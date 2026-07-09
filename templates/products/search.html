@@ -1,0 +1,120 @@
+{% include 'includes/header.html' %}
+
+  <!-- Search Header -->
+  <section class="search-hero">
+    <div class="container">
+      <h1>Product Search</h1>
+      {% if query %}
+      <p class="search-query">Showing results for: <strong>"{{ query }}"</strong></p>
+      {% else %}
+      <p>Search for inverters, batteries, and energy storage solutions</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Search Bar -->
+  <section class="section search-section">
+    <div class="container">
+      <form method="get" action="{% url 'products:search' %}" class="search-form-large">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            name="q" 
+            value="{{ query }}" 
+            placeholder="Search for products (e.g., Deye inverter, battery, 5kW)" 
+            class="search-input"
+            required
+          >
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </div>
+      </form>
+
+      <!-- Results Summary -->
+      <div class="search-results-summary">
+        {% if query %}
+          {% if result_count > 0 %}
+          <p><strong>{{ result_count }}</strong> product{{ result_count|pluralize }} found</p>
+          {% else %}
+          <p class="no-results">No products found matching "{{ query }}"</p>
+          {% endif %}
+        {% else %}
+        <p class="no-query">Enter a search term to find products</p>
+        {% endif %}
+      </div>
+
+      <!-- Search Results -->
+      {% if products %}
+      <div class="products-grid search-results">
+        {% for product in products %}
+        <article class="product-card">
+          <div class="product-image p1">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
+            {% else %}
+              <i class="fa fa-bolt"></i>
+            {% endif %}
+          </div>
+          <div class="product-body">
+            <div class="product-badges">
+              <span class="badge">{{ product.category_label }}</span>
+              {% if product.voltage_type != 'not_applicable' %}
+              <span class="badge badge-voltage">{{ product.voltage_label }}</span>
+              {% endif %}
+            </div>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.short_description|default:product.description|truncatewords:24 }}</p>
+            {% if product.price %}
+            <p class="product-price">ETB {{ product.price|floatformat:2 }}</p>
+            {% endif %}
+            <a href="{% url 'products:detail' product.slug %}" class="product-link">View Details <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% elif query %}
+      <!-- No Results Help -->
+      <div class="no-results-help">
+        <h3>Search Tips:</h3>
+        <ul>
+          <li>Try different keywords (e.g., "inverter" instead of "5kW inverter")</li>
+          <li>Check your spelling</li>
+          <li>Use more general terms</li>
+          <li>Browse by category below</li>
+        </ul>
+        
+        <div class="browse-categories">
+          <h4>Browse by Category:</h4>
+          <div class="category-links">
+            {% for cat in categories %}
+            {% if cat.slug != 'all' %}
+            <a href="{% url 'products:category' cat.slug %}" class="category-link-btn">
+              <i class="fa fa-folder"></i> {{ cat.label }}
+            </a>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Popular Searches -->
+      <div class="popular-searches">
+        <h4>Popular Searches:</h4>
+        <div class="search-tags">
+          <a href="{% url 'products:search' %}?q=Deye" class="search-tag">Deye</a>
+          <a href="{% url 'products:search' %}?q=inverter" class="search-tag">Inverter</a>
+          <a href="{% url 'products:search' %}?q=battery" class="search-tag">Battery</a>
+          <a href="{% url 'products:search' %}?q=5kW" class="search-tag">5kW</a>
+          <a href="{% url 'products:search' %}?q=residential" class="search-tag">Residential</a>
+          <a href="{% url 'products:search' %}?q=commercial" class="search-tag">Commercial</a>
+          <a href="{% url 'products:search' %}?q=ESS" class="search-tag">ESS</a>
+          <a href="{% url 'products:search' %}?q=Growatt" class="search-tag">Growatt</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}

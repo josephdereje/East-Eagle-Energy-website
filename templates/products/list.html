@@ -20,26 +20,118 @@
         {% endfor %}
       </nav>
 
-      <div class="products-grid">
-        {% for product in products %}
-        <article class="product-card">
-          <div class="product-image p1">
-            {% if product.image %}
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
-            {% else %}
-              <i class="fa fa-bolt"></i>
+      <!-- Product Page Search Bar -->
+      <div class="product-page-search">
+        <form method="get" action="{% url 'products:search' %}" class="product-page-search-form">
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="Search in products catalog..." 
+            class="product-page-search-input"
+          >
+          <button type="submit" class="product-page-search-btn">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </form>
+      </div>
+
+      <div class="products-container">
+        <!-- Sidebar (shown when viewing specific category) -->
+        {% if sidebar_section or voltage_types %}
+        <aside class="products-sidebar">
+          <!-- Sidebar Header -->
+          {% if sidebar_section %}
+          <div class="sidebar-header">
+            <h3>{{ sidebar_section.title }}</h3>
+            {% if sidebar_section.description %}
+            <p class="sidebar-description">{{ sidebar_section.description }}</p>
             {% endif %}
           </div>
-          <div class="product-body">
-            <span class="badge">{{ product.category_label }}</span>
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.short_description|default:product.description|truncatewords:24 }}</p>
-            <a href="{% url 'products:detail' product.slug %}" class="product-link">View Details <i class="fa fa-arrow-right"></i></a>
+          {% endif %}
+
+          <!-- Voltage Type Filter (for Residential only) -->
+          {% if voltage_types %}
+          <div class="sidebar-section">
+            <h4>Product Type</h4>
+            <nav class="sidebar-nav">
+              {% for vtype in voltage_types %}
+              <a href="{% if vtype.slug == 'all' %}{% url 'products:category' active_category %}{% else %}{% url 'products:category_voltage' active_category vtype.slug %}{% endif %}" 
+                 class="sidebar-link {% if active_voltage == vtype.slug %}active{% endif %}">
+                {{ vtype.label }}
+              </a>
+              {% endfor %}
+            </nav>
           </div>
-        </article>
-        {% empty %}
-        <p class="products-empty">No products in this category yet. Add products in the <a href="/admin/">admin panel</a>.</p>
-        {% endfor %}
+          {% endif %}
+
+          <!-- Sidebar Images (managed from admin) -->
+          {% if sidebar_section.images.all %}
+          <div class="sidebar-images">
+            {% for img in sidebar_section.images.all %}
+            {% if img.is_active %}
+            <div class="sidebar-image-card">
+              {% if img.link_url %}
+              <a href="{{ img.link_url }}">
+              {% endif %}
+                <img src="{{ img.image.url }}" alt="{{ img.title }}">
+                {% if img.title or img.caption %}
+                <div class="sidebar-image-content">
+                  {% if img.title %}<h5>{{ img.title }}</h5>{% endif %}
+                  {% if img.caption %}<p>{{ img.caption }}</p>{% endif %}
+                </div>
+                {% endif %}
+              {% if img.link_url %}
+              </a>
+              {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Call to Action -->
+          <div class="sidebar-cta">
+            <h4>Need Help Choosing?</h4>
+            <p>Our experts can help you select the right energy storage solution.</p>
+            <a href="/#quote" class="btn btn-primary btn-block">Get Free Consultation</a>
+          </div>
+        </aside>
+        {% endif %}
+
+        <!-- Products Grid -->
+        <div class="products-grid-container">
+          <div class="products-grid {% if sidebar_section or voltage_types %}has-sidebar{% endif %}">
+            {% for product in products %}
+            <article class="product-card">
+              <div class="product-image p1">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
+                {% else %}
+                  <i class="fa fa-bolt"></i>
+                {% endif %}
+              </div>
+              <div class="product-body">
+                <div class="product-badges">
+                  <span class="badge">{{ product.category_label }}</span>
+                  {% if product.voltage_type != 'not_applicable' %}
+                  <span class="badge badge-voltage">{{ product.voltage_label }}</span>
+                  {% endif %}
+                </div>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.short_description|default:product.description|truncatewords:24 }}</p>
+                {% if product.price %}
+                <p class="product-price">ETB {{ product.price|floatformat:2 }}</p>
+                {% endif %}
+                <a href="{% url 'products:detail' product.slug %}" class="product-link">View Details <i class="fa fa-arrow-right"></i></a>
+              </div>
+            </article>
+            {% empty %}
+            <div class="products-empty">
+              <p>No products found in this category. <a href="{% url 'products:list' %}">View all products</a></p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </section>

@@ -39,11 +39,44 @@
         <a href="/#about">About</a>
         <a href="/#services">Services</a>
         <a href="/products/" {% if '/products' in request.path %}class="active"{% endif %}>Products</a>
+        <a href="/blog/" {% if '/blog' in request.path %}class="active"{% endif %}>Blog</a>
         <a href="/#quote">Contact</a>
       </nav>
 
       <div class="header-actions">
+        <!-- Search Toggle Button -->
+        <button class="header-search-toggle" id="searchToggle" aria-label="Search products">
+          <i class="fa fa-search"></i>
+        </button>
         <a href="/#quote" class="btn btn-primary">Get a Quote</a>
       </div>
     </div>
+    
+    <!-- Header Search Dropdown -->
+    <div class="header-search-dropdown" id="headerSearchDropdown">
+      <div class="container">
+        <form method="get" action="{% url 'products:search' %}" class="header-search-form">
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="Search products (e.g., Deye, inverter, battery)" 
+            class="header-search-input"
+            id="headerSearchInput"
+          >
+          <button type="submit" class="header-search-submit">
+            <i class="fa fa-search"></i> Search
+          </button>
+        </form>
+        <div class="header-search-quick">
+          <span>Popular:</span>
+          <a href="{% url 'products:search' %}?q=Deye">Deye</a>
+          <a href="{% url 'products:search' %}?q=inverter">Inverter</a>
+          <a href="{% url 'products:search' %}?q=battery">Battery</a>
+          <a href="{% url 'products:search' %}?q=5kW">5kW</a>
+        </div>
+      </div>
+    </div>
   </header>
+
+  <!-- Search Overlay -->
+  <div class="search-overlay" id="searchOverlay"></div>

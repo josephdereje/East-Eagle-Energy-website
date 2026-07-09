@@ -4,9 +4,9 @@
         <h4>Products</h4>
         <ul>
           <li><a href="/products/category/residential/">Residential</a></li>
-          <li><a href="/products/category/commercial/">Commercial</a></li>
-          <li><a href="/products/category/industrial/">Industrial</a></li>
+          <li><a href="/products/category/c_and_i_bess/">C & I BESS</a></li>
           <li><a href="/products/category/ess_solution/">ESS Solution</a></li>
+          <li><a href="/products/">All Products</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -53,5 +53,59 @@
 
   <script src="/js/social-config.js"></script>
   <script src="/js/main.js"></script>
+  
+  <!-- Header Search Toggle Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchToggle = document.getElementById('searchToggle');
+      const searchDropdown = document.getElementById('headerSearchDropdown');
+      const searchOverlay = document.getElementById('searchOverlay');
+      const searchInput = document.getElementById('headerSearchInput');
+      
+      if (searchToggle && searchDropdown && searchOverlay) {
+        // Toggle search dropdown
+        searchToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isActive = searchDropdown.classList.contains('active');
+          
+          if (isActive) {
+            closeSearch();
+          } else {
+            openSearch();
+          }
+        });
+        
+        // Close on overlay click
+        searchOverlay.addEventListener('click', closeSearch);
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && searchDropdown.classList.contains('active')) {
+            closeSearch();
+          }
+        });
+        
+        // Prevent closing when clicking inside dropdown
+        searchDropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+      
+      function openSearch() {
+        searchDropdown.classList.add('active');
+        searchOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          if (searchInput) searchInput.focus();
+        }, 100);
+      }
+      
+      function closeSearch() {
+        searchDropdown.classList.remove('active');
+        searchOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
 </body>
 </html>

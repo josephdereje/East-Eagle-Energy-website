@@ -1,0 +1,73 @@
+{% include 'includes/header.html' %}
+
+  <!-- Blog Hero -->
+  <section class="page-hero" style="background: linear-gradient(135deg, #1B365D 0%, #2E6EB3 100%);">
+    <div class="container">
+      <h1>Company News & Energy Insights</h1>
+      <p>Latest updates from East Eagle Energy and the renewable energy industry</p>
+    </div>
+  </section>
+
+  <!-- Featured Blog Posts -->
+  {% if featured_posts %}
+  <section class="section featured-blog">
+    <div class="container">
+      <h2 class="section-title">Featured Articles</h2>
+      <div class="blog-featured-grid">
+        {% for post in featured_posts %}
+        <article class="blog-featured-card">
+          {% if post.featured_image %}
+          <div class="blog-featured-image">
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+          </div>
+          {% endif %}
+          <div class="blog-featured-content">
+            <span class="blog-meta">
+              <i class="fa fa-calendar"></i> {{ post.published_date|date:"F d, Y" }}
+              <i class="fa fa-eye" style="margin-left: 15px;"></i> {{ post.views_count }} views
+            </span>
+            <h3><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></h3>
+            <p>{{ post.excerpt }}</p>
+            <a href="{% url 'blog:detail' post.slug %}" class="btn btn-primary">Read More</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- All Blog Posts -->
+  <section class="section blog-list">
+    <div class="container">
+      <h2 class="section-title">All Articles</h2>
+      <div class="blog-grid">
+        {% for post in posts %}
+        <article class="blog-card">
+          {% if post.featured_image %}
+          <div class="blog-card-image">
+            <a href="{% url 'blog:detail' post.slug %}">
+              <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+            </a>
+          </div>
+          {% endif %}
+          <div class="blog-card-content">
+            <span class="blog-meta">
+              <i class="fa fa-calendar"></i> {{ post.published_date|date:"M d, Y" }}
+              <span style="margin-left: 15px;"><i class="fa fa-user"></i> {{ post.author }}</span>
+            </span>
+            <h3><a href="{% url 'blog:detail' post.slug %}">{{ post.title }}</a></h3>
+            <p>{{ post.excerpt }}</p>
+            <a href="{% url 'blog:detail' post.slug %}" class="blog-read-more">Read More <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </article>
+        {% empty %}
+        <div class="no-posts">
+          <p>No blog posts available yet. Check back soon!</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}
