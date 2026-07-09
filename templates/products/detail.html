@@ -1,0 +1,28 @@
+{% include 'includes/header.html' %}
+
+  <section class="section products-page">
+    <div class="container">
+      <a href="{% url 'products:list' %}" class="back-link"><i class="fa fa-arrow-left"></i> Back to Products</a>
+
+      <article class="product-detail-card">
+        <div class="product-detail-image p1">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
+          {% else %}
+            <i class="fa fa-bolt"></i>
+          {% endif %}
+        </div>
+        <div class="product-detail-body">
+          <span class="badge">{{ product.category_label }}</span>
+          <h1>{{ product.name }}</h1>
+          <p>{{ product.description }}</p>
+          {% if product.price %}
+            <p class="product-price">From {{ product.price }} ETB</p>
+          {% endif %}
+          <a href="/#quote" class="btn btn-primary">Inquire About This Product</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}

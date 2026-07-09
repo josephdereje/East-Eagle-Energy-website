@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}East Eagle Energy — Energy That Never Grows Weary{% endblock %}</title>
+  <meta name="description" content="East Eagle Energy specializes in inverters, battery packs, and comprehensive solar energy systems in Ethiopia.">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="/images/favicon.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/images/favicon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <a href="tel:+251933219802"><i class="fa fa-phone"></i> +251 93 321 9802</a>
+      <span class="tagline">Energy That Never Grows Weary</span>
+      <div class="top-bar-right">
+        <span class="location"><i class="fa fa-location-dot"></i> Addis Ababa, Ethiopia</span>
+        <div class="social-links social-links--compact" data-social-links></div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <img src="/images/logo.png" alt="East Eagle Energy" class="logo-img">
+      </a>
+
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <nav class="main-nav">
+        <a href="/#home" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
+        <a href="/#about">About</a>
+        <a href="/#services">Services</a>
+        <a href="/products/" {% if '/products' in request.path %}class="active"{% endif %}>Products</a>
+        <a href="/#quote">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/#quote" class="btn btn-primary">Get a Quote</a>
+      </div>
+    </div>
+  </header>

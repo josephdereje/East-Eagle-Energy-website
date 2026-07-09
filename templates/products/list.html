@@ -1,0 +1,47 @@
+{% include 'includes/header.html' %}
+
+  <section class="section products-page">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Our Products</p>
+          <h2>Energy Solutions Catalog</h2>
+        </div>
+        <a href="/#quote" class="btn btn-primary">Request a Quote</a>
+      </div>
+
+      <nav class="product-category-nav" aria-label="Product categories">
+        {% for cat in categories %}
+          {% if cat.slug == 'all' %}
+            <a href="{% url 'products:list' %}" {% if active_category == 'all' %}class="active"{% endif %}>{{ cat.label }}</a>
+          {% else %}
+            <a href="{% url 'products:category' cat.slug %}" {% if active_category == cat.slug %}class="active"{% endif %}>{{ cat.label }}</a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+
+      <div class="products-grid">
+        {% for product in products %}
+        <article class="product-card">
+          <div class="product-image p1">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
+            {% else %}
+              <i class="fa fa-bolt"></i>
+            {% endif %}
+          </div>
+          <div class="product-body">
+            <span class="badge">{{ product.category_label }}</span>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.short_description|default:product.description|truncatewords:24 }}</p>
+            <a href="{% url 'products:detail' product.slug %}" class="product-link">View Details <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </article>
+        {% empty %}
+        <p class="products-empty">No products in this category yet. Add products in the <a href="/admin/">admin panel</a>.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}

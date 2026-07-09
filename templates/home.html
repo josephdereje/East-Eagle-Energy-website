@@ -1,0 +1,259 @@
+{% include 'includes/header.html' %}
+
+  {% if messages %}
+  <div class="container django-messages">
+    {% for message in messages %}
+      <p class="django-message django-message--{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Hero carousel -->
+  <section id="home" class="hero">
+    <div class="carousel">
+      <div class="slide active" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
+        <div class="slide-content container">
+          <p class="eyebrow">Est. 2022 · Ethiopia</p>
+          <h1>Energy That Never Grows Weary</h1>
+          <p>Dependable solar power, inverters, and battery storage for homes and businesses across Ethiopia.</p>
+          <div class="hero-buttons">
+            <a href="/products/" class="btn btn-primary">View Products</a>
+            <a href="#quote" class="btn btn-outline">Contact Us</a>
+          </div>
+        </div>
+      </div>
+      <div class="slide" style="--bg: linear-gradient(135deg, #142E4B 0%, #1B365D 50%, #FFCB05 100%);">
+        <div class="slide-content container">
+          <p class="eyebrow">Solar Energy Systems</p>
+          <h1>Power You Can Rely On</h1>
+          <p>Comprehensive solar solutions designed for consistent, resilient energy — even when the grid fails.</p>
+          <div class="hero-buttons">
+            <a href="#services" class="btn btn-primary">Our Services</a>
+          </div>
+        </div>
+      </div>
+      <div class="slide" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
+        <div class="slide-content container">
+          <p class="eyebrow">Residential & Commercial</p>
+          <h1>Stable Energy Storage</h1>
+          <p>Battery packs and inverters built to keep your projects powered through every condition.</p>
+          <div class="hero-buttons">
+            <a href="#about" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-btn prev" aria-label="Previous slide"><i class="fa fa-chevron-left"></i></button>
+    <button class="carousel-btn next" aria-label="Next slide"><i class="fa fa-chevron-right"></i></button>
+    <div class="carousel-dots"></div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section services">
+    <div class="container">
+      <div class="services-grid">
+        <article class="service-card">
+          <div class="service-icon"><i class="fa fa-solar-panel"></i></div>
+          <h3>Solar Energy Systems</h3>
+          <p>End-to-end solar installations for residential and commercial projects across Ethiopia.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon"><i class="fa fa-battery-full"></i></div>
+          <h3>Battery Packs & Storage</h3>
+          <p>Stable energy storage units that keep power consistent, regardless of grid conditions.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-icon"><i class="fa fa-bolt"></i></div>
+          <h3>Inverters & Power Solutions</h3>
+          <p>Dependable inverters and power equipment built for long-term, resilient performance.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section about">
+    <div class="container about-grid">
+      <div class="about-content">
+        <p class="eyebrow">About Us</p>
+        <h2>Powering Ethiopia Since 2022</h2>
+        <p>East Eagle Energy, established in 2022, specializes in inverters, battery packs, and comprehensive solar energy systems designed to deliver dependable power solutions.</p>
+        <p>The company focuses on providing stable energy storage units for both residential and commercial projects, ensuring clients have consistent, reliable access to power regardless of grid conditions.</p>
+        <p><strong>Our mission:</strong> supply energy solutions that remain resilient and dependable over time — <em>Energy That Never Grows Weary.</em></p>
+        <ul class="about-facts">
+          <li><i class="fa fa-building"></i> East Eagle Trading PLC</li>
+          <li><i class="fa fa-calendar"></i> Established 2022</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <div class="about-logo-wrap">
+          <img src="/images/logo.png" alt="East Eagle Energy" class="about-logo">
+        </div>
+        <div class="stat">
+          <span class="stat-number">2022</span>
+          <span class="stat-label">Year Founded</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">3+</span>
+          <span class="stat-label">Core Product Lines</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">24/7</span>
+          <span class="stat-label">Reliable Power</span>
+        </div>
+        <a href="#quote" class="btn btn-primary btn-block">Request Consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products" class="section products">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Our Products</p>
+          <h2>Popular Solutions</h2>
+        </div>
+        <a href="/products/" class="btn btn-outline-dark">See All Products</a>
+      </div>
+      <div class="products-grid">
+        {% for product in featured_products %}
+        <article class="product-card">
+          <div class="product-image p{{ forloop.counter }}">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+              <i class="fa fa-bolt"></i>
+            {% endif %}
+          </div>
+          <div class="product-body">
+            <span class="badge">{{ product.category_label }}</span>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.short_description|default:product.description|truncatewords:20 }}</p>
+            <a href="/products/{{ product.slug }}/" class="product-link">View <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </article>
+        {% empty %}
+        <p>No featured products yet. Add products in the <a href="/admin/">admin panel</a>.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted Partners -->
+  <section id="partners" class="section partners">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <div>
+          <p class="eyebrow">Partnerships</p>
+          <h2>Our Trusted Global Partners</h2>
+        </div>
+      </div>
+      <div class="partners-grid">
+        <article class="partner-card">
+          <div class="partner-icon partner-icon--deye"><i class="fa fa-bolt"></i></div>
+          <h3>DEYE</h3>
+          <p>Inverter</p>
+        </article>
+        <article class="partner-card">
+          <div class="partner-icon partner-icon--epever"><i class="fa fa-bolt"></i></div>
+          <h3>EPEver</h3>
+          <p>Inverter</p>
+        </article>
+        <article class="partner-card">
+          <div class="partner-icon partner-icon--pytes"><i class="fa fa-battery-full"></i></div>
+          <h3>Pytes</h3>
+          <p>Batteries</p>
+        </article>
+        <article class="partner-card">
+          <div class="partner-icon partner-icon--jinko"><i class="fa fa-solar-panel"></i></div>
+          <h3>Jinko Solar</h3>
+          <p>Solar Panel</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Clients -->
+  <section id="clients" class="section clients">
+    <div class="container">
+      <div class="section-header section-header--center">
+        <div>
+          <p class="eyebrow">Trusted By</p>
+          <h2>Our Clients</h2>
+        </div>
+      </div>
+      <div class="clients-grid">
+        <article class="client-card">
+          <div class="client-icon"><i class="fa fa-building-columns"></i></div>
+          <h3>Cooperative Bank of Oromia</h3>
+        </article>
+        <article class="client-card">
+          <div class="client-icon"><i class="fa fa-building-columns"></i></div>
+          <h3>Awash Bank</h3>
+        </article>
+        <article class="client-card">
+          <div class="client-icon"><i class="fa fa-building-columns"></i></div>
+          <h3>Siinqee Bank</h3>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get Quote -->
+  <section id="quote" class="section quote-section">
+    <div class="quote-overlay"></div>
+    <div class="container quote-inner">
+      <div class="quote-header">
+        <p class="eyebrow quote-eyebrow">Get a Quote</p>
+        <h2>Request a Consultation</h2>
+        <p>Fill in your details and our team will contact you about solar solutions for your project.</p>
+      </div>
+
+      <form class="quote-form" id="quote-form" method="post" action="{% url 'contact:submit' %}">
+        {% csrf_token %}
+        <div class="quote-form-grid">
+          <div class="form-group">
+            <label for="quote-name">Name <span class="required">*</span></label>
+            {{ contact_form.name }}
+          </div>
+          <div class="form-group">
+            <label for="quote-phone">Telephone <span class="required">*</span></label>
+            {{ contact_form.phone }}
+          </div>
+          <div class="form-group">
+            <label for="quote-company">Company <span class="required">*</span></label>
+            {{ contact_form.company }}
+          </div>
+          <div class="form-group">
+            <label for="quote-address">Address <span class="required">*</span></label>
+            {{ contact_form.address }}
+          </div>
+          <div class="form-group form-group-full">
+            <label for="quote-email">Email <span class="required">*</span></label>
+            {{ contact_form.email }}
+          </div>
+          <div class="form-group form-group-full">
+            <label for="quote-message">Message <span class="required">*</span></label>
+            {{ contact_form.message }}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-send">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Subscribe -->
+  <section class="subscribe">
+    <div class="container subscribe-inner">
+      <h2>Stay Powered with Updates</h2>
+      <p>Get the latest on solar energy solutions, new products, and power storage innovations.</p>
+      <form class="subscribe-form" onsubmit="return false;">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+      <small>We'll never share your email with a third party.</small>
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}
