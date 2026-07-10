@@ -1,18 +1,27 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from .email_utils import send_inquiry_email
 from .forms import ContactInquiryForm
 
 
+def contact_page(request):
+    form = ContactInquiryForm()
+    return render(request, 'contact/contact.html', {'form': form})
+
+
 def submit_inquiry(request):
+    next_url = request.POST.get('next', '/#quote')
+
     if request.method != 'POST':
-        return redirect('home')
+        return redirect('contact:page')
 
     form = ContactInquiryForm(request.POST)
     if not form.is_valid():
-        messages.error(request, 'Please correct the errors in the form and try again.')
+        if next_url == '/contact/':
+            return render(request, 'contact/contact.html', {'form': form})
+        messages.error(request, 'Please correct the errors and try again.')
         return HttpResponseRedirect('/#quote')
 
     inquiry = form.save(commit=False)
@@ -27,10 +36,9 @@ def submit_inquiry(request):
         )
     inquiry.save()
 
-    if inquiry.email_sent:
-        messages.success(
-            request,
-            'Thank you! Your quote request has been sent. We will contact you soon.',
-        )
+    messages.success(
+        request,
+        'Thank you! Your consultation request has been sent. We will contact you soon.',
+    )
 
-    return HttpResponseRedirect('/#quote')
+    return HttpResponseRedirect(next_url if next_url else '/contact/')

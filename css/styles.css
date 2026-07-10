@@ -2358,6 +2358,181 @@ img { max-width: 100%; display: block; }
   }
 }
 
+/* ── Contact Page ─────────────────────────────────────── */
+.contact-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.contact-info-col h2,
+.contact-form-col h2 {
+  font-size: 1.6rem;
+  color: var(--navy);
+  margin-bottom: 0.6rem;
+}
+
+.contact-intro {
+  color: #5a6a75;
+  margin-bottom: 1.8rem;
+  line-height: 1.7;
+}
+
+.contact-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.contact-detail-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.contact-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.contact-detail-list strong {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--orange);
+  margin-bottom: 0.2rem;
+}
+
+.contact-detail-list p {
+  margin: 0;
+  color: var(--navy);
+  line-height: 1.5;
+}
+
+.contact-detail-list a {
+  color: var(--solar-blue);
+  text-decoration: none;
+}
+
+.contact-detail-list a:hover { text-decoration: underline; }
+
+.contact-map {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(27,54,93,0.1);
+}
+
+.contact-form-col {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.2rem;
+  box-shadow: 0 8px 32px rgba(27,54,93,0.08);
+}
+
+.contact-form-sub {
+  color: #5a6a75;
+  margin-bottom: 1.6rem;
+  font-size: 0.95rem;
+}
+
+.contact-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contact-field {
+  margin-bottom: 1.1rem;
+}
+
+.contact-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.4rem;
+}
+
+.contact-field label span {
+  color: var(--orange);
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid #dde6f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--navy);
+  background: #f8fafc;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: var(--solar-blue);
+  background: #fff;
+}
+
+.contact-field textarea { resize: vertical; }
+
+.field-error {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.contact-submit-btn {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.contact-alert {
+  padding: 0.9rem 1.1rem;
+  border-radius: 8px;
+  margin-bottom: 1.2rem;
+  font-size: 0.93rem;
+}
+
+.contact-alert--success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.contact-alert--error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.contact-alert--warning {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+@media (max-width: 900px) {
+  .contact-page-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Floating Action Buttons ──────────────────────────── */
 .fab-container {
   position: fixed;
@@ -2373,13 +2548,13 @@ img { max-width: 100%; display: block; }
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: #2abfbf;
+  background: var(--orange, #F39200);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(42, 191, 191, 0.45);
+  box-shadow: 0 4px 16px rgba(243, 146, 0, 0.45);
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
@@ -2390,9 +2565,44 @@ img { max-width: 100%; display: block; }
 }
 
 .fab-btn:hover {
-  background: #1B365D;
+  background: var(--navy, #1B365D);
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(27, 54, 93, 0.4);
+}
+
+.fab-btn[title="Browse Products"] { background: var(--orange, #F39200); box-shadow: 0 4px 16px rgba(243,146,0,0.4); }
+.fab-btn[title="Read our Blog"]   { background: var(--solar-blue, #2E6EB3); box-shadow: 0 4px 16px rgba(46,110,179,0.4); }
+.fab-btn[title="Contact Us"]      { background: var(--navy, #1B365D); box-shadow: 0 4px 16px rgba(27,54,93,0.4); }
+
+.fab-btn[title="Browse Products"]:hover { background: var(--navy, #1B365D); }
+.fab-btn[title="Read our Blog"]:hover   { background: var(--navy, #1B365D); }
+.fab-btn[title="Contact Us"]:hover      { background: var(--orange, #F39200); }
+
+/* Slide-in label on hover */
+.fab-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.fab-label {
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(27, 54, 93, 0.92);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.fab-btn:hover .fab-label {
+  opacity: 1;
 }
 
 @media (max-width: 600px) {

@@ -1,0 +1,126 @@
+{% include 'includes/header.html' %}
+
+  <!-- Page Hero -->
+  <section class="page-hero" style="background: linear-gradient(135deg, #1B365D 0%, #2E6EB3 100%);">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Get a free consultation or request a quote — we respond within 24 hours.</p>
+    </div>
+  </section>
+
+  <section class="contact-page section">
+    <div class="container contact-page-grid">
+
+      <!-- LEFT — Info + Map -->
+      <div class="contact-info-col">
+
+        <h2>Get in touch</h2>
+        <p class="contact-intro">
+          Whether you need a residential solar system, a commercial BESS solution, or just have
+          a question — our team is ready to help.
+        </p>
+
+        <ul class="contact-detail-list">
+          <li>
+            <span class="contact-icon">📍</span>
+            <div>
+              <strong>Office</strong>
+              <p>Century Executive Tower, 12-Room Number F12/06<br>Addis Ababa, Ethiopia</p>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">📞</span>
+            <div>
+              <strong>Phone</strong>
+              <p><a href="tel:+251933219802">+251 93 321 9802</a></p>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">✉️</span>
+            <div>
+              <strong>Email</strong>
+              <p><a href="mailto:info@easteagleenergy.com">info@easteagleenergy.com</a></p>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">🕐</span>
+            <div>
+              <strong>Working hours</strong>
+              <p>Monday – Saturday: 8 AM – 6 PM<br>Sunday: Closed</p>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Google Map embed -->
+        <div class="contact-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.518!2d38.7614!3d9.0107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMzguNSJOIDM4wrA0NSczNy42IkU!5e0!3m2!1sen!2set!4v1"
+            width="100%" height="240" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="East Eagle Energy location">
+          </iframe>
+        </div>
+
+      </div>
+
+      <!-- RIGHT — Consultation Form -->
+      <div class="contact-form-col">
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="contact-alert contact-alert--{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <h2>Request a free consultation</h2>
+        <p class="contact-form-sub">Fill in the form and we will reach out to discuss your energy needs.</p>
+
+        <form method="post" action="{% url 'contact:submit' %}" class="contact-form" novalidate>
+          {% csrf_token %}
+          <input type="hidden" name="next" value="/contact/">
+
+          <div class="contact-form-row">
+            <div class="contact-field">
+              <label for="quote-name">Full name <span>*</span></label>
+              {{ form.name }}
+              {% if form.name.errors %}<p class="field-error">{{ form.name.errors.0 }}</p>{% endif %}
+            </div>
+            <div class="contact-field">
+              <label for="quote-phone">Phone <span>*</span></label>
+              {{ form.phone }}
+              {% if form.phone.errors %}<p class="field-error">{{ form.phone.errors.0 }}</p>{% endif %}
+            </div>
+          </div>
+
+          <div class="contact-form-row">
+            <div class="contact-field">
+              <label for="quote-company">Company</label>
+              {{ form.company }}
+            </div>
+            <div class="contact-field">
+              <label for="quote-email">Email <span>*</span></label>
+              {{ form.email }}
+              {% if form.email.errors %}<p class="field-error">{{ form.email.errors.0 }}</p>{% endif %}
+            </div>
+          </div>
+
+          <div class="contact-field">
+            <label for="quote-address">Location / Address</label>
+            {{ form.address }}
+          </div>
+
+          <div class="contact-field">
+            <label for="quote-message">Message / Project details <span>*</span></label>
+            {{ form.message }}
+            {% if form.message.errors %}<p class="field-error">{{ form.message.errors.0 }}</p>{% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary contact-submit-btn">
+            Send Consultation Request ➜
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+{% include 'includes/footer.html' %}
