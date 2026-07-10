@@ -1,18 +1,20 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/index.html" %}
 {% load i18n static admin_dashboard %}
 
-{% block title %}Dashboard | East Eagle Energy{% endblock %}
+{% block content_title %}<h1>Dashboard</h1>{% endblock %}
 
-{% block content_title %}{% endblock %}
+{% block sidebar %}{% endblock %}
 
 {% block content %}
+
+{% admin_dashboard_stats as stats %}
 <div class="admin-dashboard">
 
   <section class="admin-hero">
     <div class="admin-hero-content">
       <p class="admin-hero-eyebrow">Energy That Never Grows Weary</p>
       <h1>Welcome to your dashboard</h1>
-      <p>Manage products, blog posts, contact inquiries, and homepage content for easteagleenergy.com.</p>
+      <p>Manage products, blog posts, inquiries, and homepage content.</p>
       <div class="admin-hero-actions">
         <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">＋ Add Product</a>
         <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">✎ New Blog Post</a>
@@ -21,10 +23,9 @@
     </div>
   </section>
 
-  {% admin_dashboard_stats as stats %}
   <section class="admin-stats-grid">
     <article class="admin-stat-card">
-      <div class="admin-stat-icon products">📦</div>
+      <div class="admin-stat-icon">📦</div>
       <div>
         <h3>{{ stats.products }}</h3>
         <p>Active products</p>
@@ -32,7 +33,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon blog">📰</div>
+      <div class="admin-stat-icon">📰</div>
       <div>
         <h3>{{ stats.blog_posts }}</h3>
         <p>Published posts</p>
@@ -40,7 +41,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon inquiries">✉️</div>
+      <div class="admin-stat-icon">✉️</div>
       <div>
         <h3>{{ stats.inquiries }}</h3>
         <p>Contact inquiries</p>
@@ -48,7 +49,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon ads">🖼️</div>
+      <div class="admin-stat-icon">🖼️</div>
       <div>
         <h3>{{ stats.homepage_ads }}</h3>
         <p>Homepage ads</p>
@@ -61,51 +62,27 @@
     <h2>Quick links</h2>
     <div class="admin-quick-grid">
       <a href="{% url 'admin:products_product_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">⚡</span>
-        <span>Products</span>
+        <span class="admin-quick-icon">⚡</span><span>Products</span>
       </a>
       <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">📝</span>
-        <span>Blog</span>
+        <span class="admin-quick-icon">📝</span><span>Blog</span>
       </a>
       <a href="{% url 'admin:contact_contactinquiry_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">📥</span>
-        <span>Inquiries</span>
-      </a>
-      <a href="{% url 'admin:products_productsidebarsection_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">🗂️</span>
-        <span>Sidebars</span>
+        <span class="admin-quick-icon">📥</span><span>Inquiries</span>
       </a>
       <a href="{% url 'admin:blog_homepagead_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">🖼️</span>
-        <span>Homepage Ads</span>
+        <span class="admin-quick-icon">🖼️</span><span>Homepage Ads</span>
       </a>
       <a href="{% url 'admin:auth_user_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">👤</span>
-        <span>Users</span>
+        <span class="admin-quick-icon">👤</span><span>Users</span>
       </a>
     </div>
-  </section>
-
-  <section class="admin-models-section">
-    <h2>All models</h2>
-    {% for app in app_list %}
-    <div class="admin-app-group">
-      <h3 class="admin-app-label">{{ app.name }}</h3>
-      <div class="admin-model-list">
-        {% for model in app.models %}
-        <div class="admin-model-row">
-          <span class="admin-model-name">{{ model.name }}</span>
-          <div class="admin-model-actions">
-            {% if model.add_url %}<a href="{{ model.add_url }}" class="admin-model-btn">Add</a>{% endif %}
-            {% if model.admin_url %}<a href="{{ model.admin_url }}" class="admin-model-btn">View</a>{% endif %}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% endfor %}
   </section>
 
 </div>
+
+<div style="margin-top:2rem">
+  {{ block.super }}
+</div>
+
 {% endblock %}

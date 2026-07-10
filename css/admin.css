@@ -431,16 +431,19 @@ body.login #content {
   margin-bottom: 0.85rem;
 }
 
-/* Hide Django's built-in dark mode theme toggle */
+/* Hide Django's built-in dark mode theme toggle — every possible selector */
 .theme-toggle,
 #toggle-nav-sidebar,
 [data-theme-toggle],
 button.theme-toggle,
 #header .theme-toggle,
 form.theme-toggle,
-div.theme-toggle {
-  display: none !important;
-}
+div.theme-toggle,
+#nav-sidebar,
+.toggle-nav-sidebar,
+#toggle-nav-sidebar-checkbox,
+label[for="toggle-nav-sidebar"],
+.sticky { display: none !important; }
 
 /* Emoji icons in quick cards */
 .admin-quick-icon {

@@ -25,3 +25,15 @@
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Remove any theme toggle elements Django injects
+  document.querySelectorAll('.theme-toggle, [data-theme-toggle]').forEach(function(el) {
+    el.remove();
+  });
+});
+</script>
+{% endblock %}
