@@ -431,6 +431,14 @@ body.login #content {
   margin-bottom: 0.85rem;
 }
 
+/* Hide Django's built-in dark mode theme toggle */
+.theme-toggle,
+#toggle-nav-sidebar,
+[data-theme-toggle],
+button.theme-toggle {
+  display: none !important;
+}
+
 /* Responsive */
 @media (max-width: 767px) {
   #header {

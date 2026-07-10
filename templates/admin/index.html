@@ -1,6 +1,8 @@
 {% extends "admin/index.html" %}
 {% load i18n static admin_dashboard %}
 
+{% block content_title %}{% endblock %}
+
 {% block content %}
 <div class="admin-dashboard">
   <section class="admin-hero">
@@ -10,13 +12,13 @@
       <p>Manage products, blog posts, contact inquiries, and homepage content for easteagleenergy.com.</p>
       <div class="admin-hero-actions">
         <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">
-          <i class="fa fa-plus"></i> Add Product
+          <i class="fas fa-plus"></i> Add Product
         </a>
         <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">
-          <i class="fa fa-pen"></i> New Blog Post
+          <i class="fas fa-pen"></i> New Blog Post
         </a>
         <a href="/" target="_blank" rel="noopener" class="admin-btn admin-btn-ghost">
-          <i class="fa fa-external-link"></i> View Website
+          <i class="fas fa-external-link-alt"></i> View Website
         </a>
       </div>
     </div>
@@ -25,7 +27,7 @@
   {% admin_dashboard_stats as stats %}
   <section class="admin-stats-grid">
     <article class="admin-stat-card">
-      <div class="admin-stat-icon products"><i class="fa fa-box"></i></div>
+      <div class="admin-stat-icon products"><i class="fas fa-box"></i></div>
       <div>
         <h3>{{ stats.products }}</h3>
         <p>Active products</p>
@@ -33,7 +35,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon blog"><i class="fa fa-newspaper"></i></div>
+      <div class="admin-stat-icon blog"><i class="fas fa-newspaper"></i></div>
       <div>
         <h3>{{ stats.blog_posts }}</h3>
         <p>Published posts</p>
@@ -41,7 +43,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon inquiries"><i class="fa fa-envelope"></i></div>
+      <div class="admin-stat-icon inquiries"><i class="fas fa-envelope"></i></div>
       <div>
         <h3>{{ stats.inquiries }}</h3>
         <p>Contact inquiries</p>
@@ -49,7 +51,7 @@
       </div>
     </article>
     <article class="admin-stat-card">
-      <div class="admin-stat-icon ads"><i class="fa fa-image"></i></div>
+      <div class="admin-stat-icon ads"><i class="fas fa-image"></i></div>
       <div>
         <h3>{{ stats.homepage_ads }}</h3>
         <p>Homepage ads</p>
@@ -62,27 +64,27 @@
     <h2>Quick links</h2>
     <div class="admin-quick-grid">
       <a href="{% url 'admin:products_product_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-solar-panel"></i>
+        <i class="fas fa-solar-panel"></i>
         <span>Products</span>
       </a>
       <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-blog"></i>
+        <i class="fas fa-blog"></i>
         <span>Blog</span>
       </a>
       <a href="{% url 'admin:contact_contactinquiry_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-inbox"></i>
+        <i class="fas fa-inbox"></i>
         <span>Inquiries</span>
       </a>
       <a href="{% url 'admin:products_productsidebarsection_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-columns"></i>
+        <i class="fas fa-columns"></i>
         <span>Sidebars</span>
       </a>
       <a href="{% url 'admin:blog_homepagead_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-images"></i>
+        <i class="fas fa-images"></i>
         <span>Homepage Ads</span>
       </a>
       <a href="{% url 'admin:auth_user_changelist' %}" class="admin-quick-card">
-        <i class="fa fa-user-shield"></i>
+        <i class="fas fa-user-shield"></i>
         <span>Users</span>
       </a>
     </div>
