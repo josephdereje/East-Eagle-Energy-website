@@ -462,6 +462,82 @@ div.theme-toggle {
   flex-shrink: 0;
 }
 
+/* All models section */
+.admin-models-section {
+  margin-top: 2rem;
+}
+
+.admin-models-section h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ee-navy);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.admin-app-group {
+  background: var(--ee-card);
+  border: 1px solid var(--ee-border);
+  border-radius: var(--ee-radius);
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.admin-app-label {
+  background: var(--ee-navy);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.6rem 1.2rem;
+  margin: 0;
+}
+
+.admin-model-list {
+  padding: 0.4rem 0;
+}
+
+.admin-model-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1.2rem;
+  border-bottom: 1px solid var(--ee-border);
+}
+
+.admin-model-row:last-child {
+  border-bottom: none;
+}
+
+.admin-model-name {
+  font-size: 0.95rem;
+  color: var(--ee-text);
+  font-weight: 500;
+}
+
+.admin-model-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-model-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ee-blue);
+  border: 1px solid var(--ee-blue);
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-model-btn:hover {
+  background: var(--ee-blue);
+  color: #fff;
+}
+
 /* Responsive */
 @media (max-width: 767px) {
   #header {

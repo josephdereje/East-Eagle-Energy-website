@@ -1,25 +1,22 @@
-{% extends "admin/index.html" %}
+{% extends "admin/base_site.html" %}
 {% load i18n static admin_dashboard %}
+
+{% block title %}Dashboard | East Eagle Energy{% endblock %}
 
 {% block content_title %}{% endblock %}
 
 {% block content %}
 <div class="admin-dashboard">
+
   <section class="admin-hero">
     <div class="admin-hero-content">
       <p class="admin-hero-eyebrow">Energy That Never Grows Weary</p>
       <h1>Welcome to your dashboard</h1>
       <p>Manage products, blog posts, contact inquiries, and homepage content for easteagleenergy.com.</p>
       <div class="admin-hero-actions">
-        <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">
-          ＋ Add Product
-        </a>
-        <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">
-          ✎ New Blog Post
-        </a>
-        <a href="/" target="_blank" rel="noopener" class="admin-btn admin-btn-ghost">
-          ↗ View Website
-        </a>
+        <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">＋ Add Product</a>
+        <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">✎ New Blog Post</a>
+        <a href="/" target="_blank" rel="noopener" class="admin-btn admin-btn-ghost">↗ View Website</a>
       </div>
     </div>
   </section>
@@ -89,9 +86,26 @@
       </a>
     </div>
   </section>
-</div>
 
-<div class="admin-modules-wrap">
-  {{ block.super }}
+  <section class="admin-models-section">
+    <h2>All models</h2>
+    {% for app in app_list %}
+    <div class="admin-app-group">
+      <h3 class="admin-app-label">{{ app.name }}</h3>
+      <div class="admin-model-list">
+        {% for model in app.models %}
+        <div class="admin-model-row">
+          <span class="admin-model-name">{{ model.name }}</span>
+          <div class="admin-model-actions">
+            {% if model.add_url %}<a href="{{ model.add_url }}" class="admin-model-btn">Add</a>{% endif %}
+            {% if model.admin_url %}<a href="{{ model.admin_url }}" class="admin-model-btn">View</a>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
 </div>
 {% endblock %}
