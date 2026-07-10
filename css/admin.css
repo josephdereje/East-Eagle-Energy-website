@@ -435,8 +435,31 @@ body.login #content {
 .theme-toggle,
 #toggle-nav-sidebar,
 [data-theme-toggle],
-button.theme-toggle {
+button.theme-toggle,
+#header .theme-toggle,
+form.theme-toggle,
+div.theme-toggle {
   display: none !important;
+}
+
+/* Emoji icons in quick cards */
+.admin-quick-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.4rem;
+  line-height: 1;
+}
+
+/* Emoji icons in stat cards */
+.admin-stat-icon {
+  font-size: 1.8rem;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  flex-shrink: 0;
 }
 
 /* Responsive */
