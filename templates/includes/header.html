@@ -64,7 +64,7 @@
         <a href="/#services">Services</a>
         <a href="/products/" {% if '/products' in request.path %}class="active"{% endif %}>Products</a>
         <a href="/blog/" {% if '/blog' in request.path %}class="active"{% endif %}>Blog</a>
-        <a href="/#quote">Contact</a>
+        <a href="/contact/" {% if '/contact' in request.path %}class="active"{% endif %}>Contact</a>
       </nav>
 
       <div class="header-actions">
@@ -72,7 +72,7 @@
         <button class="header-search-toggle" id="searchToggle" aria-label="Search products">
           <i class="fa fa-search"></i>
         </button>
-        <a href="/#quote" class="btn btn-primary">Get a Quote</a>
+        <a href="/contact/" class="btn btn-primary">Get a Quote</a>
       </div>
     </div>
     
