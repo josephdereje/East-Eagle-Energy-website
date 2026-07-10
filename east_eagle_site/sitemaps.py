@@ -26,7 +26,7 @@ class ProductCategorySitemap(Sitemap):
         return [c.value for c in ProductCategory]
 
     def location(self, item):
-        return reverse('products:category', kwargs={'slug': item})
+        return reverse('products:category', kwargs={'category': item})
 
 
 class ProductSitemap(Sitemap):
