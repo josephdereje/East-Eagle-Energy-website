@@ -1,11 +1,32 @@
 import os
 import sys
+import traceback
 
-# Add the project directory to sys.path
-sys.path.insert(0, os.path.dirname(__file__))
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, PROJECT_DIR)
+os.chdir(PROJECT_DIR)
 
-# Set the DJANGO_SETTINGS_MODULE environment variable
-os.environ['DJANGO_SETTINGS_MODULE'] = 'east_eagle_site.settings'
+LOG_FILE = os.path.join(PROJECT_DIR, 'ERROR_LOG.txt')
 
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+try:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'east_eagle_site.settings')
+
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(os.path.join(PROJECT_DIR, '.env'))
+    except ImportError:
+        pass
+
+    from django.core.wsgi import get_wsgi_application
+    application = get_wsgi_application()
+
+except Exception:
+    error_text = traceback.format_exc()
+    with open(LOG_FILE, 'w', encoding='utf-8') as f:
+        f.write(error_text)
+
+    def application(environ, start_response):
+        with open(LOG_FILE, 'w', encoding='utf-8') as f:
+            f.write(error_text)
+        start_response('500 Internal Server Error', [('Content-Type', 'text/plain')])
+        return [error_text.encode('utf-8')]

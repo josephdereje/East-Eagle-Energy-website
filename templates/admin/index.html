@@ -1,0 +1,95 @@
+{% extends "admin/index.html" %}
+{% load i18n static admin_dashboard %}
+
+{% block content %}
+<div class="admin-dashboard">
+  <section class="admin-hero">
+    <div class="admin-hero-content">
+      <p class="admin-hero-eyebrow">Energy That Never Grows Weary</p>
+      <h1>Welcome to your dashboard</h1>
+      <p>Manage products, blog posts, contact inquiries, and homepage content for easteagleenergy.com.</p>
+      <div class="admin-hero-actions">
+        <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">
+          <i class="fa fa-plus"></i> Add Product
+        </a>
+        <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">
+          <i class="fa fa-pen"></i> New Blog Post
+        </a>
+        <a href="/" target="_blank" rel="noopener" class="admin-btn admin-btn-ghost">
+          <i class="fa fa-external-link"></i> View Website
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {% admin_dashboard_stats as stats %}
+  <section class="admin-stats-grid">
+    <article class="admin-stat-card">
+      <div class="admin-stat-icon products"><i class="fa fa-box"></i></div>
+      <div>
+        <h3>{{ stats.products }}</h3>
+        <p>Active products</p>
+        <span>{{ stats.products_total }} total</span>
+      </div>
+    </article>
+    <article class="admin-stat-card">
+      <div class="admin-stat-icon blog"><i class="fa fa-newspaper"></i></div>
+      <div>
+        <h3>{{ stats.blog_posts }}</h3>
+        <p>Published posts</p>
+        <span>{{ stats.blog_drafts }} drafts</span>
+      </div>
+    </article>
+    <article class="admin-stat-card">
+      <div class="admin-stat-icon inquiries"><i class="fa fa-envelope"></i></div>
+      <div>
+        <h3>{{ stats.inquiries }}</h3>
+        <p>Contact inquiries</p>
+        <span>Quote requests</span>
+      </div>
+    </article>
+    <article class="admin-stat-card">
+      <div class="admin-stat-icon ads"><i class="fa fa-image"></i></div>
+      <div>
+        <h3>{{ stats.homepage_ads }}</h3>
+        <p>Homepage ads</p>
+        <span>Active banners</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="admin-quick-links">
+    <h2>Quick links</h2>
+    <div class="admin-quick-grid">
+      <a href="{% url 'admin:products_product_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-solar-panel"></i>
+        <span>Products</span>
+      </a>
+      <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-blog"></i>
+        <span>Blog</span>
+      </a>
+      <a href="{% url 'admin:contact_contactinquiry_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-inbox"></i>
+        <span>Inquiries</span>
+      </a>
+      <a href="{% url 'admin:products_productsidebarsection_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-columns"></i>
+        <span>Sidebars</span>
+      </a>
+      <a href="{% url 'admin:blog_homepagead_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-images"></i>
+        <span>Homepage Ads</span>
+      </a>
+      <a href="{% url 'admin:auth_user_changelist' %}" class="admin-quick-card">
+        <i class="fa fa-user-shield"></i>
+        <span>Users</span>
+      </a>
+    </div>
+  </section>
+</div>
+
+<div class="admin-modules-wrap">
+  {{ block.super }}
+</div>
+{% endblock %}

@@ -14,7 +14,13 @@ SECRET_KEY = os.getenv(
 
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = [
+    host.strip() for host in os.getenv(
+        'ALLOWED_HOSTS',
+        'easteagleenergy.com,www.easteagleenergy.com,mojito.hostns.io,127.0.0.1,localhost',
+    ).split(',')
+    if host.strip()
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'east_eagle_site.apps.EastEagleSiteConfig',
+    'django.contrib.sitemaps',
     'products',
     'contact',
     'blog',
@@ -78,8 +86,14 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'public/static'
+STATICFILES_DIRS = [
+    path for path in [BASE_DIR / 'css', BASE_DIR / 'js', BASE_DIR / 'images']
+    if path.exists()
+]
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media' if DEBUG else BASE_DIR / 'public/media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

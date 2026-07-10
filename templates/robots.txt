@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /health/
+
+Sitemap: https://www.easteagleenergy.com/sitemap.xml

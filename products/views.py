@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
 
@@ -50,6 +52,29 @@ def product_list(request, category=None, voltage_type=None):
             {'slug': VoltageType.HIGH_VOLTAGE, 'label': 'High Voltage'},
         ]
 
+    # SEO
+    if category and category != 'all':
+        cat_label = next((c['label'] for c in categories if c['slug'] == category), 'Products')
+        seo_title = f'{cat_label} | East Eagle Energy'
+        seo_description = (
+            f'Browse East Eagle Energy {cat_label} — solar inverters, batteries, '
+            f'and energy storage systems for Ethiopia.'
+        )
+    else:
+        seo_title = 'Products | East Eagle Energy'
+        seo_description = (
+            'Explore all East Eagle Energy products: residential solar inverters, '
+            'C&I BESS, and ESS solutions for Ethiopia.'
+        )
+
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        'name': seo_title,
+        'url': 'https://www.easteagleenergy.com/products/',
+        'numberOfItems': products.count(),
+    }
+
     return render(
         request,
         'products/list.html',
@@ -60,6 +85,10 @@ def product_list(request, category=None, voltage_type=None):
             'active_category': active_category,
             'active_voltage': active_voltage,
             'sidebar_section': sidebar_section,
+            'seo_title': seo_title,
+            'seo_description': seo_description,
+            'seo_keywords': 'solar inverter Ethiopia, battery storage Ethiopia, BESS Ethiopia, East Eagle Energy products',
+            'schema_json': json.dumps(schema),
         },
     )
 
@@ -83,13 +112,40 @@ def product_detail(request, slug):
         is_active=True
     ).exclude(id=product.id)[:4]
     
+    og_image = (
+        f'https://www.easteagleenergy.com{product.image.url}'
+        if product.image else 'https://www.easteagleenergy.com/images/logo.png'
+    )
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': product.name,
+        'description': product.short_description or product.description[:160],
+        'brand': {'@type': 'Brand', 'name': 'East Eagle Energy'},
+        'url': f'https://www.easteagleenergy.com{product.get_absolute_url()}',
+        'image': og_image,
+        'offers': {
+            '@type': 'Offer',
+            'availability': 'https://schema.org/InStock',
+            'priceCurrency': 'ETB',
+            'seller': {'@type': 'Organization', 'name': 'East Eagle Energy'},
+        },
+    }
+    if product.price:
+        schema['offers']['price'] = str(product.price)
+
     return render(
-        request, 
-        'products/detail.html', 
+        request,
+        'products/detail.html',
         {
             'product': product,
             'related_products': related_products,
             'sidebar_section': sidebar_section,
+            'seo_title': f'{product.name} | East Eagle Energy',
+            'seo_description': product.short_description or product.description[:160],
+            'og_image': og_image,
+            'og_type': 'product',
+            'schema_json': json.dumps(schema),
         }
     )
 

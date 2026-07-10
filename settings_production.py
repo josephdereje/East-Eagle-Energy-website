@@ -2,11 +2,11 @@
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
-load_dotenv()
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-mu!l#vd3fyvd7g)gfyues*if38)wf8co8xa^)9l8^d62)wapgu')
@@ -14,7 +14,13 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-mu!l#vd3fyvd7g)gfyu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'easteagleenergy.com,www.easteagleenergy.com,127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = [
+    host.strip() for host in os.getenv(
+        'ALLOWED_HOSTS',
+        'easteagleenergy.com,www.easteagleenergy.com,mojito.hostns.io,127.0.0.1,localhost',
+    ).split(',')
+    if host.strip()
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'east_eagle_site.apps.EastEagleSiteConfig',
+    'django.contrib.sitemaps',
     'products',
     'contact',
     'blog',
@@ -85,11 +93,10 @@ STATIC_ROOT = BASE_DIR / 'public/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'public/media'
 
-# Additional static file directories
+# Only include folders that exist (avoids collectstatic errors on server)
 STATICFILES_DIRS = [
-    BASE_DIR / 'css',
-    BASE_DIR / 'js',
-    BASE_DIR / 'images',
+    path for path in [BASE_DIR / 'css', BASE_DIR / 'js', BASE_DIR / 'images']
+    if path.exists()
 ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | East Eagle Energy{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/css/admin.css">
+{% endblock %}
+
+{% block branding %}
+<div id="branding">
+  <div id="site-name">
+    <a href="{% url 'admin:index' %}">
+      <img src="/images/logo.png" alt="East Eagle Energy" class="admin-logo">
+      <span class="admin-brand-text">
+        <strong>East Eagle Energy</strong>
+        <small>Admin Dashboard</small>
+      </span>
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

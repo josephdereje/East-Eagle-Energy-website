@@ -16,20 +16,22 @@
 - [ ] Navigate to public_html
 - [ ] Upload `easteagle-deployment.zip`
 - [ ] Extract ZIP file
-- [ ] Rename folder to `easteagle`
+- [ ] Rename folder to `east_eagle`
 
 ### ☑️ 2. Setup Python App (10 minutes)
 - [ ] Find "Setup Python App" in cPanel
 - [ ] Click "Create Application"
 - [ ] Set Python version: 3.9+
-- [ ] Set application root: `easteagle`
+- [ ] Set application root: `public_html/east_eagle`
+- [ ] Set application URL: `/`
 - [ ] Set startup file: `passenger_wsgi.py`
+- [ ] Set entry point: `application`
 - [ ] Click Create and wait
 
 ### ☑️ 3. Install Dependencies (5 minutes)
 - [ ] Open Terminal in cPanel
-- [ ] Activate virtual environment
-- [ ] Run: `pip install -r requirements.txt`
+- [ ] Activate virtual environment (see Quick Commands below)
+- [ ] Run: `pip install Django Pillow python-dotenv`
 
 ### ☑️ 4. Configure Settings (10 minutes)
 - [ ] Create `.env` file in project root
@@ -50,9 +52,9 @@
 - [ ] Run: `python manage.py collectstatic --noinput`
 
 ### ☑️ 7. Configure Domain (5 minutes)
-- [ ] Verify domain points to project folder
-- [ ] Create `.htaccess` file
-- [ ] Configure URL rewrites
+- [ ] Domain root stays as `public_html` (normal for main domain)
+- [ ] Python App root must be `public_html/east_eagle`
+- [ ] Do NOT create a custom `.htaccess` file
 
 ### ☑️ 8. Restart & Test (5 minutes)
 - [ ] Restart Python application
@@ -84,36 +86,44 @@
 
 ---
 
-## Quick Commands
+## Quick Commands (your cPanel paths)
 
 ```bash
-# Activate virtualenv (replace path)
-source /home/yourusername/virtualenv/easteagle/3.9/bin/activate
+# 1. Activate virtual environment
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
 
-# Navigate to project
-cd ~/public_html/easteagle
+# 2. Go to your project folder
+cd ~/public_html/east_eagle
 
-# Install packages
-pip install -r requirements.txt
+# 3. Install packages
+pip install Django Pillow python-dotenv
 
-# Run migrations
+# 4. Create .env file (copy from template, then edit with Gmail + secret key)
+cp .env.production .env
+nano .env
+
+# 5. Run migrations and load data
 python manage.py migrate
-
-# Create admin user
 python manage.py createsuperuser
-
-# Load data
-python manage.py seed_products
 python manage.py seed_blog
 python manage.py seed_sidebars
 
-# Collect static
+# 6. Collect static files
 mkdir -p public/static public/media
 python manage.py collectstatic --noinput
 
-# Restart app
+# 7. Restart the app
 touch passenger_wsgi.py
 ```
+
+## Your server paths
+
+| Item | Path |
+|------|------|
+| **Project folder** | `/home/easteagl/public_html/east_eagle/` |
+| **Virtualenv** | `/home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate` |
+| **Domain root** | `/home/easteagl/public_html/` |
+| **Python App root** | `public_html/east_eagle` |
 
 ---
 
@@ -140,19 +150,29 @@ touch passenger_wsgi.py
 
 **500 Error?**
 ```bash
-tail -f ~/logs/easteagle-error.log
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
+cd ~/public_html/east_eagle
+python manage.py check
+python manage.py shell -c "
+from django.test import Client
+r = Client(HTTP_HOST='www.easteagleenergy.com').get('/')
+print('Status:', r.status_code)
+"
 ```
 
 **Static files not loading?**
 ```bash
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
+cd ~/public_html/east_eagle
 python manage.py collectstatic --clear --noinput
-chmod -R 755 ~/public_html/easteagle/public/static
+chmod -R 755 ~/public_html/east_eagle/public/static
 ```
 
 **Module not found?**
 ```bash
-source /home/yourusername/virtualenv/easteagle/3.9/bin/activate
-pip install --force-reinstall -r requirements.txt
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
+cd ~/public_html/east_eagle
+pip install --force-reinstall Django Pillow python-dotenv
 ```
 
 ---
