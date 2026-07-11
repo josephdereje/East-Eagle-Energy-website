@@ -1,131 +1,118 @@
 # cPanel Deployment Commands - Quick Reference
 
-## 📦 Pull Latest Changes from GitHub to cPanel
+## Why CSS looks wrong after `git pull`
 
-Follow these commands in order:
+The site loads styles from **`/css/styles.css`** and **`/css/dark-mode.css`**.
 
-### Step 1: Open cPanel Terminal
-1. Go to: http://mojito.hostns.io:2083/
-2. Login with your credentials
-3. Click **"Terminal"** (in Advanced section)
+On cPanel, Apache often serves those from **`public_html/css/`**, not from Django’s `collectstatic` folder (`public/static/`).
 
-### Step 2: Navigate and Activate Environment
+So after every pull you must:
+
+1. Update the Django app (`git pull` + `collectstatic` + restart)
+2. **Copy CSS / JS / images into `public_html`**
+
+---
+
+## All commands (copy & paste)
+
 ```bash
-# Go to your project directory
+# 1) Project + venv
 cd /home/easteagl/easteagle
-
-# Activate the virtual environment
-source /home/easteagl/virtualenv/easteagle/3.9/bin/activate
-```
-
-### Step 3: Pull Updates from GitHub
-```bash
-# Pull latest code
-git pull origin main
-```
-
-### Step 4: Update Static Files
-```bash
-# Collect static files (CSS, images, JS)
-python manage.py collectstatic --no-input
-```
-
-### Step 5: Restart Application
-Option A - Via Terminal:
-```bash
-touch passenger_wsgi.py
-```
-
-Option B - Via cPanel Interface:
-1. Go to **"Setup Python App"** in cPanel
-2. Find your application
-3. Click **"Restart"** button
-
----
-
-## ✅ Verification
-
-After deployment, check:
-
-1. **Website loads**: https://www.easteagleenergy.com
-2. **Logo appears correctly**: New white background logo
-3. **No 500 errors**: Check homepage, products, blog
-
-If you see a 500 error:
-```bash
-# View error logs
-tail -100 ~/error_log
-
-# Or restart the app
-touch passenger_wsgi.py
-```
-
----
-
-## 🔍 Test Structured Data
-
-After deploying, test your SEO improvements:
-
-1. Go to: https://search.google.com/test/rich-results
-2. Enter: `https://www.easteagleenergy.com`
-3. Click **"Test URL"**
-4. Verify you see:
-   - ✅ Organization schema
-   - ✅ WebSite schema
-   - ✅ Logo URL
-   - ✅ Site name "East Eagle Energy"
-
----
-
-## 📝 All Commands in One Block (Copy & Paste)
-
-```bash
-# Navigate to project
-cd /home/easteagl/easteagle
-
-# Activate environment
 source /home/easteagl/virtualenv/easteagle/3.9/bin/activate
 
-# Pull latest changes
+# 2) Pull latest code
 git pull origin main
 
-# Update static files
+# 3) Database + Django static (WhiteNoise /static/)
+python manage.py migrate
 python manage.py collectstatic --no-input
 
-# Restart application
+# 4) Sync files Apache serves at /css /js /images
+mkdir -p /home/easteagl/public_html/css \
+         /home/easteagl/public_html/js \
+         /home/easteagl/public_html/images
+
+cp -f /home/easteagl/easteagle/css/*.css /home/easteagl/public_html/css/
+cp -f /home/easteagl/easteagle/js/*.js   /home/easteagl/public_html/js/
+cp -f /home/easteagl/easteagle/images/*  /home/easteagl/public_html/images/
+
+# 5) Restart Passenger
+touch /home/easteagl/easteagle/passenger_wsgi.py
+```
+
+### If your app lives under `public_html` instead
+
+```bash
+cd ~/public_html/easteagle
+# or: cd ~/public_html/east_eagle
+
+source /home/easteagl/virtualenv/easteagle/3.9/bin/activate
+# adjust venv path if different:
+# source ~/virtualenv/public_html/easteagle/3.9/bin/activate
+
+git pull origin main
+python manage.py migrate
+python manage.py collectstatic --no-input
+
+mkdir -p ~/public_html/css ~/public_html/js ~/public_html/images
+cp -f css/*.css ~/public_html/css/
+cp -f js/*.js   ~/public_html/js/
+cp -f images/*  ~/public_html/images/
+
 touch passenger_wsgi.py
 ```
 
 ---
 
-## 🎯 What's New in This Update
+## Files that must land in `public_html/css/`
 
-✅ Enhanced SEO schema (Organization + WebSite)  
-✅ Site name set to "East Eagle Energy" for Google  
-✅ New logo with white background (160px height)  
-✅ Header layout optimized (no gap, navigation closer)  
-✅ Logo configured for Google search results  
-✅ Added comprehensive Google Search Console guide  
+| File | Purpose |
+|------|---------|
+| `styles.css` | Main layout, mobile, products |
+| `dark-mode.css` | Night mode |
+| `admin.css` | Admin (if used from /css/) |
 
----
+Also sync:
 
-## ⏱️ Expected Changes
-
-| Change | When You'll See It |
-|--------|-------------------|
-| Logo on website | Immediately after deployment |
-| CSS/layout updates | Immediately (may need cache clear) |
-| Google site name change | 1-4 weeks |
-| Logo in Google search | 2-4 weeks |
+- `public_html/js/` → `theme.js`, `main.js`, `home-animations.js`, `product-detail.js`, …
+- `public_html/images/` → `logo-transparent.png`, `logo-light.png`, favicons, …
 
 ---
 
-## 📚 Additional Resources
+## Hard refresh after deploy
 
-- **Google Search Console Guide**: `GOOGLE_SEARCH_CONSOLE_GUIDE.md`
-- **Deployment Checklist**: `SEO_LOGO_DEPLOYMENT.md`
+Browsers cache CSS heavily. After upload:
+
+1. Open the site
+2. Hard refresh: **Ctrl+Shift+R** (Windows) or **Cmd+Shift+R** (Mac)
+3. Or open DevTools → Network → “Disable cache” → reload
+
+Check the CSS URL loads the new file:
+
+- https://www.easteagleenergy.com/css/styles.css
+- https://www.easteagleenergy.com/css/dark-mode.css
 
 ---
 
-**Last Updated**: July 11, 2026  
-**Git Commit**: `32efa5f` - "Update SEO schema, logo, and add Google Search Console guide"
+## Quick check on the server
+
+```bash
+ls -la /home/easteagl/public_html/css/
+ls -la /home/easteagl/easteagle/css/
+# timestamps / sizes should match after cp
+diff -q /home/easteagl/easteagle/css/styles.css /home/easteagl/public_html/css/styles.css
+diff -q /home/easteagl/easteagle/css/dark-mode.css /home/easteagl/public_html/css/dark-mode.css
+```
+
+If `diff` prints nothing, the public_html CSS matches the app.
+
+---
+
+## File Manager (no Terminal)
+
+1. cPanel → **File Manager**
+2. Open `/home/easteagl/easteagle/css/`
+3. Select `styles.css` and `dark-mode.css` → **Copy**
+4. Paste into `/home/easteagl/public_html/css/` (overwrite)
+5. Repeat for `js/` and `images/` if needed
+6. Setup Python App → **Restart**

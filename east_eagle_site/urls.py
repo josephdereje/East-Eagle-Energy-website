@@ -147,10 +147,16 @@ urlpatterns = [
     path('contact/', include('contact.urls')),
 ]
 
+# Templates load /css/, /js/, /images/ (not /static/). Serve these in
+# production too so updates from git pull apply without relying only on
+# a separate public_html copy. Media stays DEBUG-only when DEBUG is True.
+urlpatterns += [
+    re_path(r'^css/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'css'}),
+    re_path(r'^js/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'js'}),
+    re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'images'}),
+]
+
 if settings.DEBUG:
     urlpatterns += [
-        re_path(r'^css/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'css'}),
-        re_path(r'^js/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'js'}),
-        re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'images'}),
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     ]
