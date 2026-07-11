@@ -33,25 +33,55 @@ def home(request):
     homepage_ads = HomepageAd.objects.filter(is_active=True)[:3]
     latest_blog_posts = BlogPost.objects.filter(is_published=True)[:3]
     
+    # Schema.org structured data with both Organization and WebSite
     schema = {
         '@context': 'https://schema.org',
-        '@type': 'Organization',
-        'name': 'East Eagle Energy',
-        'url': 'https://www.easteagleenergy.com',
-        'logo': 'https://www.easteagleenergy.com/images/logo.png',
-        'description': (
-            'East Eagle Energy specializes in solar inverters, LiFePO4 batteries, '
-            'and energy storage systems for homes and businesses worldwide. '
-            'Energy That Never Grows Weary.'
-        ),
-        'foundingDate': '2022',
-        'address': {
-            '@type': 'PostalAddress',
-            'streetAddress': 'Century Executive Tower, 12-Room Number F12/06',
-            'addressLocality': 'Addis Ababa',
-            'addressCountry': 'ET',
-        },
-        'telephone': '+251933219802',
+        '@graph': [
+            {
+                '@type': 'Organization',
+                '@id': 'https://www.easteagleenergy.com/#organization',
+                'name': 'East Eagle Energy',
+                'url': 'https://www.easteagleenergy.com',
+                'logo': {
+                    '@type': 'ImageObject',
+                    'url': 'https://www.easteagleenergy.com/images/logo.png',
+                    'width': 250,
+                    'height': 160,
+                },
+                'description': (
+                    'East Eagle Energy specializes in solar inverters, LiFePO4 batteries, '
+                    'and energy storage systems for homes and businesses worldwide. '
+                    'Energy That Never Grows Weary.'
+                ),
+                'foundingDate': '2022',
+                'address': {
+                    '@type': 'PostalAddress',
+                    'streetAddress': 'Century Executive Tower, 12-Room Number F12/06',
+                    'addressLocality': 'Addis Ababa',
+                    'addressCountry': 'ET',
+                },
+                'telephone': '+251933219802',
+                'sameAs': [
+                    'https://www.facebook.com/easteagleenergy',
+                    'https://www.linkedin.com/company/easteagleenergy',
+                ],
+            },
+            {
+                '@type': 'WebSite',
+                '@id': 'https://www.easteagleenergy.com/#website',
+                'url': 'https://www.easteagleenergy.com',
+                'name': 'East Eagle Energy',
+                'description': 'Global provider of solar energy solutions',
+                'publisher': {
+                    '@id': 'https://www.easteagleenergy.com/#organization'
+                },
+                'potentialAction': {
+                    '@type': 'SearchAction',
+                    'target': 'https://www.easteagleenergy.com/products/search/?q={search_term_string}',
+                    'query-input': 'required name=search_term_string',
+                },
+            },
+        ],
     }
 
     return render(
