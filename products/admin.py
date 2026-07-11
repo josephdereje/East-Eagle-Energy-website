@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, ProductSidebarSection, ProductSidebarImage, ProductType, EssSubType
+from .models import Product, ProductSidebarSection, ProductSidebarImage, RecommendedProduct
 
 
 class ProductSidebarImageInline(admin.TabularInline):
@@ -37,5 +37,26 @@ class ProductSidebarSectionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('category', 'title', 'description', 'display_order', 'is_active')
+        }),
+    )
+
+
+@admin.register(RecommendedProduct)
+class RecommendedProductAdmin(admin.ModelAdmin):
+    list_display = ('display_title', 'badge', 'product', 'is_active', 'display_order', 'created_at')
+    list_filter = ('badge', 'is_active')
+    list_editable = ('is_active', 'display_order')
+    search_fields = ('title', 'subtitle', 'product__name')
+    autocomplete_fields = ('product',)
+    fieldsets = (
+        ('Link to catalog (optional)', {
+            'fields': ('product',),
+            'description': 'Pick a product to auto-fill title/image/link, or leave blank for a custom promo.',
+        }),
+        ('Promo content', {
+            'fields': ('title', 'subtitle', 'badge', 'image', 'link_url', 'button_text'),
+        }),
+        ('Display', {
+            'fields': ('display_order', 'is_active'),
         }),
     )

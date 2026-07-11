@@ -502,3 +502,49 @@
   background: var(--orange);
   color: #1a2432;
 }
+
+/* Recommended Products — classy showcase */
+[data-theme="dark"] .rec-showcase-title {
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .rec-showcase-counter {
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .rec-stage {
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .rec-progress-item {
+  background: var(--dm-border-strong);
+}
+
+[data-theme="dark"] .product-pager {
+  border-top-color: var(--dm-border);
+}
+
+[data-theme="dark"] .product-pager-note {
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .product-pager-page,
+[data-theme="dark"] .product-pager-btn {
+  background: var(--dm-surface);
+  border-color: var(--dm-border-strong);
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .product-pager-page-label {
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .dyness-main-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 168, 188, 0.35);
+}
+
+[data-theme="dark"] .dyness-main-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}

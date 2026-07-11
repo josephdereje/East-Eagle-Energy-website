@@ -135,3 +135,101 @@ class ProductSidebarImage(models.Model):
     
     def __str__(self):
         return f'{self.title or "Image"} - {self.sidebar_section}'
+
+
+class RecommendedProduct(models.Model):
+    """
+    Featured / best-seller promo slides on the product list page.
+    Ad-style cards managed in admin — link to a catalog product or a custom URL.
+    """
+
+    class Badge(models.TextChoices):
+        BEST_SELLER = 'best_seller', 'Best Seller'
+        FEATURED = 'featured', 'Featured'
+        HOT_DEAL = 'hot_deal', 'Hot Deal'
+        NEW = 'new', 'New Arrival'
+        POPULAR = 'popular', 'Popular'
+        PROMO = 'promo', 'Promo'
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='recommendations',
+        help_text='Optional: link to a catalog product',
+    )
+    title = models.CharField(
+        max_length=150,
+        blank=True,
+        help_text='Leave blank to use the product name',
+    )
+    subtitle = models.CharField(
+        max_length=250,
+        blank=True,
+        help_text='Short promo line under the title',
+    )
+    badge = models.CharField(
+        max_length=20,
+        choices=Badge.choices,
+        default=Badge.BEST_SELLER,
+    )
+    image = models.ImageField(
+        upload_to='recommended/',
+        blank=True,
+        null=True,
+        help_text='Promo image (uses product image if empty)',
+    )
+    link_url = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text='Optional custom link. Blank = product page URL',
+    )
+    button_text = models.CharField(max_length=50, default='View Product')
+    display_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['display_order', '-created_at']
+        verbose_name = 'Recommended Product'
+        verbose_name_plural = 'Recommended Products'
+
+    def __str__(self):
+        return self.display_title
+
+    @property
+    def display_title(self):
+        if self.title:
+            return self.title
+        if self.product_id:
+            return self.product.name
+        return 'Recommended Product'
+
+    @property
+    def display_subtitle(self):
+        if self.subtitle:
+            return self.subtitle
+        if self.product_id and self.product.short_description:
+            return self.product.short_description
+        return ''
+
+    @property
+    def display_image_url(self):
+        if self.image:
+            return self.image.url
+        if self.product_id and self.product.image:
+            return self.product.image.url
+        return ''
+
+    @property
+    def display_url(self):
+        if self.link_url:
+            return self.link_url
+        if self.product_id:
+            return self.product.get_absolute_url()
+        return '/products/'
+
+    @property
+    def badge_label(self):
+        return self.get_badge_display()

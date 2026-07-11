@@ -1,8 +1,12 @@
 import json
 
+from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 from .models import (
     EssSubType,
@@ -10,8 +14,59 @@ from .models import (
     ProductCategory,
     ProductSidebarSection,
     ProductType,
+    RecommendedProduct,
     VoltageType,
 )
+
+PRODUCTS_PER_PAGE = 12
+
+def _product_card_payload(product):
+    desc = product.short_description or strip_tags(product.description or '')
+    type_labels = {
+        ProductType.INVERTER: 'Inverter',
+        ProductType.SOLAR_PANEL: 'Solar Panel',
+        ProductType.EV_CHARGER: 'EV Charger',
+        ProductType.ENERGY_STORAGE: 'ESS',
+    }
+    icon = 'fa-solar-panel' if product.product_type == ProductType.INVERTER else 'fa-battery-full'
+    if product.product_type == ProductType.SOLAR_PANEL:
+        icon = 'fa-solar-panel'
+    elif product.product_type == ProductType.EV_CHARGER:
+        icon = 'fa-charging-station'
+
+    return {
+        'name': product.name,
+        'slug': product.slug,
+        'url': product.get_absolute_url(),
+        'image_url': product.image.url if product.image else '',
+        'short_description': Truncator(desc).words(12, truncate=' …'),
+        'product_type': product.product_type,
+        'type_label': type_labels.get(product.product_type, 'ESS'),
+        'type_class': {
+            ProductType.INVERTER: 'dyness-tag--inverter',
+            ProductType.SOLAR_PANEL: 'dyness-tag--solar',
+            ProductType.EV_CHARGER: 'dyness-tag--ev',
+        }.get(product.product_type, 'dyness-tag--ess'),
+        'voltage_label': (
+            product.voltage_label
+            if product.voltage_type != VoltageType.NOT_APPLICABLE
+            else ''
+        ),
+        'ess_sub_type_label': (
+            product.ess_sub_type_label
+            if product.ess_sub_type != EssSubType.NOT_APPLICABLE
+            else ''
+        ),
+        'icon': icon,
+    }
+
+
+def _wants_ajax(request):
+    return (
+        request.GET.get('ajax') == '1'
+        or request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    )
+
 
 def _product_count(**filters):
     return Product.objects.filter(is_active=True, **filters).count()
@@ -431,28 +486,66 @@ def product_list(
         'numberOfItems': products.count(),
     }
 
-    return render(
-        request,
-        'products/list.html',
-        {
-            'products': products,
-            'nav_groups': nav_groups,
-            'active_section': active_section,
-            'active_category': active_category,
-            'active_voltage': active_voltage,
-            'active_ess_sub': active_ess_sub,
-            'active_filter': active_filter,
-            'page_title': page_title,
-            'sidebar_section': sidebar_section,
-            'seo_title': seo_title,
-            'seo_description': seo_description,
-            'seo_keywords': (
-                'solar inverter, solar panel, EV charger, battery storage, BESS, ESS, '
-                'energy storage, East Eagle Energy products'
-            ),
-            'schema_json': json.dumps(schema),
-        },
+    recommended = (
+        RecommendedProduct.objects.filter(is_active=True)
+        .select_related('product')
+        .order_by('display_order', '-created_at')[:12]
     )
+
+    products = products.order_by('name')
+    total_products = products.count()
+    paginator = Paginator(products, PRODUCTS_PER_PAGE)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    schema['numberOfItems'] = total_products
+
+    context = {
+        'products': page_obj.object_list,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'total_products': total_products,
+        'nav_groups': nav_groups,
+        'active_section': active_section,
+        'active_category': active_category,
+        'active_voltage': active_voltage,
+        'active_ess_sub': active_ess_sub,
+        'active_filter': active_filter,
+        'page_title': page_title,
+        'sidebar_section': sidebar_section,
+        'recommended_products': recommended,
+        'seo_title': seo_title,
+        'seo_description': seo_description,
+        'seo_keywords': (
+            'solar inverter, solar panel, EV charger, battery storage, BESS, ESS, '
+            'energy storage, East Eagle Energy products'
+        ),
+        'schema_json': json.dumps(schema),
+    }
+
+    if _wants_ajax(request):
+        return JsonResponse({
+            'ok': True,
+            'page_title': page_title,
+            'seo_title': seo_title,
+            'active_section': active_section,
+            'active_filter': active_filter,
+            'total_products': total_products,
+            'nav_groups': nav_groups,
+            'products': [_product_card_payload(p) for p in page_obj.object_list],
+            'pagination': {
+                'page': page_obj.number,
+                'num_pages': paginator.num_pages,
+                'has_previous': page_obj.has_previous(),
+                'has_next': page_obj.has_next(),
+                'previous_page': page_obj.previous_page_number() if page_obj.has_previous() else None,
+                'next_page': page_obj.next_page_number() if page_obj.has_next() else None,
+                'page_range': list(paginator.page_range),
+                'showing': len(page_obj.object_list),
+            },
+        })
+
+    return render(request, 'products/list.html', context)
 
 
 def product_detail(request, slug):

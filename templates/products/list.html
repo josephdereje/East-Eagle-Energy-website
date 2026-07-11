@@ -3,25 +3,75 @@
   <section class="section products-page dyness-layout">
     <div class="container">
 
-      <!-- Top product categories -->
-      <div class="product-section-tabs">
-        <a href="{% url 'products:ess' %}" class="section-tab {% if active_section == 'ess' %}active{% endif %}">
-          <i class="fa fa-battery-full"></i>
-          Energy Storage Systems
-        </a>
-        <a href="{% url 'products:inverters' %}" class="section-tab {% if active_section == 'inverters' %}active{% endif %}">
-          <i class="fa fa-bolt"></i>
-          Inverters
-        </a>
-        <a href="{% url 'products:solar_panels' %}" class="section-tab {% if active_section == 'solar_panels' %}active{% endif %}">
-          <i class="fa fa-solar-panel"></i>
-          Solar Panels
-        </a>
-        <a href="{% url 'products:ev_chargers' %}" class="section-tab {% if active_section == 'ev_chargers' %}active{% endif %}">
-          <i class="fa fa-charging-station"></i>
-          EV Chargers
-        </a>
-      </div>
+      {% if recommended_products %}
+      <section class="rec-showcase" aria-label="Recommended products" id="recShowcase">
+        <div class="rec-showcase-top">
+          <div class="rec-showcase-heading">
+            <span class="rec-showcase-line" aria-hidden="true"></span>
+            <p class="rec-showcase-eyebrow">Curated Selection</p>
+            <h2 class="rec-showcase-title">Recommended Products</h2>
+          </div>
+          <div class="rec-showcase-meta">
+            <span class="rec-showcase-counter" id="recCounter">01 / {{ recommended_products|length|stringformat:"02d" }}</span>
+          </div>
+        </div>
+
+        <div class="rec-stage">
+          {% for item in recommended_products %}
+          <article
+            class="rec-slide{% if forloop.first %} is-active{% endif %} rec-slide--{{ item.badge }}"
+            data-rec-slide
+            {% if not forloop.first %}aria-hidden="true"{% endif %}
+          >
+            <div class="rec-slide-visual">
+              {% if item.display_image_url %}
+              <img src="{{ item.display_image_url }}" alt="{{ item.display_title }}" class="rec-slide-img">
+              {% else %}
+              <div class="rec-slide-fallback" aria-hidden="true">
+                <i class="fa fa-solar-panel"></i>
+              </div>
+              {% endif %}
+              <div class="rec-slide-veil"></div>
+            </div>
+
+            <div class="rec-slide-copy">
+              <span class="rec-slide-badge">{{ item.badge_label }}</span>
+              <h3 class="rec-slide-name">{{ item.display_title }}</h3>
+              {% if item.display_subtitle %}
+              <p class="rec-slide-text">{{ item.display_subtitle|truncatewords:14 }}</p>
+              {% endif %}
+              <a href="{{ item.display_url }}" class="rec-slide-cta">
+                <span>{{ item.button_text }}</span>
+                <i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </article>
+          {% endfor %}
+
+          <div class="rec-stage-nav">
+            <button type="button" class="rec-nav-btn rec-prev" aria-label="Previous recommendation">
+              <i class="fa fa-arrow-left"></i>
+            </button>
+            <button type="button" class="rec-nav-btn rec-next" aria-label="Next recommendation">
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="rec-progress" role="tablist" aria-label="Recommended slides">
+          {% for item in recommended_products %}
+          <button
+            type="button"
+            class="rec-progress-item{% if forloop.first %} is-active{% endif %}"
+            data-rec-goto="{{ forloop.counter0 }}"
+            aria-label="Show {{ item.display_title }}"
+          >
+            <span class="rec-progress-fill"></span>
+          </button>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
 
       <!-- Search Bar -->
       <div class="product-page-search">
@@ -38,10 +88,31 @@
         </form>
       </div>
 
+      <!-- Top product categories -->
+      <div class="product-section-tabs">
+        <a href="{% url 'products:ess' %}" class="section-tab {% if active_section == 'ess' %}active{% endif %}" data-section="ess" data-catalog-nav>
+          <i class="fa fa-battery-full"></i>
+          Energy Storage Systems
+        </a>
+        <a href="{% url 'products:inverters' %}" class="section-tab {% if active_section == 'inverters' %}active{% endif %}" data-section="inverters" data-catalog-nav>
+          <i class="fa fa-bolt"></i>
+          Inverters
+        </a>
+        <a href="{% url 'products:solar_panels' %}" class="section-tab {% if active_section == 'solar_panels' %}active{% endif %}" data-section="solar_panels" data-catalog-nav>
+          <i class="fa fa-solar-panel"></i>
+          Solar Panels
+        </a>
+        <a href="{% url 'products:ev_chargers' %}" class="section-tab {% if active_section == 'ev_chargers' %}active{% endif %}" data-section="ev_chargers" data-catalog-nav>
+          <i class="fa fa-charging-station"></i>
+          EV Chargers
+        </a>
+      </div>
+
       <div class="dyness-container">
 
         <!-- Left Sidebar Navigation -->
         <aside class="dyness-sidebar">
+          <div id="catalogSidebarNav">
           {% for group in nav_groups %}
           <div class="dyness-nav-group">
             <div class="dyness-nav-group-header">
@@ -51,7 +122,8 @@
             <nav class="dyness-nav-items">
               {% for item in group.items %}
               <a href="{{ item.url }}"
-                 class="dyness-nav-link {% if item.is_sub %}dyness-nav-link--sub{% endif %} {% if active_filter == item.filter_key %}active{% endif %}">
+                 class="dyness-nav-link {% if item.is_sub %}dyness-nav-link--sub{% endif %} {% if active_filter == item.filter_key %}active{% endif %}"
+                 data-catalog-nav>
                 {{ item.label }}
                 {% if item.count %}<span class="nav-count">{{ item.count }}</span>{% endif %}
               </a>
@@ -59,6 +131,7 @@
             </nav>
           </div>
           {% endfor %}
+          </div>
 
           <!-- Sidebar promo images from admin -->
           {% if sidebar_section and sidebar_section.images.all %}
@@ -86,54 +159,104 @@
         <!-- Main Product Grid -->
         <div class="dyness-main">
           <div class="dyness-main-header">
-            <h2>{{ page_title }}</h2>
-            <span class="product-count-label">{{ products|length }} product{{ products|length|pluralize }}</span>
+            <h2 id="catalogPageTitle">{{ page_title }}</h2>
+            <span class="product-count-label" id="catalogPageCount">
+              {% if total_products %}
+                {{ total_products }} product{{ total_products|pluralize }}
+                {% if page_obj.paginator.num_pages > 1 %}
+                  · Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                {% endif %}
+              {% else %}
+                0 products
+              {% endif %}
+            </span>
           </div>
 
-          <div class="dyness-product-grid">
-            {% for product in products %}
-            <a href="{% url 'products:detail' product.slug %}" class="dyness-product-card">
-              <div class="dyness-product-image">
-                {% if product.image %}
-                  <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                {% else %}
-                  <div class="dyness-product-placeholder">
-                    <i class="fa {% if product.product_type == 'inverter' %}fa-solar-panel{% else %}fa-battery-full{% endif %}"></i>
-                  </div>
-                {% endif %}
-              </div>
-              <div class="dyness-product-info">
-                <h3>{{ product.name }}</h3>
-                <p class="dyness-product-spec">
-                  {{ product.short_description|default:product.description|truncatewords:12 }}
-                </p>
-                <div class="dyness-product-tags">
-                  {% if product.product_type == 'inverter' %}
-                  <span class="dyness-tag dyness-tag--inverter">Inverter</span>
-                  {% elif product.product_type == 'solar_panel' %}
-                  <span class="dyness-tag dyness-tag--solar">Solar Panel</span>
-                  {% elif product.product_type == 'ev_charger' %}
-                  <span class="dyness-tag dyness-tag--ev">EV Charger</span>
+          <div class="dyness-main-scroll" id="productGrid" tabindex="0" aria-label="Product list">
+            <div class="dyness-product-grid">
+              {% for product in products %}
+              <a href="{% url 'products:detail' product.slug %}" class="dyness-product-card">
+                <div class="dyness-product-image">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
                   {% else %}
-                  <span class="dyness-tag dyness-tag--ess">ESS</span>
-                  {% endif %}
-                  {% if product.voltage_type != 'not_applicable' %}
-                  <span class="dyness-tag">{{ product.voltage_label }}</span>
-                  {% endif %}
-                  {% if product.ess_sub_type != 'not_applicable' %}
-                  <span class="dyness-tag">{{ product.ess_sub_type_label }}</span>
+                    <div class="dyness-product-placeholder">
+                      <i class="fa {% if product.product_type == 'inverter' %}fa-solar-panel{% else %}fa-battery-full{% endif %}"></i>
+                    </div>
                   {% endif %}
                 </div>
+                <div class="dyness-product-info">
+                  <h3>{{ product.name }}</h3>
+                  <p class="dyness-product-spec">
+                    {{ product.short_description|default:product.description|truncatewords:12 }}
+                  </p>
+                  <div class="dyness-product-tags">
+                    {% if product.product_type == 'inverter' %}
+                    <span class="dyness-tag dyness-tag--inverter">Inverter</span>
+                    {% elif product.product_type == 'solar_panel' %}
+                    <span class="dyness-tag dyness-tag--solar">Solar Panel</span>
+                    {% elif product.product_type == 'ev_charger' %}
+                    <span class="dyness-tag dyness-tag--ev">EV Charger</span>
+                    {% else %}
+                    <span class="dyness-tag dyness-tag--ess">ESS</span>
+                    {% endif %}
+                    {% if product.voltage_type != 'not_applicable' %}
+                    <span class="dyness-tag">{{ product.voltage_label }}</span>
+                    {% endif %}
+                    {% if product.ess_sub_type != 'not_applicable' %}
+                    <span class="dyness-tag">{{ product.ess_sub_type_label }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="dyness-card-accent"></div>
+              </a>
+              {% empty %}
+              <div class="dyness-empty">
+                <i class="fa fa-box-open"></i>
+                <h3>No products found</h3>
+                <p>Try a different category or <a href="{% url 'products:search' %}">search our catalog</a>.</p>
               </div>
-              <div class="dyness-card-accent"></div>
-            </a>
-            {% empty %}
-            <div class="dyness-empty">
-              <i class="fa fa-box-open"></i>
-              <h3>No products found</h3>
-              <p>Try a different category or <a href="{% url 'products:search' %}">search our catalog</a>.</p>
+              {% endfor %}
             </div>
-            {% endfor %}
+
+            {% if page_obj.paginator.num_pages > 1 %}
+            <nav class="product-pager" aria-label="Product pages">
+              <div class="product-pager-track">
+                {% if page_obj.has_previous %}
+                <a class="product-pager-btn" href="?page={{ page_obj.previous_page_number }}" data-catalog-page aria-label="Previous page">
+                  <i class="fa fa-arrow-left"></i>
+                </a>
+                {% else %}
+                <span class="product-pager-btn is-disabled" aria-disabled="true"><i class="fa fa-arrow-left"></i></span>
+                {% endif %}
+
+                <div class="product-pager-pages">
+                  {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                    <span class="product-pager-page is-active" aria-current="page">
+                      <span class="product-pager-page-label">Page</span>
+                      {{ num }}
+                    </span>
+                    {% else %}
+                    <a class="product-pager-page" href="?page={{ num }}" data-catalog-page>
+                      <span class="product-pager-page-label">Page</span>
+                      {{ num }}
+                    </a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+
+                {% if page_obj.has_next %}
+                <a class="product-pager-btn" href="?page={{ page_obj.next_page_number }}" data-catalog-page aria-label="Next page">
+                  <i class="fa fa-arrow-right"></i>
+                </a>
+                {% else %}
+                <span class="product-pager-btn is-disabled" aria-disabled="true"><i class="fa fa-arrow-right"></i></span>
+                {% endif %}
+              </div>
+              <p class="product-pager-note">Showing {{ products|length }} of {{ total_products }} · 12 per page</p>
+            </nav>
+            {% endif %}
           </div>
         </div>
 
@@ -142,3 +265,5 @@
   </section>
 
 {% include 'includes/footer.html' %}
+<script src="/js/recommended-products.js"></script>
+<script src="/js/product-catalog.js"></script>
