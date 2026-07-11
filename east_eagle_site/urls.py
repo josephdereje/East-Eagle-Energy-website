@@ -41,7 +41,8 @@ def home(request):
         'logo': 'https://www.easteagleenergy.com/images/logo.png',
         'description': (
             'East Eagle Energy specializes in solar inverters, LiFePO4 batteries, '
-            'and energy storage systems for homes and businesses across Ethiopia.'
+            'and energy storage systems for homes and businesses worldwide. '
+            'Energy That Never Grows Weary.'
         ),
         'foundingDate': '2022',
         'address': {
@@ -61,16 +62,16 @@ def home(request):
             'homepage_ads': homepage_ads,
             'latest_blog_posts': latest_blog_posts,
             'contact_form': ContactInquiryForm(),
-            'seo_title': 'East Eagle Energy — Energy That Never Grows Weary',
+            'seo_title': 'East Eagle Energy | Energy Solutions',
             'seo_description': (
-                'East Eagle Energy supplies solar inverters, LiFePO4 batteries, and '
-                'energy storage systems for homes and businesses across Ethiopia. '
-                'Based in Addis Ababa since 2022.'
+                'East Eagle Energy - Global provider of solar inverters, LiFePO4 batteries, and '
+                'energy storage systems. Reliable solar power solutions for homes and businesses '
+                'worldwide. Energy That Never Grows Weary.'
             ),
             'seo_keywords': (
-                'solar energy Ethiopia, inverter Ethiopia, battery storage Addis Ababa, '
-                'East Eagle Energy, LiFePO4 battery, Deye inverter, Growatt Ethiopia, '
-                'BESS Ethiopia, solar panels Ethiopia'
+                'East Eagle Energy, solar energy, solar inverter, battery storage, '
+                'energy solutions, LiFePO4 battery, Deye inverter, Growatt, '
+                'BESS, renewable energy, global solar solutions'
             ),
             'schema_json': json.dumps(schema),
         },
