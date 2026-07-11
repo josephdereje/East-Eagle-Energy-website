@@ -4,13 +4,15 @@ document.getElementById('year').textContent = new Date().getFullYear();
 const menuToggle = document.querySelector('.menu-toggle');
 const mainNav = document.querySelector('.main-nav');
 
-menuToggle.addEventListener('click', () => {
-  mainNav.classList.toggle('open');
-});
+if (menuToggle && mainNav) {
+  menuToggle.addEventListener('click', () => {
+    mainNav.classList.toggle('open');
+  });
 
-mainNav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => mainNav.classList.remove('open'));
-});
+  mainNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => mainNav.classList.remove('open'));
+  });
+}
 
 // Carousel
 const slides = document.querySelectorAll('.slide');
@@ -20,36 +22,41 @@ const nextBtn = document.querySelector('.carousel-btn.next');
 let current = 0;
 let interval;
 
-slides.forEach((_, i) => {
-  const dot = document.createElement('button');
-  dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-  if (i === 0) dot.classList.add('active');
-  dot.addEventListener('click', () => goTo(i));
-  dotsContainer.appendChild(dot);
-});
+if (slides.length && dotsContainer && prevBtn && nextBtn) {
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
 
-const dots = dotsContainer.querySelectorAll('button');
+  const dots = dotsContainer.querySelectorAll('button');
 
-function goTo(index) {
-  slides[current].classList.remove('active');
-  dots[current].classList.remove('active');
-  current = (index + slides.length) % slides.length;
-  slides[current].classList.add('active');
-  dots[current].classList.add('active');
-}
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    document.dispatchEvent(new CustomEvent('heroSlideChange', {
+      detail: { slide: slides[current], index: current },
+    }));
+  }
 
-function next() { goTo(current + 1); }
-function prev() { goTo(current - 1); }
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
 
-nextBtn.addEventListener('click', () => { next(); resetInterval(); });
-prevBtn.addEventListener('click', () => { prev(); resetInterval(); });
+  nextBtn.addEventListener('click', () => { next(); resetInterval(); });
+  prevBtn.addEventListener('click', () => { prev(); resetInterval(); });
 
-function resetInterval() {
-  clearInterval(interval);
+  function resetInterval() {
+    clearInterval(interval);
+    interval = setInterval(next, 6000);
+  }
+
   interval = setInterval(next, 6000);
 }
-
-interval = setInterval(next, 6000);
 
 // Active nav on scroll
 const sections = document.querySelectorAll('section[id]');
@@ -71,14 +78,17 @@ window.addEventListener('scroll', () => {
 });
 
 // Subscribe form
-document.querySelector('.subscribe-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const input = e.target.querySelector('input');
-  if (input.value) {
-    alert('Thank you for subscribing! We will keep you updated on solar energy solutions.');
-    input.value = '';
-  }
-});
+const subscribeForm = document.querySelector('.subscribe-form');
+if (subscribeForm) {
+  subscribeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = e.target.querySelector('input');
+    if (input.value) {
+      alert('Thank you for subscribing! We will keep you updated on solar energy solutions.');
+      input.value = '';
+    }
+  });
+}
 
 // Get Quote form — Django handles submission via POST to /contact/submit/
 // Client-side validation only for empty fields before submit

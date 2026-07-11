@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, ProductSidebarSection, ProductSidebarImage
+from .models import Product, ProductSidebarSection, ProductSidebarImage, ProductType, EssSubType
 
 
 class ProductSidebarImageInline(admin.TabularInline):
@@ -11,13 +11,13 @@ class ProductSidebarImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'voltage_type', 'price', 'is_featured', 'is_active', 'created_at')
-    list_filter = ('category', 'voltage_type', 'is_featured', 'is_active')
+    list_display = ('name', 'product_type', 'category', 'voltage_type', 'ess_sub_type', 'price', 'is_featured', 'is_active')
+    list_filter = ('product_type', 'category', 'voltage_type', 'ess_sub_type', 'is_featured', 'is_active')
     search_fields = ('name', 'short_description', 'description')
     prepopulated_fields = {'slug': ('name',)}
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'slug', 'category', 'voltage_type')
+            'fields': ('name', 'slug', 'product_type', 'category', 'voltage_type', 'ess_sub_type')
         }),
         ('Content', {
             'fields': ('short_description', 'description', 'image', 'price')

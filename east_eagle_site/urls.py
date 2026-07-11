@@ -11,7 +11,7 @@ from django.views.static import serve
 
 from contact.forms import ContactInquiryForm
 from products.models import Product
-from blog.models import HomepageAd, BlogPost
+from blog.models import HomepageAd, BlogPost, HeroSlide
 from east_eagle_site.sitemaps import sitemaps
 
 admin.site.site_header = 'East Eagle Energy Admin'
@@ -32,6 +32,7 @@ def home(request):
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:4]
     homepage_ads = HomepageAd.objects.filter(is_active=True)[:3]
     latest_blog_posts = BlogPost.objects.filter(is_published=True)[:3]
+    hero_slides = HeroSlide.objects.filter(is_active=True)
     
     # Schema.org structured data with both Organization and WebSite
     schema = {
@@ -91,6 +92,7 @@ def home(request):
             'featured_products': featured_products,
             'homepage_ads': homepage_ads,
             'latest_blog_posts': latest_blog_posts,
+            'hero_slides': hero_slides,
             'contact_form': ContactInquiryForm(),
             'seo_title': 'East Eagle Energy | Energy Solutions',
             'seo_description': (
@@ -108,12 +110,38 @@ def home(request):
     )
 
 
+def about(request):
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        'name': 'About East Eagle Energy',
+        'description': (
+            'East Eagle Energy — global provider of solar inverters, LiFePO4 batteries, '
+            'and energy storage systems. Energy That Never Grows Weary.'
+        ),
+        'url': 'https://www.easteagleenergy.com/about/',
+    }
+    return render(
+        request,
+        'about.html',
+        {
+            'seo_title': 'About Us | East Eagle Energy',
+            'seo_description': (
+                'Learn about East Eagle Energy — our mission, core aims, and growth '
+                'as a global energy storage and solar solutions provider since 2022.'
+            ),
+            'schema_json': json.dumps(schema),
+        },
+    )
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health/', health_check, name='health'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('', home, name='home'),
+    path('about/', about, name='about'),
     path('products/', include('products.urls')),
     path('blog/', include('blog.urls')),
     path('contact/', include('contact.urls')),

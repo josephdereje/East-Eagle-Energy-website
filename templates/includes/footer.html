@@ -3,16 +3,20 @@
       <div class="footer-col">
         <h4>Products</h4>
         <ul>
-          <li><a href="/products/category/residential/">Residential</a></li>
-          <li><a href="/products/category/c_and_i_bess/">C & I BESS</a></li>
-          <li><a href="/products/category/ess_solution/">ESS Solution</a></li>
-          <li><a href="/products/">All Products</a></li>
+          <li><a href="{% url 'products:ess' %}">Energy Storage Systems</a></li>
+          <li><a href="{% url 'products:ess_residential' %}">Residential ESS</a></li>
+          <li><a href="{% url 'products:ess_ci' %}">C & I Energy Storage</a></li>
+          <li><a href="{% url 'products:ess_smart_energy' %}">Smart Energy Management</a></li>
+          <li><a href="{% url 'products:inverters' %}">Inverters</a></li>
+          <li><a href="{% url 'products:solar_panels' %}">Solar Panels</a></li>
+          <li><a href="{% url 'products:ev_chargers' %}">EV Chargers</a></li>
+          <li><a href="{% url 'products:list' %}">All Products</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="/#about">About Us</a></li>
+          <li><a href="/about/">About Us</a></li>
           <li><a href="/#about">Our Mission</a></li>
           <li><a href="/#services">Services</a></li>
           <li><a href="/contact/">Contact</a></li>
@@ -29,8 +33,9 @@
       </div>
       <div class="footer-col contact-col">
         <h4>Get in Touch</h4>
-        <div class="contact-brand">
-          <img src="/images/logo-transparent.png" alt="East Eagle Energy" class="footer-logo">
+        <div class="contact-brand brand-logo-host" data-logo-surface="muted">
+          <img src="/images/logo-transparent.png" alt="East Eagle Energy" class="footer-logo brand-logo brand-logo-day">
+          <img src="/images/logo-light.png" alt="" class="footer-logo brand-logo brand-logo-night" aria-hidden="true">
           <strong class="contact-brand-name">East Eagle Energy</strong>
         </div>
         <p><i class="fa fa-location-dot"></i> Century Executive Tower, 12-Room Number F12/06, Addis Ababa, Ethiopia</p>

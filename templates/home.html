@@ -10,95 +10,202 @@
 
   <!-- Hero carousel -->
   <section id="home" class="hero">
-    <div class="carousel">
-      <div class="slide active" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
-        <div class="slide-content container">
-          <p class="eyebrow">Est. 2022 · Ethiopia</p>
-          <h1>Energy That Never Grows Weary</h1>
-          <p>Dependable solar power, inverters, and battery storage for homes and businesses across Ethiopia.</p>
-          <div class="hero-buttons">
-            <a href="/products/" class="btn btn-primary">View Products</a>
-            <a href="#quote" class="btn btn-outline">Contact Us</a>
-          </div>
-        </div>
-      </div>
-      <div class="slide" style="--bg: linear-gradient(135deg, #142E4B 0%, #1B365D 50%, #FFCB05 100%);">
-        <div class="slide-content container">
-          <p class="eyebrow">Solar Energy Systems</p>
-          <h1>Power You Can Rely On</h1>
-          <p>Comprehensive solar solutions designed for consistent, resilient energy — even when the grid fails.</p>
-          <div class="hero-buttons">
-            <a href="#services" class="btn btn-primary">Our Services</a>
-          </div>
-        </div>
-      </div>
-      <div class="slide" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
-        <div class="slide-content container">
-          <p class="eyebrow">Residential & Commercial</p>
-          <h1>Stable Energy Storage</h1>
-          <p>Battery packs and inverters built to keep your projects powered through every condition.</p>
-          <div class="hero-buttons">
-            <a href="#about" class="btn btn-primary">Learn More</a>
-          </div>
-        </div>
+    <!-- Animated energy background -->
+    <div class="hero-bg-layers" aria-hidden="true">
+      <div class="hero-grid-pattern"></div>
+      <div class="hero-glow hero-glow--1"></div>
+      <div class="hero-glow hero-glow--2"></div>
+      <div class="hero-particles">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
+
+    <div class="carousel">
+      {% for slide in hero_slides %}
+      <div class="slide {% if forloop.first %}active{% endif %}" style="--bg: {{ slide.gradient }};">
+        {% if slide.image %}
+        <div class="slide-bg-image" style="background-image: url('{{ slide.image.url }}');"></div>
+        {% endif %}
+        <div class="slide-overlay"></div>
+        <div class="slide-content container hero-layout">
+          <div class="hero-text hero-glass">
+            {% if slide.eyebrow %}<p class="eyebrow hero-animate">{{ slide.eyebrow }}</p>{% endif %}
+            <h1 class="hero-animate">{{ slide.title }}</h1>
+            {% if slide.subtitle %}<p class="hero-animate">{{ slide.subtitle }}</p>{% endif %}
+            <div class="hero-buttons hero-animate">
+              {% if slide.primary_btn_text %}
+              <a href="{{ slide.primary_btn_url }}" class="btn btn-primary">{{ slide.primary_btn_text }}</a>
+              {% endif %}
+              {% if slide.secondary_btn_text %}
+              <a href="{{ slide.secondary_btn_url }}" class="btn btn-outline">{{ slide.secondary_btn_text }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="slide active" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
+        <div class="slide-overlay"></div>
+        <div class="slide-content container hero-layout">
+          <div class="hero-text hero-glass">
+            <p class="eyebrow hero-animate">Est. 2022 · Global Energy Solutions</p>
+            <h1 class="hero-animate">Energy That Never Grows Weary</h1>
+            <p class="hero-animate">Dependable solar power, inverters, and battery storage for homes and businesses worldwide.</p>
+            <div class="hero-buttons hero-animate">
+              <a href="/products/" class="btn btn-primary">View Products</a>
+              <a href="/contact/" class="btn btn-outline">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Animated ESS visual (persists across slides) -->
+    <div class="hero-ess-visual" aria-hidden="true">
+      <div class="ess-diagram">
+        <div class="ess-node ess-node--solar">
+          <div class="ess-node-icon"><i class="fa fa-solar-panel"></i></div>
+          <span>Solar</span>
+          <div class="ess-pulse"></div>
+        </div>
+        <div class="ess-connector ess-connector--1">
+          <div class="ess-flow-line"></div>
+          <div class="ess-flow-dot"></div>
+        </div>
+        <div class="ess-node ess-node--inverter">
+          <div class="ess-node-icon"><i class="fa fa-bolt"></i></div>
+          <span>Inverter</span>
+        </div>
+        <div class="ess-connector ess-connector--2">
+          <div class="ess-flow-line"></div>
+          <div class="ess-flow-dot ess-flow-dot--delay"></div>
+        </div>
+        <div class="ess-node ess-node--battery">
+          <div class="ess-battery">
+            <div class="ess-battery-cap"></div>
+            <div class="ess-battery-body">
+              <div class="ess-battery-fill"></div>
+              <div class="ess-battery-segments">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <span>ESS Storage</span>
+          <div class="ess-charge-label">98%</div>
+        </div>
+        <div class="ess-connector ess-connector--3">
+          <div class="ess-flow-line"></div>
+          <div class="ess-flow-dot ess-flow-dot--delay2"></div>
+        </div>
+        <div class="ess-node ess-node--load">
+          <div class="ess-node-icon"><i class="fa fa-building"></i></div>
+          <span>Power Load</span>
+        </div>
+      </div>
+      <div class="ess-orbit ess-orbit--1"></div>
+      <div class="ess-orbit ess-orbit--2"></div>
+    </div>
+
     <button class="carousel-btn prev" aria-label="Previous slide"><i class="fa fa-chevron-left"></i></button>
     <button class="carousel-btn next" aria-label="Next slide"><i class="fa fa-chevron-right"></i></button>
     <div class="carousel-dots"></div>
   </section>
 
+  <!-- Energy flow metrics strip -->
+  <section class="energy-metrics" aria-label="Energy capabilities">
+    <div class="container energy-metrics-inner">
+      <div class="metric-item reveal">
+        <div class="metric-icon"><i class="fa fa-battery-full"></i></div>
+        <div class="metric-data">
+          <span class="metric-value" data-count="6000">0</span><span class="metric-suffix">+</span>
+          <span class="metric-label">Battery Cycles</span>
+        </div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-item reveal">
+        <div class="metric-icon"><i class="fa fa-bolt"></i></div>
+        <div class="metric-data">
+          <span class="metric-value" data-count="99">0</span><span class="metric-suffix">%</span>
+          <span class="metric-label">System Efficiency</span>
+        </div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-item reveal">
+        <div class="metric-icon"><i class="fa fa-clock"></i></div>
+        <div class="metric-data">
+          <span class="metric-value" data-count="24">0</span><span class="metric-suffix">/7</span>
+          <span class="metric-label">Reliable Backup</span>
+        </div>
+      </div>
+      <div class="metric-divider"></div>
+      <div class="metric-item reveal">
+        <div class="metric-icon"><i class="fa fa-leaf"></i></div>
+        <div class="metric-data">
+          <span class="metric-value" data-count="100">0</span><span class="metric-suffix">%</span>
+          <span class="metric-label">Clean Energy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Services -->
   <section id="services" class="section services">
     <div class="container">
+      <div class="section-intro reveal">
+        <p class="eyebrow">What We Do</p>
+        <h2>Complete Energy Solutions</h2>
+        <p class="section-intro-text">From solar generation to battery storage and power conversion — integrated systems built for reliability.</p>
+      </div>
       <div class="services-grid">
-        <article class="service-card">
+        <article class="service-card reveal">
           <div class="service-icon"><i class="fa fa-solar-panel"></i></div>
+          <div class="service-icon-ring"></div>
           <h3>Solar Energy Systems</h3>
-          <p>End-to-end solar installations for residential and commercial projects across Ethiopia.</p>
+          <p>End-to-end solar installations for residential and commercial projects worldwide.</p>
         </article>
-        <article class="service-card">
+        <article class="service-card reveal">
           <div class="service-icon"><i class="fa fa-battery-full"></i></div>
+          <div class="service-icon-ring"></div>
           <h3>Battery Packs & Storage</h3>
-          <p>Stable energy storage units that keep power consistent, regardless of grid conditions.</p>
+          <p>LiFePO4 energy storage units that keep power consistent, regardless of grid conditions.</p>
         </article>
-        <article class="service-card">
+        <article class="service-card reveal">
           <div class="service-icon"><i class="fa fa-bolt"></i></div>
+          <div class="service-icon-ring"></div>
           <h3>Inverters & Power Solutions</h3>
-          <p>Dependable inverters and power equipment built for long-term, resilient performance.</p>
+          <p>Hybrid and string inverters built for long-term, resilient performance.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- About -->
+  <!-- About preview -->
   <section id="about" class="section about">
     <div class="container about-grid">
-      <div class="about-content">
+      <div class="about-content reveal">
         <p class="eyebrow">About Us</p>
-        <h2>Powering Ethiopia Since 2022</h2>
-        <p>East Eagle Energy, established in 2022, specializes in inverters, battery packs, and comprehensive solar energy systems designed to deliver dependable power solutions.</p>
-        <p>The company focuses on providing stable energy storage units for both residential and commercial projects, ensuring clients have consistent, reliable access to power regardless of grid conditions.</p>
+        <h2>Powering the World Since 2022</h2>
+        <p>East Eagle Energy specializes in inverters, battery packs, and comprehensive solar energy systems designed to deliver dependable power solutions globally.</p>
         <p><strong>Our mission:</strong> supply energy solutions that remain resilient and dependable over time — <em>Energy That Never Grows Weary.</em></p>
-        <ul class="about-facts">
-          <li><i class="fa fa-building"></i> East Eagle Trading PLC</li>
-          <li><i class="fa fa-calendar"></i> Established 2022</li>
-        </ul>
+        <a href="/about/" class="btn btn-primary">Learn More About Us</a>
       </div>
-      <div class="about-card">
-        <div class="about-logo-wrap">
-          <img src="/images/logo.png" alt="East Eagle Energy" class="about-logo">
+      <div class="about-card reveal">
+        <div class="about-logo-wrap brand-logo-host" data-logo-surface="light">
+          <img src="/images/logo-transparent.png" alt="East Eagle Energy" class="about-logo brand-logo brand-logo-day">
+          <img src="/images/logo-light.png" alt="" class="about-logo brand-logo brand-logo-night" aria-hidden="true">
         </div>
         <div class="stat">
-          <span class="stat-number">2022</span>
+          <span class="stat-number" data-count="2022">0</span>
           <span class="stat-label">Year Founded</span>
         </div>
         <div class="stat">
-          <span class="stat-number">3+</span>
+          <span class="stat-number" data-count="3">0</span><span class="stat-plus">+</span>
           <span class="stat-label">Core Product Lines</span>
         </div>
         <div class="stat">
-          <span class="stat-number">24/7</span>
+          <span class="stat-number stat-number--text">24/7</span>
           <span class="stat-label">Reliable Power</span>
         </div>
         <a href="#quote" class="btn btn-primary btn-block">Request Consultation</a>
@@ -109,7 +216,7 @@
   <!-- Products -->
   <section id="products" class="section products">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <div>
           <p class="eyebrow">Our Products</p>
           <h2>Popular Solutions</h2>
@@ -118,7 +225,7 @@
       </div>
       <div class="products-grid">
         {% for product in featured_products %}
-        <article class="product-card">
+        <article class="product-card reveal">
           <div class="product-image p{{ forloop.counter }}">
             {% if product.image %}
               <img src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -143,29 +250,29 @@
   <!-- Trusted Partners -->
   <section id="partners" class="section partners">
     <div class="container">
-      <div class="section-header section-header--center">
+      <div class="section-header section-header--center reveal">
         <div>
           <p class="eyebrow">Partnerships</p>
           <h2>Our Trusted Global Partners</h2>
         </div>
       </div>
       <div class="partners-grid">
-        <article class="partner-card">
+        <article class="partner-card reveal">
           <div class="partner-icon partner-icon--deye"><i class="fa fa-bolt"></i></div>
           <h3>DEYE</h3>
           <p>Inverter</p>
         </article>
-        <article class="partner-card">
+        <article class="partner-card reveal">
           <div class="partner-icon partner-icon--epever"><i class="fa fa-bolt"></i></div>
           <h3>EPEver</h3>
           <p>Inverter</p>
         </article>
-        <article class="partner-card">
+        <article class="partner-card reveal">
           <div class="partner-icon partner-icon--pytes"><i class="fa fa-battery-full"></i></div>
           <h3>Pytes</h3>
           <p>Batteries</p>
         </article>
-        <article class="partner-card">
+        <article class="partner-card reveal">
           <div class="partner-icon partner-icon--jinko"><i class="fa fa-solar-panel"></i></div>
           <h3>Jinko Solar</h3>
           <p>Solar Panel</p>
@@ -177,22 +284,22 @@
   <!-- Our Clients -->
   <section id="clients" class="section clients">
     <div class="container">
-      <div class="section-header section-header--center">
+      <div class="section-header section-header--center reveal">
         <div>
           <p class="eyebrow">Trusted By</p>
           <h2>Our Clients</h2>
         </div>
       </div>
       <div class="clients-grid">
-        <article class="client-card">
+        <article class="client-card reveal">
           <div class="client-icon"><i class="fa fa-building-columns"></i></div>
           <h3>Cooperative Bank of Oromia</h3>
         </article>
-        <article class="client-card">
+        <article class="client-card reveal">
           <div class="client-icon"><i class="fa fa-building-columns"></i></div>
           <h3>Awash Bank</h3>
         </article>
-        <article class="client-card">
+        <article class="client-card reveal">
           <div class="client-icon"><i class="fa fa-building-columns"></i></div>
           <h3>Siinqee Bank</h3>
         </article>
@@ -203,7 +310,8 @@
   <!-- Get Quote -->
   <section id="quote" class="section quote-section">
     <div class="quote-overlay"></div>
-    <div class="container quote-inner">
+    <div class="quote-energy-lines" aria-hidden="true"></div>
+    <div class="container quote-inner reveal">
       <div class="quote-header">
         <p class="eyebrow quote-eyebrow">Get a Quote</p>
         <h2>Request a Consultation</h2>
@@ -257,3 +365,4 @@
   </section>
 
 {% include 'includes/footer.html' %}
+<script src="/js/home-animations.js"></script>

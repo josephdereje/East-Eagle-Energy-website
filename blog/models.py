@@ -33,6 +33,39 @@ class BlogPost(models.Model):
         super().save(*args, **kwargs)
 
 
+class HeroSlide(models.Model):
+    """Homepage hero carousel slides — managed via admin."""
+    eyebrow = models.CharField(max_length=100, blank=True, help_text='Small label above title')
+    title = models.CharField(max_length=200)
+    subtitle = models.CharField(max_length=350, blank=True)
+    image = models.ImageField(
+        upload_to='hero/',
+        blank=True,
+        null=True,
+        help_text='Background image (recommended 1920×800px)',
+    )
+    gradient = models.CharField(
+        max_length=300,
+        default='linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%)',
+        help_text='CSS gradient overlay when no image, or over image',
+    )
+    primary_btn_text = models.CharField(max_length=50, default='View Products')
+    primary_btn_url = models.CharField(max_length=200, default='/products/')
+    secondary_btn_text = models.CharField(max_length=50, blank=True)
+    secondary_btn_url = models.CharField(max_length=200, blank=True)
+    display_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['display_order', 'id']
+        verbose_name = 'Hero Slide'
+        verbose_name_plural = 'Hero Slides'
+
+    def __str__(self):
+        return self.title
+
+
 class HomepageAd(models.Model):
     title = models.CharField(max_length=150)
     subtitle = models.CharField(max_length=200, blank=True)

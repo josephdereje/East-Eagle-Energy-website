@@ -1,28 +1,115 @@
 {% include 'includes/header.html' %}
 
-  <section class="section products-page">
+  <section class="section product-detail-page">
     <div class="container">
-      <a href="{% url 'products:list' %}" class="back-link"><i class="fa fa-arrow-left"></i> Back to Products</a>
+      <nav class="product-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="{% url 'products:list' %}">Products</a>
+        <span>/</span>
+        <span>{{ product.name }}</span>
+      </nav>
 
-      <article class="product-detail-card">
-        <div class="product-detail-image p1">
-          {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-photo">
-          {% else %}
-            <i class="fa fa-bolt"></i>
-          {% endif %}
+      <article class="product-detail-modern">
+        <div class="product-detail-gallery">
+          <div class="product-gallery-main" id="productGallery">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" id="productMainImage" class="product-gallery-img">
+              <button class="gallery-zoom-btn" id="galleryZoomBtn" aria-label="Zoom image">
+                <i class="fa fa-magnifying-glass-plus"></i>
+              </button>
+            {% else %}
+              <div class="product-gallery-placeholder">
+                <i class="fa {% if product.product_type == 'inverter' %}fa-solar-panel{% elif product.product_type == 'ev_charger' %}fa-charging-station{% elif product.product_type == 'solar_panel' %}fa-solar-panel{% else %}fa-battery-full{% endif %}"></i>
+              </div>
+            {% endif %}
+          </div>
+          <div class="product-gallery-tags">
+            <span class="dyness-tag dyness-tag--type">{{ product.product_type_label }}</span>
+            <span class="dyness-tag">{{ product.category_label }}</span>
+            {% if product.voltage_type != 'not_applicable' %}
+            <span class="dyness-tag">{{ product.voltage_label }}</span>
+            {% endif %}
+            {% if product.ess_sub_type != 'not_applicable' %}
+            <span class="dyness-tag">{{ product.ess_sub_type_label }}</span>
+            {% endif %}
+          </div>
         </div>
-        <div class="product-detail-body">
-          <span class="badge">{{ product.category_label }}</span>
+
+        <div class="product-detail-info">
           <h1>{{ product.name }}</h1>
-          <p>{{ product.description }}</p>
-          {% if product.price %}
-            <p class="product-price">From {{ product.price }} ETB</p>
+          {% if product.short_description %}
+          <p class="product-detail-lead">{{ product.short_description }}</p>
           {% endif %}
-          <a href="/#quote" class="btn btn-primary">Inquire About This Product</a>
+
+          {% if product.price %}
+          <div class="product-detail-price-box">
+            <span class="price-label">Starting from</span>
+            <span class="price-value">ETB {{ product.price|floatformat:2 }}</span>
+          </div>
+          {% endif %}
+
+          <div class="product-detail-specs">
+            <div class="spec-row">
+              <span class="spec-label"><i class="fa fa-tag"></i> Type</span>
+              <span class="spec-value">{{ product.product_type_label }}</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-label"><i class="fa fa-folder"></i> Category</span>
+              <span class="spec-value">{{ product.category_label }}</span>
+            </div>
+            {% if product.voltage_type != 'not_applicable' %}
+            <div class="spec-row">
+              <span class="spec-label"><i class="fa fa-bolt"></i> Voltage</span>
+              <span class="spec-value">{{ product.voltage_label }}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="product-detail-actions">
+            <a href="/contact/" class="btn btn-primary btn-lg">Request a Quote</a>
+            <a href="tel:+251933219802" class="btn btn-outline-dark"><i class="fa fa-phone"></i> Call Us</a>
+          </div>
         </div>
       </article>
+
+      <div class="product-detail-description reveal">
+        <h2>Product Overview</h2>
+        <div class="product-description-body">{{ product.description|linebreaks }}</div>
+      </div>
+
+      {% if related_products %}
+      <section class="product-related reveal">
+        <h2>Related Products</h2>
+        <div class="dyness-product-grid">
+          {% for related in related_products %}
+          <a href="{% url 'products:detail' related.slug %}" class="dyness-product-card">
+            <div class="dyness-product-image">
+              {% if related.image %}
+                <img src="{{ related.image.url }}" alt="{{ related.name }}">
+              {% else %}
+                <div class="dyness-product-placeholder"><i class="fa fa-bolt"></i></div>
+              {% endif %}
+            </div>
+            <div class="dyness-product-info">
+              <h3>{{ related.name }}</h3>
+              <p class="dyness-product-spec">{{ related.short_description|truncatewords:10 }}</p>
+            </div>
+            <div class="dyness-card-accent"></div>
+          </a>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
     </div>
   </section>
 
+  <!-- Image zoom lightbox -->
+  <div class="product-lightbox" id="productLightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <img src="" alt="" id="lightboxImage">
+  </div>
+
 {% include 'includes/footer.html' %}
+<script src="/js/product-detail.js"></script>
+<script src="/js/home-animations.js"></script>

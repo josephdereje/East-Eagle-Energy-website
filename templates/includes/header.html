@@ -1,8 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+
+  <script>
+    (function () {
+      var t = localStorage.getItem('eee-theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
 
   <title>{{ seo_title|default:"East Eagle Energy | Energy Solutions" }}</title>
   <meta name="description" content="{{ seo_description|default:"East Eagle Energy - Global provider of solar inverters, LiFePO4 batteries, and energy storage systems. Reliable solar power solutions for homes and businesses worldwide. Energy That Never Grows Weary." }}">
@@ -30,7 +38,9 @@
   <script type="application/ld+json">{{ schema_json|default:"{}" }}</script>
 
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/dark-mode.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="/js/theme.js" defer></script>
   
   <!-- Favicons -->
   <link rel="icon" href="/images/favicon-32.png" type="image/png" sizes="32x32">
@@ -53,8 +63,9 @@
 
   <header class="site-header">
     <div class="container header-inner">
-      <a href="/" class="logo">
-        <img src="/images/logo.png" alt="East Eagle Energy" class="logo-img">
+      <a href="/" class="logo logo-wrap brand-logo-host" data-logo-surface="light">
+        <img src="/images/logo-transparent.png" alt="East Eagle Energy" class="logo-img brand-logo brand-logo-day">
+        <img src="/images/logo-light.png" alt="" class="logo-img brand-logo brand-logo-night" aria-hidden="true">
       </a>
 
       <button class="menu-toggle" aria-label="Toggle menu">
@@ -63,7 +74,7 @@
 
       <nav class="main-nav">
         <a href="/#home" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
-        <a href="/#about">About</a>
+        <a href="/about/" {% if request.path == '/about/' %}class="active"{% endif %}>About</a>
         <a href="/#services">Services</a>
         <a href="/products/" {% if '/products' in request.path %}class="active"{% endif %}>Products</a>
         <a href="/blog/" {% if '/blog' in request.path %}class="active"{% endif %}>Blog</a>
@@ -71,6 +82,10 @@
       </nav>
 
       <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <i class="fa fa-moon theme-icon-dark"></i>
+          <i class="fa fa-sun theme-icon-light"></i>
+        </button>
         <!-- Search Toggle Button -->
         <button class="header-search-toggle" id="searchToggle" aria-label="Search products">
           <i class="fa fa-search"></i>
