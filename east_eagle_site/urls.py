@@ -1,9 +1,7 @@
-import json
-
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import include, path, re_path
@@ -13,6 +11,7 @@ from contact.forms import ContactInquiryForm
 from products.models import Product
 from blog.models import HomepageAd, BlogPost, HeroSlide
 from east_eagle_site.sitemaps import sitemaps
+from east_eagle_site.seo import about_schema_json, home_schema_json
 
 admin.site.site_header = 'East Eagle Energy Admin'
 admin.site.site_title = 'East Eagle Energy'
@@ -28,62 +27,16 @@ def robots_txt(request):
     return HttpResponse(content, content_type='text/plain')
 
 
+def favicon_ico(request):
+    icon_path = settings.BASE_DIR / 'images' / 'favicon.ico'
+    return FileResponse(icon_path.open('rb'), content_type='image/x-icon')
+
+
 def home(request):
     featured_products = Product.objects.filter(is_active=True, is_featured=True)[:4]
     homepage_ads = HomepageAd.objects.filter(is_active=True)[:3]
     latest_blog_posts = BlogPost.objects.filter(is_published=True)[:3]
     hero_slides = HeroSlide.objects.filter(is_active=True)
-    
-    # Schema.org structured data with both Organization and WebSite
-    schema = {
-        '@context': 'https://schema.org',
-        '@graph': [
-            {
-                '@type': 'Organization',
-                '@id': 'https://www.easteagleenergy.com/#organization',
-                'name': 'East Eagle Energy',
-                'url': 'https://www.easteagleenergy.com',
-                'logo': {
-                    '@type': 'ImageObject',
-                    'url': 'https://www.easteagleenergy.com/images/logo.png',
-                    'width': 250,
-                    'height': 160,
-                },
-                'description': (
-                    'East Eagle Energy specializes in solar inverters, LiFePO4 batteries, '
-                    'and energy storage systems for homes and businesses worldwide. '
-                    'Energy That Never Grows Weary.'
-                ),
-                'foundingDate': '2022',
-                'address': {
-                    '@type': 'PostalAddress',
-                    'streetAddress': 'Century Executive Tower, 12-Room Number F12/06',
-                    'addressLocality': 'Addis Ababa',
-                    'addressCountry': 'ET',
-                },
-                'telephone': '+251933219802',
-                'sameAs': [
-                    'https://www.facebook.com/easteagleenergy',
-                    'https://www.linkedin.com/company/easteagleenergy',
-                ],
-            },
-            {
-                '@type': 'WebSite',
-                '@id': 'https://www.easteagleenergy.com/#website',
-                'url': 'https://www.easteagleenergy.com',
-                'name': 'East Eagle Energy',
-                'description': 'Global provider of solar energy solutions',
-                'publisher': {
-                    '@id': 'https://www.easteagleenergy.com/#organization'
-                },
-                'potentialAction': {
-                    '@type': 'SearchAction',
-                    'target': 'https://www.easteagleenergy.com/products/search/?q={search_term_string}',
-                    'query-input': 'required name=search_term_string',
-                },
-            },
-        ],
-    }
 
     return render(
         request,
@@ -105,22 +58,12 @@ def home(request):
                 'energy solutions, LiFePO4 battery, Deye inverter, Growatt, '
                 'BESS, renewable energy, global solar solutions'
             ),
-            'schema_json': json.dumps(schema),
+            'page_schema_json': home_schema_json(),
         },
     )
 
 
 def about(request):
-    schema = {
-        '@context': 'https://schema.org',
-        '@type': 'AboutPage',
-        'name': 'About East Eagle Energy',
-        'description': (
-            'East Eagle Energy — global provider of solar inverters, LiFePO4 batteries, '
-            'and energy storage systems. Energy That Never Grows Weary.'
-        ),
-        'url': 'https://www.easteagleenergy.com/about/',
-    }
     return render(
         request,
         'about.html',
@@ -130,13 +73,14 @@ def about(request):
                 'Learn about East Eagle Energy — our mission, core aims, and growth '
                 'as a global energy storage and solar solutions provider since 2022.'
             ),
-            'schema_json': json.dumps(schema),
+            'page_schema_json': about_schema_json(),
         },
     )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('favicon.ico', favicon_ico, name='favicon'),
     path('health/', health_check, name='health'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),

@@ -1,5 +1,3 @@
-import json
-
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
@@ -7,6 +5,8 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
+
+from east_eagle_site.seo import SITE_URL, breadcrumb_node, build_page_schema, webpage_node
 
 from .models import (
     EssSubType,
@@ -479,10 +479,9 @@ def product_list(
     )
 
     schema = {
-        '@context': 'https://schema.org',
         '@type': 'ItemList',
         'name': seo_title,
-        'url': 'https://www.easteagleenergy.com/products/',
+        'url': f'{SITE_URL}/products/',
         'numberOfItems': products.count(),
     }
 
@@ -499,6 +498,15 @@ def product_list(
     page_obj = paginator.get_page(page_number)
 
     schema['numberOfItems'] = total_products
+
+    page_schema_json = build_page_schema(
+        webpage_node(f'{SITE_URL}/products/', seo_title, seo_description),
+        schema,
+        breadcrumb_node([
+            {'name': 'East Eagle Energy', 'url': SITE_URL + '/'},
+            {'name': 'Products', 'url': f'{SITE_URL}/products/'},
+        ]),
+    )
 
     context = {
         'products': page_obj.object_list,
@@ -520,7 +528,7 @@ def product_list(
             'solar inverter, solar panel, EV charger, battery storage, BESS, ESS, '
             'energy storage, East Eagle Energy products'
         ),
-        'schema_json': json.dumps(schema),
+        'page_schema_json': page_schema_json,
     }
 
     if _wants_ajax(request):
@@ -576,24 +584,34 @@ def product_detail(request, slug):
         og_image = f'https://www.easteagleenergy.com{product.image.url}'
     else:
         og_image = 'https://www.easteagleenergy.com/images/logo.png'
-    schema = {
-        '@context': 'https://schema.org',
+    product_url = f'{SITE_URL}{product.get_absolute_url()}'
+    product_schema = {
         '@type': 'Product',
         'name': product.name,
         'description': product.short_description or product.description[:160],
         'brand': {'@type': 'Brand', 'name': 'East Eagle Energy'},
-        'url': f'https://www.easteagleenergy.com{product.get_absolute_url()}',
-        'image': [f'https://www.easteagleenergy.com{item["url"]}' for item in gallery_images]
+        'url': product_url,
+        'image': [f'{SITE_URL}{item["url"]}' for item in gallery_images]
         if len(gallery_images) > 1 else og_image,
         'offers': {
             '@type': 'Offer',
             'availability': 'https://schema.org/InStock',
             'priceCurrency': 'ETB',
-            'seller': {'@type': 'Organization', 'name': 'East Eagle Energy'},
+            'seller': {'@id': f'{SITE_URL}/#organization'},
         },
     }
     if product.price:
-        schema['offers']['price'] = str(product.price)
+        product_schema['offers']['price'] = str(product.price)
+
+    page_schema_json = build_page_schema(
+        webpage_node(product_url, f'{product.name} | East Eagle Energy', product.short_description or product.description[:160]),
+        product_schema,
+        breadcrumb_node([
+            {'name': 'East Eagle Energy', 'url': SITE_URL + '/'},
+            {'name': 'Products', 'url': f'{SITE_URL}/products/'},
+            {'name': product.name, 'url': product_url},
+        ]),
+    )
 
     return render(
         request,
@@ -607,7 +625,7 @@ def product_detail(request, slug):
             'seo_description': product.short_description or product.description[:160],
             'og_image': og_image,
             'og_type': 'product',
-            'schema_json': json.dumps(schema),
+            'page_schema_json': page_schema_json,
         },
     )
 

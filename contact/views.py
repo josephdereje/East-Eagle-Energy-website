@@ -2,13 +2,23 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
+from east_eagle_site.seo import contact_schema_json
+
 from .email_utils import send_inquiry_email
 from .forms import ContactInquiryForm
 
 
 def contact_page(request):
     form = ContactInquiryForm()
-    return render(request, 'contact/contact.html', {'form': form})
+    return render(request, 'contact/contact.html', {
+        'form': form,
+        'seo_title': 'Contact Us | East Eagle Energy',
+        'seo_description': (
+            'Contact East Eagle Energy for solar inverters, battery storage, and energy '
+            'system quotes. Based in Addis Ababa, Ethiopia.'
+        ),
+        'page_schema_json': contact_schema_json(),
+    })
 
 
 def submit_inquiry(request):
@@ -20,7 +30,15 @@ def submit_inquiry(request):
     form = ContactInquiryForm(request.POST)
     if not form.is_valid():
         if next_url == '/contact/':
-            return render(request, 'contact/contact.html', {'form': form})
+            return render(request, 'contact/contact.html', {
+                'form': form,
+                'seo_title': 'Contact Us | East Eagle Energy',
+                'seo_description': (
+                    'Contact East Eagle Energy for solar inverters, battery storage, and energy '
+                    'system quotes. Based in Addis Ababa, Ethiopia.'
+                ),
+                'page_schema_json': contact_schema_json(),
+            })
         messages.error(request, 'Please correct the errors and try again.')
         return HttpResponseRedirect('/#quote')
 
