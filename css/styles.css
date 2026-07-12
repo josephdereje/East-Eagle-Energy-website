@@ -244,38 +244,6 @@ img { max-width: 100%; display: block; }
   min-height: 520px;
 }
 
-.home-site-nav {
-  position: relative;
-  z-index: 4;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.55rem;
-  margin: -2.4rem auto 1.25rem;
-  padding: 0 1rem;
-}
-
-.home-site-nav-link {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.55rem 0.95rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  color: var(--navy);
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(27, 54, 93, 0.12);
-  border: 1px solid rgba(27, 54, 93, 0.08);
-  transition: transform 0.2s, background 0.2s, color 0.2s;
-}
-
-.home-site-nav-link:hover {
-  transform: translateY(-1px);
-  background: var(--orange);
-  color: var(--black);
-}
-
 .hero-bg-layers {
   position: absolute;
   inset: 0;

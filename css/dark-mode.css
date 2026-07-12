@@ -568,17 +568,6 @@
   color: var(--dm-muted);
 }
 
-[data-theme="dark"] .home-site-nav-link {
-  background: rgba(28, 39, 54, 0.92);
-  color: var(--dm-text);
-  border-color: var(--dm-border);
-}
-
-[data-theme="dark"] .home-site-nav-link:hover {
-  background: var(--orange);
-  color: var(--black);
-}
-
 @media (max-width: 560px) {
   [data-theme="dark"] .dyness-product-card {
     background: var(--dm-surface);
