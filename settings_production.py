@@ -119,10 +119,25 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply
 CONTACT_RECIPIENT_EMAIL = os.getenv('CONTACT_RECIPIENT_EMAIL', EMAIL_HOST_USER or 'info@easteagleenergy.com')
 
 # Security settings for production
+USE_SSL = os.getenv('USE_SSL', 'False').lower() == 'true'
+
 if not DEBUG:
-    SECURE_SSL_REDIRECT = False  # Set to True if you have SSL certificate
-    SESSION_COOKIE_SECURE = False  # Set to True if you have SSL
-    CSRF_COOKIE_SECURE = False  # Set to True if you have SSL
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+
+    if USE_SSL:
+        # cPanel/Passenger terminates SSL at Apache; tell Django the request is HTTPS.
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+        SESSION_COOKIE_SECURE = True
+        CSRF_COOKIE_SECURE = True
+        CSRF_TRUSTED_ORIGINS = [
+            'https://easteagleenergy.com',
+            'https://www.easteagleenergy.com',
+        ]
+        # Apache .htaccess should redirect HTTP→HTTPS; leave Django redirect off to avoid loops.
+        SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False').lower() == 'true'
+    else:
+        SECURE_SSL_REDIRECT = False
+        SESSION_COOKIE_SECURE = False
+        CSRF_COOKIE_SECURE = False

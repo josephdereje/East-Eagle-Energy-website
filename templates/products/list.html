@@ -73,45 +73,77 @@
       </section>
       {% endif %}
 
-      <!-- Search Bar -->
-      <div class="product-page-search">
-        <form method="get" action="{% url 'products:search' %}" class="product-page-search-form">
-          <input
-            type="text"
-            name="q"
-            placeholder="Search products (e.g., Deye, inverter, battery, 5kW)..."
-            class="product-page-search-input"
+      <div class="mobile-catalog-sticky">
+        <!-- Search Bar -->
+        <div class="product-page-search">
+          <form method="get" action="{% url 'products:search' %}" class="product-page-search-form">
+            <input
+              type="text"
+              name="q"
+              placeholder="Search products..."
+              class="product-page-search-input"
+            >
+            <button type="submit" class="product-page-search-btn" aria-label="Search products">
+              <i class="fa fa-search"></i>
+              <span class="product-page-search-label">Search</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Top product categories -->
+        <div class="product-section-tabs" role="tablist" aria-label="Product categories">
+          <a href="{% url 'products:ess' %}" class="section-tab {% if active_section == 'ess' %}active{% endif %}" data-section="ess" data-catalog-nav role="tab">
+            <i class="fa fa-battery-full"></i>
+            <span class="tab-label-short">ESS</span>
+            <span class="tab-label-long">Energy Storage</span>
+          </a>
+          <a href="{% url 'products:inverters' %}" class="section-tab {% if active_section == 'inverters' %}active{% endif %}" data-section="inverters" data-catalog-nav role="tab">
+            <i class="fa fa-bolt"></i>
+            <span class="tab-label-short">Inverters</span>
+            <span class="tab-label-long">Inverters</span>
+          </a>
+          <a href="{% url 'products:solar_panels' %}" class="section-tab {% if active_section == 'solar_panels' %}active{% endif %}" data-section="solar_panels" data-catalog-nav role="tab">
+            <i class="fa fa-solar-panel"></i>
+            <span class="tab-label-short">Solar</span>
+            <span class="tab-label-long">Solar Panels</span>
+          </a>
+          <a href="{% url 'products:ev_chargers' %}" class="section-tab {% if active_section == 'ev_chargers' %}active{% endif %}" data-section="ev_chargers" data-catalog-nav role="tab">
+            <i class="fa fa-charging-station"></i>
+            <span class="tab-label-short">EV</span>
+            <span class="tab-label-long">EV Chargers</span>
+          </a>
+        </div>
+
+        <div class="mobile-catalog-toolbar">
+          <button
+            type="button"
+            class="mobile-filter-btn"
+            id="mobileFilterOpen"
+            aria-expanded="false"
+            aria-controls="catalogSidebarNav"
           >
-          <button type="submit" class="product-page-search-btn">
-            <i class="fa fa-search"></i> Search
+            <i class="fa fa-sliders-h" aria-hidden="true"></i>
+            <span class="mobile-filter-btn-label">Filters</span>
+            <span class="mobile-active-filter" id="mobileActiveFilter">{{ page_title }}</span>
           </button>
-        </form>
+        </div>
       </div>
 
-      <!-- Top product categories -->
-      <div class="product-section-tabs">
-        <a href="{% url 'products:ess' %}" class="section-tab {% if active_section == 'ess' %}active{% endif %}" data-section="ess" data-catalog-nav>
-          <i class="fa fa-battery-full"></i>
-          Energy Storage Systems
-        </a>
-        <a href="{% url 'products:inverters' %}" class="section-tab {% if active_section == 'inverters' %}active{% endif %}" data-section="inverters" data-catalog-nav>
-          <i class="fa fa-bolt"></i>
-          Inverters
-        </a>
-        <a href="{% url 'products:solar_panels' %}" class="section-tab {% if active_section == 'solar_panels' %}active{% endif %}" data-section="solar_panels" data-catalog-nav>
-          <i class="fa fa-solar-panel"></i>
-          Solar Panels
-        </a>
-        <a href="{% url 'products:ev_chargers' %}" class="section-tab {% if active_section == 'ev_chargers' %}active{% endif %}" data-section="ev_chargers" data-catalog-nav>
-          <i class="fa fa-charging-station"></i>
-          EV Chargers
-        </a>
-      </div>
+      <div class="mobile-filter-backdrop" id="mobileFilterBackdrop" aria-hidden="true"></div>
 
       <div class="dyness-container">
 
-        <!-- Left Sidebar Navigation -->
-        <aside class="dyness-sidebar">
+        <!-- Left Sidebar Navigation (bottom sheet on phone) -->
+        <aside class="dyness-sidebar" id="catalogSidebar" aria-label="Product filters">
+          <div class="mobile-filter-sheet-head">
+            <div class="mobile-filter-handle" aria-hidden="true"></div>
+            <div class="mobile-filter-sheet-title">
+              <h3>Refine selection</h3>
+              <button type="button" class="mobile-filter-close" id="mobileFilterClose" aria-label="Close filters">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
           <div id="catalogSidebarNav">
           {% for group in nav_groups %}
           <div class="dyness-nav-group">
@@ -206,6 +238,10 @@
                     {% if product.ess_sub_type != 'not_applicable' %}
                     <span class="dyness-tag">{{ product.ess_sub_type_label }}</span>
                     {% endif %}
+                  </div>
+                  <div class="dyness-product-cta">
+                    <span>View details</span>
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
                   </div>
                 </div>
                 <div class="dyness-card-accent"></div>

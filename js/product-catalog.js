@@ -1,5 +1,6 @@
 /**
  * Product catalog — browse filters/tabs/pages without full reload.
+ * Mobile: bottom-sheet filters + sticky category bar.
  */
 (function () {
   const root = document.querySelector('.products-page.dyness-layout');
@@ -8,9 +9,29 @@
   const sidebarNav = document.getElementById('catalogSidebarNav');
   const titleEl = document.getElementById('catalogPageTitle');
   const countEl = document.getElementById('catalogPageCount');
+  const mobileFilterLabel = document.getElementById('mobileActiveFilter');
   const scrollEl = document.getElementById('productGrid');
+  const filterOpenBtn = document.getElementById('mobileFilterOpen');
+  const filterCloseBtn = document.getElementById('mobileFilterClose');
+  const filterBackdrop = document.getElementById('mobileFilterBackdrop');
 
   let loading = false;
+
+  function isMobileCatalog() {
+    return window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function openFilters() {
+    document.body.classList.add('catalog-filters-open');
+    filterOpenBtn?.setAttribute('aria-expanded', 'true');
+    filterBackdrop?.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeFilters() {
+    document.body.classList.remove('catalog-filters-open');
+    filterOpenBtn?.setAttribute('aria-expanded', 'false');
+    filterBackdrop?.setAttribute('aria-hidden', 'true');
+  }
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -93,6 +114,7 @@
         `<h3>${escapeHtml(p.name)}</h3>` +
         `<p class="dyness-product-spec">${escapeHtml(p.short_description)}</p>` +
         `<div class="dyness-product-tags">${tags}</div>` +
+        `<div class="dyness-product-cta"><span>View details</span><i class="fa fa-arrow-right" aria-hidden="true"></i></div>` +
         `</div>` +
         `<div class="dyness-card-accent"></div>` +
         `</a>`
@@ -151,6 +173,12 @@
     countEl.textContent = text;
   }
 
+  function updateMobileFilterLabel(title) {
+    if (mobileFilterLabel && title) {
+      mobileFilterLabel.textContent = title;
+    }
+  }
+
   async function loadCatalog(url, { push = true } = {}) {
     if (loading) return;
     loading = true;
@@ -172,6 +200,7 @@
       const publicUrl = parsed.pathname + parsed.search;
 
       if (titleEl) titleEl.textContent = data.page_title || '';
+      updateMobileFilterLabel(data.page_title);
       updateCount(data.total_products, data.pagination);
       updateTabs(data.active_section);
       renderSidebar(data.nav_groups, data.active_filter);
@@ -194,6 +223,21 @@
     }
   }
 
+  filterOpenBtn?.addEventListener('click', () => {
+    if (isMobileCatalog()) openFilters();
+  });
+
+  filterCloseBtn?.addEventListener('click', closeFilters);
+  filterBackdrop?.addEventListener('click', closeFilters);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeFilters();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!isMobileCatalog()) closeFilters();
+  });
+
   root.addEventListener('click', (event) => {
     const link = event.target.closest(
       'a.section-tab[data-catalog-nav], a.dyness-nav-link[data-catalog-nav], a[data-catalog-page]'
@@ -207,13 +251,15 @@
     if (!href || href.startsWith('#')) return;
 
     event.preventDefault();
+    if (link.classList.contains('dyness-nav-link') && isMobileCatalog()) {
+      closeFilters();
+    }
     loadCatalog(href, { push: true });
   });
 
   window.addEventListener('popstate', () => {
     if (!window.location.pathname.startsWith('/products')) return;
     if (window.location.pathname.includes('/search')) return;
-    // Ignore product detail pages
     const parts = window.location.pathname.replace(/\/+$/, '').split('/');
     if (
       parts.length === 3 &&

@@ -1,0 +1,9 @@
+# Add these lines at the TOP of ~/public_html/.htaccess on cPanel (after SSL is installed).
+# Do not remove your existing Passenger/Django rules below them.
+
+RewriteEngine On
+
+# Force HTTPS and use www (matches sitemap + Google Search Console)
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^easteagleenergy\.com$ [NC]
+RewriteRule ^(.*)$ https://www.easteagleenergy.com/$1 [L,R=301]
