@@ -574,7 +574,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 991px) {
   [data-theme="dark"] .metric-item {
     background: var(--dm-surface);
     border-color: var(--dm-border);
@@ -594,7 +594,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   [data-theme="dark"] .mobile-catalog-sticky {
     background: rgba(26, 36, 50, 0.96);
     border-bottom-color: var(--dm-border);

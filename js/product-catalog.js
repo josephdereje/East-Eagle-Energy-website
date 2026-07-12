@@ -16,12 +16,15 @@
   const filterBackdrop = document.getElementById('mobileFilterBackdrop');
 
   let loading = false;
+  let catalogScrollY = 0;
 
   function isMobileCatalog() {
-    return window.matchMedia('(max-width: 768px)').matches;
+    return window.matchMedia('(max-width: 991px)').matches;
   }
 
   function openFilters() {
+    catalogScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = `-${catalogScrollY}px`;
     document.body.classList.add('catalog-filters-open');
     filterOpenBtn?.setAttribute('aria-expanded', 'true');
     filterBackdrop?.setAttribute('aria-hidden', 'false');
@@ -29,8 +32,10 @@
 
   function closeFilters() {
     document.body.classList.remove('catalog-filters-open');
+    document.body.style.top = '';
     filterOpenBtn?.setAttribute('aria-expanded', 'false');
     filterBackdrop?.setAttribute('aria-hidden', 'true');
+    window.scrollTo(0, catalogScrollY);
   }
 
   function escapeHtml(value) {
