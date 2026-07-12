@@ -1301,6 +1301,11 @@ img { max-width: 100%; display: block; }
     padding: 0.4rem 0.9rem;
   }
 
+  .site-header .container.header-inner,
+  .header-inner.container {
+    max-width: 100%;
+  }
+
   .logo {
     order: 1;
     min-width: 0;
@@ -2852,53 +2857,25 @@ img { max-width: 100%; display: block; }
   }
   
   .header-search-submit {
-  background: #2563EB;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
+    background: #2563EB;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  }
   
   .header-search-quick {
     padding: 0 1rem;
     font-size: 0.85rem;
   }
-  
-  .product-page-search {
-    padding: 1rem;
-  }
-  
-  .product-page-search-form {
-    flex-direction: column;
-  }
-  
-  .product-page-search-input {
-    border-right: 2px solid white;
-  }
-  
-  .product-page-search-btn {
-  background: #2563EB;
-  color: white;
-  border: none;
-  padding: 0.875rem 1.75rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-}
 }
 
 @media (max-width: 480px) {
@@ -3679,6 +3656,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 900px) {
   .dyness-container {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .dyness-sidebar {
@@ -3687,19 +3665,50 @@ img { max-width: 100%; display: block; }
     max-height: none;
     overflow: visible;
     z-index: auto;
+    padding: 1rem 1.1rem;
   }
 
+  /* On phone, let the page scroll naturally — no nested sticky panels */
   .dyness-main {
     position: static;
     top: auto;
-    max-height: min(70vh, 640px);
+    max-height: none;
+  }
+
+  .dyness-main-scroll {
+    overflow: visible;
+    max-height: none;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+  }
+
+  .dyness-nav-group {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
   }
 
   .dyness-nav-items {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     padding-left: 0;
-    gap: 0.25rem;
+    gap: 0.35rem;
+  }
+
+  .dyness-nav-link {
+    padding: 0.55rem 0.6rem;
+    font-size: 0.82rem;
+  }
+
+  .dyness-main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .dyness-main-header h2 {
+    font-size: 1.25rem;
+    line-height: 1.25;
   }
 
   /* Keep product category tabs in one scrollable row on phones */
@@ -3708,37 +3717,278 @@ img { max-width: 100%; display: block; }
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    gap: 0.25rem;
-    margin-left: -0.25rem;
-    margin-right: -0.25rem;
-    padding: 0 0.25rem 0.35rem;
+    scrollbar-width: none;
+    gap: 0.2rem;
+    margin: 0 0 1rem;
+    padding: 0 0 0.35rem;
     border-bottom: 2px solid var(--gray-200);
+  }
+
+  .product-section-tabs::-webkit-scrollbar {
+    display: none;
   }
 
   .section-tab {
     flex: 0 0 auto;
     white-space: nowrap;
-    padding: 0.75rem 1rem;
-    font-size: 0.88rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.84rem;
     border-bottom: 3px solid transparent;
     border-left: none;
     margin-bottom: -2px;
+    gap: 0.4rem;
+  }
+
+  .section-tab i {
+    font-size: 0.95rem;
   }
 
   .section-tab.active {
     border-left-color: transparent;
     border-bottom-color: var(--orange);
   }
+
+  .product-page-search {
+    margin: 0 0 1rem;
+    padding: 0.85rem;
+  }
+
+  .product-page-search-form {
+    flex-direction: row;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .product-page-search-input {
+    min-width: 0;
+    width: 100%;
+    font-size: 0.92rem;
+    padding: 0.75rem 0.9rem;
+    border-right: none;
+  }
+
+  .product-page-search-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+    justify-content: center;
+  }
+
+  .product-page-search-btn i {
+    margin: 0;
+  }
+
+  .dyness-product-image {
+    height: 160px;
+    padding: 1rem;
+  }
+
+  .dyness-sidebar-cta {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+
+  .dyness-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+
+  .dyness-product-info {
+    padding: 0.9rem 0.85rem 0.75rem;
+  }
+
+  .dyness-product-info h3 {
+    font-size: 0.92rem;
+  }
+
+  .dyness-product-spec {
+    font-size: 0.76rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 420px) {
+  .product-page-search-btn {
+    padding: 0.75rem 0.9rem;
+    min-width: 46px;
+  }
 }
 
 @media (max-width: 560px) {
   .dyness-product-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .dyness-nav-items {
     grid-template-columns: 1fr;
+  }
+
+  .dyness-layout {
+    padding-top: 1rem;
+  }
+
+  /* Compact phone product cards: image left, details right */
+  .dyness-product-card {
+    flex-direction: row;
+    align-items: stretch;
+    border-radius: 10px;
+  }
+
+  .dyness-product-card:hover {
+    transform: none;
+  }
+
+  .dyness-product-image {
+    width: 108px;
+    min-width: 108px;
+    height: auto;
+    min-height: 108px;
+    max-height: 128px;
+    padding: 0.55rem;
+    align-self: stretch;
+  }
+
+  .dyness-product-image img {
+    max-height: 96px;
+  }
+
+  .dyness-product-placeholder {
+    width: 56px;
+    height: 56px;
+    font-size: 1.35rem;
+  }
+
+  .dyness-product-info {
+    text-align: left;
+    padding: 0.7rem 0.8rem 0.7rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .dyness-product-info h3 {
+    font-size: 0.92rem;
+    margin-bottom: 0.3rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .dyness-product-spec {
+    font-size: 0.75rem;
+    margin-bottom: 0.4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .dyness-product-tags {
+    justify-content: flex-start;
+    gap: 0.25rem;
+  }
+
+  .dyness-tag {
+    font-size: 0.62rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .dyness-card-accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    height: auto;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .product-page-search-btn span,
+  .product-page-search-btn {
+    font-size: 0.85rem;
+  }
+
+  .product-pager {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .product-pager-track {
+    gap: 0.35rem;
+  }
+
+  .product-pager-pages {
+    gap: 0.3rem;
+  }
+
+  .product-pager-page {
+    min-width: 48px;
+    padding: 0.4rem 0.45rem;
+    font-size: 0.85rem;
+  }
+
+  .product-pager-page-label {
+    font-size: 0.52rem;
+  }
+
+  .product-pager-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .product-pager-note {
+    font-size: 0.75rem;
+  }
+
+  .rec-showcase {
+    margin-bottom: 1.1rem;
+  }
+
+  .rec-showcase-title {
+    font-size: 1.2rem;
+  }
+
+  .rec-stage {
+    min-height: 0;
+  }
+
+  .rec-slide-visual {
+    min-height: 160px;
+    max-height: 170px;
+  }
+
+  .rec-slide-copy {
+    padding: 1rem 0.95rem 3.4rem;
+  }
+
+  .rec-slide-name {
+    font-size: 1.05rem;
+  }
+
+  .rec-slide-text {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 2;
+    margin-bottom: 0.55rem;
+  }
+
+  .rec-nav-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .container {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+
+  .dyness-empty {
+    padding: 2.5rem 1rem;
   }
 }
 
@@ -4914,11 +5164,11 @@ body {
 
   .rec-stage {
     height: auto;
-    min-height: 390px;
+    min-height: 0;
   }
 
   .rec-slide-visual {
-    min-height: 190px;
+    min-height: 180px;
     max-height: 200px;
   }
 
@@ -4931,7 +5181,11 @@ body {
   }
 
   .rec-slide-copy {
-    padding: 1.1rem 1rem 3.6rem;
+    padding: 1.1rem 1rem 3.4rem;
+  }
+
+  .rec-showcase-top {
+    margin-bottom: 0.65rem;
   }
 }
 
@@ -4939,10 +5193,7 @@ body {
   .rec-showcase-top {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .rec-stage {
-    min-height: 370px;
+    gap: 0.35rem;
   }
 }
 

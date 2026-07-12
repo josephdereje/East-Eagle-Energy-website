@@ -548,3 +548,9 @@
 [data-theme="dark"] .dyness-main-scroll::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.2);
 }
+
+@media (max-width: 560px) {
+  [data-theme="dark"] .dyness-product-card {
+    background: var(--dm-surface);
+  }
+}
