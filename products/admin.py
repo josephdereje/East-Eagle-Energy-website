@@ -1,6 +1,18 @@
 from django.contrib import admin
 
-from .models import Product, ProductSidebarSection, ProductSidebarImage, RecommendedProduct
+from .models import (
+    Product,
+    ProductImage,
+    ProductSidebarSection,
+    ProductSidebarImage,
+    RecommendedProduct,
+)
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ('image', 'label', 'display_order', 'is_active')
 
 
 class ProductSidebarImageInline(admin.TabularInline):
@@ -15,6 +27,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('product_type', 'category', 'voltage_type', 'ess_sub_type', 'is_featured', 'is_active')
     search_fields = ('name', 'short_description', 'description')
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [ProductImageInline]
     fieldsets = (
         ('Basic Information', {
             'fields': ('name', 'slug', 'product_type', 'category', 'voltage_type', 'ess_sub_type')

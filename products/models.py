@@ -72,6 +72,26 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('products:detail', kwargs={'slug': self.slug})
 
+    def get_gallery_items(self):
+        """Main product image plus additional gallery angles for the detail page."""
+        items = []
+        if self.image:
+            items.append({
+                'url': self.image.url,
+                'alt': self.name,
+                'label': 'Main view',
+            })
+        for index, gallery_image in enumerate(
+            self.gallery_images.filter(is_active=True),
+            start=len(items) + 1,
+        ):
+            items.append({
+                'url': gallery_image.image.url,
+                'alt': gallery_image.label or f'{self.name} — view {index}',
+                'label': gallery_image.label or f'View {index}',
+            })
+        return items
+
     @property
     def category_label(self):
         return ProductCategory(self.category).label
@@ -87,6 +107,32 @@ class Product(models.Model):
     @property
     def ess_sub_type_label(self):
         return EssSubType(self.ess_sub_type).label
+
+
+class ProductImage(models.Model):
+    """Additional product photos (side, back, detail angles) for the detail gallery."""
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='gallery_images',
+    )
+    image = models.ImageField(upload_to='products/gallery/')
+    label = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text='Optional label, e.g. Side view, Back view',
+    )
+    display_order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['display_order', 'id']
+        verbose_name = 'Product Gallery Image'
+        verbose_name_plural = 'Product Gallery Images'
+
+    def __str__(self):
+        return self.label or f'Gallery image for {self.product.name}'
 
 
 class ProductSidebarSection(models.Model):

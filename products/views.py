@@ -549,7 +549,12 @@ def product_list(
 
 
 def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, is_active=True)
+    product = get_object_or_404(
+        Product.objects.prefetch_related('gallery_images'),
+        slug=slug,
+        is_active=True,
+    )
+    gallery_images = product.get_gallery_items()
 
     sidebar_section = None
     try:
@@ -565,10 +570,12 @@ def product_detail(request, slug):
         is_active=True,
     ).exclude(id=product.id)[:4]
 
-    og_image = (
-        f'https://www.easteagleenergy.com{product.image.url}'
-        if product.image else 'https://www.easteagleenergy.com/images/logo.png'
-    )
+    if gallery_images:
+        og_image = f'https://www.easteagleenergy.com{gallery_images[0]["url"]}'
+    elif product.image:
+        og_image = f'https://www.easteagleenergy.com{product.image.url}'
+    else:
+        og_image = 'https://www.easteagleenergy.com/images/logo.png'
     schema = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -576,7 +583,8 @@ def product_detail(request, slug):
         'description': product.short_description or product.description[:160],
         'brand': {'@type': 'Brand', 'name': 'East Eagle Energy'},
         'url': f'https://www.easteagleenergy.com{product.get_absolute_url()}',
-        'image': og_image,
+        'image': [f'https://www.easteagleenergy.com{item["url"]}' for item in gallery_images]
+        if len(gallery_images) > 1 else og_image,
         'offers': {
             '@type': 'Offer',
             'availability': 'https://schema.org/InStock',
@@ -592,6 +600,7 @@ def product_detail(request, slug):
         'products/detail.html',
         {
             'product': product,
+            'gallery_images': gallery_images,
             'related_products': related_products,
             'sidebar_section': sidebar_section,
             'seo_title': f'{product.name} | East Eagle Energy',

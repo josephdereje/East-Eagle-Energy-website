@@ -12,18 +12,70 @@
 
       <article class="product-detail-modern">
         <div class="product-detail-gallery">
-          <div class="product-gallery-main" id="productGallery">
-            {% if product.image %}
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" id="productMainImage" class="product-gallery-img">
-              <button class="gallery-zoom-btn" id="galleryZoomBtn" aria-label="Zoom image">
-                <i class="fa fa-magnifying-glass-plus"></i>
+          {% if gallery_images %}
+          <div class="product-gallery-layout{% if gallery_images|length == 1 %} product-gallery-layout--single{% endif %}" id="productGalleryRoot">
+            {% if gallery_images|length > 1 %}
+            <div class="product-gallery-thumbs" id="productGalleryThumbs" aria-label="Product image thumbnails">
+              {% for image in gallery_images %}
+              <button
+                type="button"
+                class="gallery-thumb{% if forloop.first %} is-active{% endif %}"
+                data-gallery-index="{{ forloop.counter0 }}"
+                aria-label="{{ image.label }}"
+                aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+              >
+                <img src="{{ image.url }}" alt="{{ image.alt }}" loading="lazy">
+                <span class="gallery-thumb-label">{{ image.label }}</span>
               </button>
-            {% else %}
-              <div class="product-gallery-placeholder">
-                <i class="fa {% if product.product_type == 'inverter' %}fa-solar-panel{% elif product.product_type == 'ev_charger' %}fa-charging-station{% elif product.product_type == 'solar_panel' %}fa-solar-panel{% else %}fa-battery-full{% endif %}"></i>
-              </div>
+              {% endfor %}
+            </div>
             {% endif %}
+
+            <div class="product-gallery-stage">
+              <div class="product-gallery-main" id="productGallery">
+                <div class="gallery-slides" id="gallerySlides">
+                  {% for image in gallery_images %}
+                  <div class="gallery-slide{% if forloop.first %} is-active{% endif %}" data-gallery-index="{{ forloop.counter0 }}">
+                    <img
+                      src="{{ image.url }}"
+                      alt="{{ image.alt }}"
+                      class="product-gallery-img"
+                      {% if forloop.first %}id="productMainImage"{% endif %}
+                    >
+                  </div>
+                  {% endfor %}
+                </div>
+
+                {% if gallery_images|length > 1 %}
+                <button type="button" class="gallery-nav gallery-nav--prev" id="galleryPrevBtn" aria-label="Previous image">
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button type="button" class="gallery-nav gallery-nav--next" id="galleryNextBtn" aria-label="Next image">
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+                {% endif %}
+
+                <button type="button" class="gallery-zoom-btn" id="galleryZoomBtn" aria-label="Zoom image">
+                  <i class="fa fa-magnifying-glass-plus"></i>
+                </button>
+              </div>
+
+              {% if gallery_images|length > 1 %}
+              <div class="gallery-slide-meta">
+                <span class="gallery-slide-label" id="gallerySlideLabel">{{ gallery_images.0.label }}</span>
+                <span class="gallery-slide-counter" id="gallerySlideCounter">1 / {{ gallery_images|length }}</span>
+              </div>
+              {% endif %}
+            </div>
           </div>
+          {% else %}
+          <div class="product-gallery-main product-gallery-main--placeholder">
+            <div class="product-gallery-placeholder">
+              <i class="fa {% if product.product_type == 'inverter' %}fa-solar-panel{% elif product.product_type == 'ev_charger' %}fa-charging-station{% elif product.product_type == 'solar_panel' %}fa-solar-panel{% else %}fa-battery-full{% endif %}"></i>
+            </div>
+          </div>
+          {% endif %}
+
           <div class="product-gallery-tags">
             <span class="dyness-tag dyness-tag--type">{{ product.product_type_label }}</span>
             <span class="dyness-tag">{{ product.category_label }}</span>
@@ -106,7 +158,16 @@
 
   <!-- Image zoom lightbox -->
   <div class="product-lightbox" id="productLightbox" aria-hidden="true">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    {% if gallery_images and gallery_images|length > 1 %}
+    <button type="button" class="lightbox-nav lightbox-nav--prev" id="lightboxPrevBtn" aria-label="Previous image">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+    <button type="button" class="lightbox-nav lightbox-nav--next" id="lightboxNextBtn" aria-label="Next image">
+      <i class="fa fa-chevron-right"></i>
+    </button>
+    <span class="lightbox-counter" id="lightboxCounter"></span>
+    {% endif %}
     <img src="" alt="" id="lightboxImage">
   </div>
 
