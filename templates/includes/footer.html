@@ -57,62 +57,9 @@
     </div>
   </footer>
 
-  <script src="/js/social-config.js"></script>
-  <script src="/js/main.js"></script>
-  
-  <!-- Header Search Toggle Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchToggle = document.getElementById('searchToggle');
-      const searchDropdown = document.getElementById('headerSearchDropdown');
-      const searchOverlay = document.getElementById('searchOverlay');
-      const searchInput = document.getElementById('headerSearchInput');
-      
-      if (searchToggle && searchDropdown && searchOverlay) {
-        // Toggle search dropdown
-        searchToggle.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const isActive = searchDropdown.classList.contains('active');
-          
-          if (isActive) {
-            closeSearch();
-          } else {
-            openSearch();
-          }
-        });
-        
-        // Close on overlay click
-        searchOverlay.addEventListener('click', closeSearch);
-        
-        // Close on ESC key
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape' && searchDropdown.classList.contains('active')) {
-            closeSearch();
-          }
-        });
-        
-        // Prevent closing when clicking inside dropdown
-        searchDropdown.addEventListener('click', function(e) {
-          e.stopPropagation();
-        });
-      }
-      
-      function openSearch() {
-        searchDropdown.classList.add('active');
-        searchOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-          if (searchInput) searchInput.focus();
-        }, 100);
-      }
-      
-      function closeSearch() {
-        searchDropdown.classList.remove('active');
-        searchOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
-  </script>
+  <form id="csrf-cookie-bridge" style="display:none" aria-hidden="true">{% csrf_token %}</form>
+
+  {% include 'includes/chat-widget.html' %}
 
   <!-- Floating action buttons -->
   <div class="fab-container">
@@ -145,6 +92,74 @@
       <span class="fab-label">Call Us</span>
     </a>
 
+    <button
+      type="button"
+      class="fab-btn fab-btn--chat"
+      id="supportChatFab"
+      title="Technical Support Chat"
+      aria-label="Open technical support chat"
+      aria-expanded="false"
+      aria-controls="supportChatPanel"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="fab-label">Tech Chat</span>
+    </button>
+
   </div>
+
+  <script src="/js/social-config.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/support-chat.js?v=20260713"></script>
+
+  <!-- Header Search Toggle Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchToggle = document.getElementById('searchToggle');
+      const searchDropdown = document.getElementById('headerSearchDropdown');
+      const searchOverlay = document.getElementById('searchOverlay');
+      const searchInput = document.getElementById('headerSearchInput');
+
+      if (searchToggle && searchDropdown && searchOverlay) {
+        searchToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isActive = searchDropdown.classList.contains('active');
+          if (isActive) {
+            closeSearch();
+          } else {
+            openSearch();
+          }
+        });
+
+        searchOverlay.addEventListener('click', closeSearch);
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && searchDropdown.classList.contains('active')) {
+            closeSearch();
+          }
+        });
+
+        searchDropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+
+      function openSearch() {
+        searchDropdown.classList.add('active');
+        searchOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          if (searchInput) searchInput.focus();
+        }, 100);
+      }
+
+      function closeSearch() {
+        searchDropdown.classList.remove('active');
+        searchOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
 </body>
 </html>

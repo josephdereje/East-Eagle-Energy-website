@@ -24,3 +24,27 @@ def send_inquiry_email(inquiry):
         recipient_list=[recipient],
         fail_silently=False,
     )
+
+
+def send_support_chat_email(session, message):
+    subject = f'Tech support chat — {session.email}'
+    name_line = f'Name: {session.name}\n' if session.name else ''
+    body = (
+        f'New support chat message — East Eagle Energy\n\n'
+        f'{name_line}'
+        f'Email: {session.email}\n'
+        f'Page: {session.page_url or "—"}\n'
+        f'Session: {session.pk}\n\n'
+        f'Message:\n{message.body}\n'
+    )
+
+    recipient = settings.CONTACT_RECIPIENT_EMAIL
+    from_email = settings.DEFAULT_FROM_EMAIL
+
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=from_email,
+        recipient_list=[recipient],
+        fail_silently=False,
+    )

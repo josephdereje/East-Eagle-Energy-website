@@ -35,3 +35,27 @@ class ContactInquiryForm(forms.ModelForm):
                 'id': 'quote-message',
             }),
         }
+
+
+class SupportChatStartForm(forms.Form):
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'your.email@example.com',
+            'autocomplete': 'email',
+        }),
+    )
+    name = forms.CharField(
+        max_length=120,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your name (optional)',
+            'autocomplete': 'name',
+        }),
+    )
+    page_url = forms.CharField(max_length=500, required=False)
+
+
+class SupportChatSendForm(forms.Form):
+    session_id = forms.UUIDField()
+    message = forms.CharField(min_length=2, max_length=2000)

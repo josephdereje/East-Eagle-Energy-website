@@ -639,3 +639,31 @@
     color: var(--solar-blue-light);
   }
 }
+
+[data-theme="dark"] .support-chat-panel {
+  background: var(--dm-surface);
+  border-color: var(--dm-border);
+}
+
+[data-theme="dark"] .support-chat-bubble.is-bot {
+  background: var(--dm-surface-strong);
+  border-color: var(--dm-border);
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .support-chat-field input,
+[data-theme="dark"] .support-chat-compose textarea {
+  background: var(--dm-surface-strong);
+  border-color: var(--dm-border);
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .support-chat-login-lead,
+[data-theme="dark"] .support-chat-userbar,
+[data-theme="dark"] .support-chat-status {
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .fab-btn--chat {
+  background: #15803d;
+}

@@ -1,0 +1,55 @@
+<div class="support-chat-panel" id="supportChatPanel" aria-hidden="true" role="dialog" aria-labelledby="supportChatTitle">
+  <div class="support-chat-header">
+    <div class="support-chat-header-main">
+      <div class="support-chat-avatar" aria-hidden="true">
+        <i class="fa fa-headset"></i>
+      </div>
+      <div>
+        <h3 id="supportChatTitle">Technical Support</h3>
+        <p class="support-chat-subtitle">East Eagle Energy · Basic questions</p>
+      </div>
+    </div>
+    <button type="button" class="support-chat-close" id="supportChatClose" aria-label="Close chat">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+
+  <div class="support-chat-login" id="supportChatLogin">
+    <p class="support-chat-login-lead">Sign in with your email to message our technical team.</p>
+    <form id="supportChatLoginForm" novalidate>
+      <label class="support-chat-field">
+        <span>Email</span>
+        <input type="email" name="email" required autocomplete="email" placeholder="your.email@example.com">
+      </label>
+      <label class="support-chat-field">
+        <span>Name <em>(optional)</em></span>
+        <input type="text" name="name" autocomplete="name" placeholder="Your name">
+      </label>
+      <button type="submit" class="support-chat-submit">Start chat</button>
+    </form>
+    <p class="support-chat-login-note">We reply by email. For urgent help, call <a href="tel:+251933219802">+251 93 321 9802</a>.</p>
+  </div>
+
+  <div class="support-chat-body" id="supportChatBody" hidden>
+    <div class="support-chat-userbar">
+      <span id="supportChatUserLabel">Signed in</span>
+      <button type="button" class="support-chat-signout" id="supportChatSignOut">Change email</button>
+    </div>
+    <div class="support-chat-messages" id="supportChatMessages" aria-live="polite"></div>
+    <form class="support-chat-compose" id="supportChatComposeForm">
+      <textarea
+        name="message"
+        id="supportChatInput"
+        rows="2"
+        maxlength="2000"
+        placeholder="Ask about products, quotes, installation..."
+        required
+      ></textarea>
+      <button type="submit" class="support-chat-send" aria-label="Send message">
+        <i class="fa fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <div class="support-chat-status" id="supportChatStatus" role="status" aria-live="polite"></div>
+</div>
