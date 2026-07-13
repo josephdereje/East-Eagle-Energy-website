@@ -668,6 +668,11 @@
   background: #15803d;
 }
 
+[data-theme="dark"] .fab-btn--chat:hover,
+[data-theme="dark"] .fab-btn--chat.is-active {
+  background: var(--navy);
+}
+
 [data-theme="dark"] .support-chat-backdrop {
   background: rgba(0, 0, 0, 0.55);
 }

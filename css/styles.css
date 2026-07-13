@@ -6155,10 +6155,11 @@ body {
    ====================================== */
 
 .support-chat-panel {
-  --chat-panel-bottom: calc(2rem + (52px + 0.75rem) * 4 + 0.5rem);
   position: fixed;
-  right: max(1.2rem, var(--safe-right));
-  bottom: var(--chat-panel-bottom);
+  top: auto;
+  left: auto;
+  bottom: var(--chat-anchor-bottom, calc(2rem + (52px + 0.75rem) * 4 + 0.75rem));
+  right: var(--chat-anchor-right, max(1.2rem, var(--safe-right)));
   width: min(360px, calc(100vw - 1.6rem));
   max-height: min(70dvh, 520px);
   display: flex;
@@ -6167,12 +6168,13 @@ body {
   border-radius: 16px;
   box-shadow: 0 18px 48px rgba(15, 23, 42, 0.22);
   border: 1px solid var(--gray-200);
-  z-index: 998;
+  z-index: 1001;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transform: translateY(12px) scale(0.98);
+  transform-origin: bottom right;
   transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
 }
 
@@ -6493,8 +6495,7 @@ body {
   box-shadow: 0 6px 20px rgba(27, 54, 93, 0.4);
 }
 
-.fab-btn--chat.is-active,
-.support-chat-panel.is-open + .fab-container .fab-btn--chat {
+.fab-btn--chat.is-active {
   background: var(--navy);
 }
 
@@ -6623,7 +6624,7 @@ body.support-chat-open {
   }
 
   .support-chat-panel {
-    --chat-panel-bottom: 0px;
+    top: auto;
     left: 0;
     right: 0;
     bottom: 0;
@@ -6635,7 +6636,8 @@ body.support-chat-open {
     border-left: none;
     border-right: none;
     border-bottom: none;
-    z-index: 999;
+    z-index: 1001;
+    transform-origin: bottom center;
     -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, visibility 0.25s ease;
@@ -6686,10 +6688,6 @@ body.support-chat-open {
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
-  }
-
-  .fab-btn--chat.is-active {
-    background: var(--navy);
   }
 }
 

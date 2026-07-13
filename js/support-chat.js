@@ -8,6 +8,7 @@
   const panel = document.getElementById('supportChatPanel');
   const backdrop = document.getElementById('supportChatBackdrop');
   const fab = document.getElementById('supportChatFab');
+  const anchor = document.getElementById('supportChatAnchor');
   const closeBtn = document.getElementById('supportChatClose');
   const loginView = document.getElementById('supportChatLogin');
   const loginForm = document.getElementById('supportChatLoginForm');
@@ -102,6 +103,43 @@
     setEmailError('');
   }
 
+  function positionPanel() {
+    if (!panel) return;
+
+    if (isMobileChat()) {
+      panel.style.removeProperty('--chat-anchor-bottom');
+      panel.style.removeProperty('--chat-anchor-right');
+      return;
+    }
+
+    const target = anchor || fab?.closest('.fab-container') || fab;
+    if (!target) return;
+
+    const rect = target.getBoundingClientRect();
+    const gap = 12;
+    const panelWidth = panel.offsetWidth || Math.min(360, window.innerWidth - 16);
+    const panelHeight = panel.offsetHeight || Math.min(480, window.innerHeight * 0.7);
+    const spaceLeft = rect.left - gap - 8;
+
+    let right;
+    let bottom;
+
+    if (spaceLeft >= panelWidth) {
+      // Beside the FAB column (to the left of the icons)
+      right = Math.max(8, window.innerWidth - rect.left + gap);
+      bottom = Math.max(8, window.innerHeight - rect.bottom);
+      const maxBottom = Math.max(8, window.innerHeight - panelHeight - 8);
+      bottom = Math.min(bottom, maxBottom);
+    } else {
+      // Narrow screen: open above the icons
+      right = Math.max(8, window.innerWidth - rect.right);
+      bottom = Math.max(8, window.innerHeight - rect.top + gap);
+    }
+
+    panel.style.setProperty('--chat-anchor-bottom', `${bottom}px`);
+    panel.style.setProperty('--chat-anchor-right', `${right}px`);
+  }
+
   function lockBodyScroll() {
     if (!isMobileChat()) return;
     chatScrollY = window.scrollY || 0;
@@ -120,18 +158,19 @@
     isOpen = true;
     panel.classList.add('is-open');
     panel.setAttribute('aria-hidden', 'false');
-    fab.setAttribute('aria-expanded', 'true');
-    fab.classList.add('is-active');
+    fab?.classList.add('is-active');
+    fab?.setAttribute('aria-expanded', 'true');
     backdrop?.setAttribute('aria-hidden', 'false');
     lockBodyScroll();
+    requestAnimationFrame(() => positionPanel());
   }
 
   function closePanel() {
     isOpen = false;
     panel.classList.remove('is-open');
     panel.setAttribute('aria-hidden', 'true');
-    fab.setAttribute('aria-expanded', 'false');
-    fab.classList.remove('is-active');
+    fab?.classList.remove('is-active');
+    fab?.setAttribute('aria-expanded', 'false');
     backdrop?.setAttribute('aria-hidden', 'true');
     unlockBodyScroll();
     setStatus('');
@@ -257,8 +296,13 @@
   });
 
   window.addEventListener('resize', () => {
+    if (isOpen) positionPanel();
     if (!isMobileChat()) unlockBodyScroll();
   });
+
+  window.addEventListener('scroll', () => {
+    if (isOpen && !isMobileChat()) positionPanel();
+  }, { passive: true });
 
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', () => {

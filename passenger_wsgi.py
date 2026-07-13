@@ -9,7 +9,7 @@ os.chdir(PROJECT_DIR)
 LOG_FILE = os.path.join(PROJECT_DIR, 'ERROR_LOG.txt')
 
 try:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'east_eagle_site.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings_production')
 
     try:
         from dotenv import load_dotenv
