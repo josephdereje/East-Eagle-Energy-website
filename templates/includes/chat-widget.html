@@ -1,12 +1,16 @@
-<div class="support-chat-panel" id="supportChatPanel" aria-hidden="true" role="dialog" aria-labelledby="supportChatTitle">
+<div class="support-chat-backdrop" id="supportChatBackdrop" aria-hidden="true"></div>
+
+<div class="support-chat-panel" id="supportChatPanel" aria-hidden="true" role="dialog" aria-labelledby="supportChatTitle" aria-modal="true">
+  <div class="support-chat-sheet-handle" aria-hidden="true"></div>
+
   <div class="support-chat-header">
     <div class="support-chat-header-main">
       <div class="support-chat-avatar" aria-hidden="true">
-        <i class="fa fa-headset"></i>
+        <i class="fa fa-robot"></i>
       </div>
       <div>
-        <h3 id="supportChatTitle">Technical Support</h3>
-        <p class="support-chat-subtitle">East Eagle Energy · Basic questions</p>
+        <h3 id="supportChatTitle">Service Bot</h3>
+        <p class="support-chat-subtitle" id="supportChatSubtitle">East Eagle Energy · Technical help</p>
       </div>
     </div>
     <button type="button" class="support-chat-close" id="supportChatClose" aria-label="Close chat">
@@ -14,27 +18,39 @@
     </button>
   </div>
 
-  <div class="support-chat-login" id="supportChatLogin">
-    <p class="support-chat-login-lead">Sign in with your email to message our technical team.</p>
+  <!-- Step 1: email only -->
+  <div class="support-chat-view support-chat-view--login is-active" id="supportChatLogin" data-view="login">
+    <p class="support-chat-login-lead">Enter your email to start chatting with our service bot.</p>
     <form id="supportChatLoginForm" novalidate>
       <label class="support-chat-field">
-        <span>Email</span>
-        <input type="email" name="email" required autocomplete="email" placeholder="your.email@example.com">
+        <span>Your email</span>
+        <input
+          type="email"
+          name="email"
+          id="supportChatEmail"
+          required
+          autocomplete="email"
+          inputmode="email"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
+          placeholder="you@example.com"
+          aria-required="true"
+        >
       </label>
-      <label class="support-chat-field">
-        <span>Name <em>(optional)</em></span>
-        <input type="text" name="name" autocomplete="name" placeholder="Your name">
-      </label>
-      <button type="submit" class="support-chat-submit">Start chat</button>
+      <p class="support-chat-field-error" id="supportChatEmailError" role="alert"></p>
+      <button type="submit" class="support-chat-submit" id="supportChatStartBtn">
+        Continue to chat
+      </button>
     </form>
-    <p class="support-chat-login-note">We reply by email. For urgent help, call <a href="tel:+251933219802">+251 93 321 9802</a>.</p>
+    <p class="support-chat-login-note">
+      A human from our team may also follow up by email.
+      Urgent? <a href="tel:+251933219802">+251 93 321 9802</a>
+    </p>
   </div>
 
-  <div class="support-chat-body" id="supportChatBody" hidden>
-    <div class="support-chat-userbar">
-      <span id="supportChatUserLabel">Signed in</span>
-      <button type="button" class="support-chat-signout" id="supportChatSignOut">Change email</button>
-    </div>
+  <!-- Step 2: chat (shown after email login) -->
+  <div class="support-chat-view support-chat-view--chat" id="supportChatBody" data-view="chat" hidden>
     <div class="support-chat-messages" id="supportChatMessages" aria-live="polite"></div>
     <form class="support-chat-compose" id="supportChatComposeForm">
       <textarea
@@ -42,13 +58,15 @@
         id="supportChatInput"
         rows="2"
         maxlength="2000"
-        placeholder="Ask about products, quotes, installation..."
+        placeholder="Type your question..."
         required
+        autocomplete="off"
       ></textarea>
       <button type="submit" class="support-chat-send" aria-label="Send message">
         <i class="fa fa-paper-plane"></i>
       </button>
     </form>
+    <button type="button" class="support-chat-change-email" id="supportChatSignOut">Use a different email</button>
   </div>
 
   <div class="support-chat-status" id="supportChatStatus" role="status" aria-live="polite"></div>

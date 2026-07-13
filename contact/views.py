@@ -5,7 +5,8 @@ from django.views.decorators.http import require_GET, require_POST
 
 from east_eagle_site.seo import contact_schema_json
 
-from .chat_utils import WELCOME_MESSAGE, bot_reply_for_message
+from .ai_bot import ai_enabled, get_bot_reply
+from .chat_utils import WELCOME_MESSAGE
 from .email_utils import send_inquiry_email, send_support_chat_email
 from .forms import ContactInquiryForm, SupportChatSendForm, SupportChatStartForm
 from .models import SupportChatMessage, SupportChatSession
@@ -99,8 +100,8 @@ def chat_start(request):
         'ok': True,
         'session_id': str(session.pk),
         'email': session.email,
-        'name': session.name,
         'messages': [_serialize_message(welcome)],
+        'ai_enabled': ai_enabled(),
     })
 
 
@@ -111,8 +112,8 @@ def chat_history(request, session_id):
         'ok': True,
         'session_id': str(session.pk),
         'email': session.email,
-        'name': session.name,
         'messages': _serialize_session_messages(session),
+        'ai_enabled': ai_enabled(),
     })
 
 
@@ -141,7 +142,7 @@ def chat_send(request):
         user_message.email_sent = False
         user_message.save(update_fields=['email_sent'])
 
-    bot_body = bot_reply_for_message(user_message.body)
+    bot_body = get_bot_reply(session, user_message.body)
     bot_message = SupportChatMessage.objects.create(
         session=session,
         role=SupportChatMessage.ROLE_BOT,

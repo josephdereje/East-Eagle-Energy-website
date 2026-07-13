@@ -667,3 +667,27 @@
 [data-theme="dark"] .fab-btn--chat {
   background: #15803d;
 }
+
+[data-theme="dark"] .support-chat-backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+[data-theme="dark"] .support-chat-steps,
+[data-theme="dark"] .support-chat-login-card {
+  background: var(--dm-surface-strong);
+  border-color: var(--dm-border);
+}
+
+[data-theme="dark"] .support-chat-step {
+  background: var(--dm-surface);
+  border-color: var(--dm-border);
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .support-chat-step.is-active {
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .support-chat-compose {
+  background: var(--dm-surface);
+}

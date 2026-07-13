@@ -1,6 +1,7 @@
 WELCOME_MESSAGE = (
-    "Hi! I'm the East Eagle Energy assistant. Ask about solar inverters, batteries, "
-    "ESS systems, quotes, or installation. Our technical team will follow up by email."
+    "Hello! I'm the East Eagle Energy service bot. "
+    "Ask me about inverters, batteries, ESS, solar panels, quotes, or installation — "
+    "I'm here to help right away."
 )
 
 
