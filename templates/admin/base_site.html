@@ -5,7 +5,8 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<link rel="stylesheet" href="/css/admin.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="/css/admin.css?v=20260716t">
 {% endblock %}
 
 {% block dark-mode-vars %}{% endblock %}
@@ -14,9 +15,10 @@
 <div id="branding">
   <div id="site-name">
     <a href="{% url 'admin:index' %}">
-      <img src="/images/logo.png" alt="East Eagle Energy" class="admin-logo">
-      <span class="admin-brand-text">
-        <strong>East Eagle Energy</strong>
+      <span class="eee-logo-box">
+        <img src="/images/company-logo.png" alt="East Eagle Energy" class="eee-company-logo-header">
+      </span>
+      <span class="eee-brand">
         <small>Admin Dashboard</small>
       </span>
     </a>
@@ -24,13 +26,24 @@
 </div>
 {% endblock %}
 
-{% block nav-global %}{% endblock %}
+{% block nav-global %}
+<button type="button" class="eee-theme-btn" id="adminThemeToggle" aria-label="Toggle theme">
+  <i class="fa fa-sun eee-icon-day"></i>
+  <i class="fa fa-moon eee-icon-night"></i>
+</button>
+{% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 <script>
+(function () {
+  var t = localStorage.getItem('eee-theme');
+  if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<script src="/js/admin-theme.js" defer></script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Remove any theme toggle elements Django injects
   document.querySelectorAll('.theme-toggle, [data-theme-toggle]').forEach(function(el) {
     el.remove();
   });

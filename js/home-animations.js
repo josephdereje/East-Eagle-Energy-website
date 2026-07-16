@@ -1,29 +1,9 @@
 /**
- * Homepage animations — energy storage themed
- * Respects prefers-reduced-motion
+ * Homepage animations — scroll reveals + service cards
+ * Hero panel animations handled in main.js + premium.css
  */
 (function () {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ── Hero text stagger on load & slide change ── */
-  function animateHeroSlide(slide) {
-    if (!slide || prefersReduced) return;
-    const items = slide.querySelectorAll('.hero-animate');
-    items.forEach((el, i) => {
-      el.style.animation = 'none';
-      el.offsetHeight; // reflow
-      el.style.animation = '';
-      el.style.animationDelay = `${0.15 + i * 0.12}s`;
-    });
-  }
-
-  const activeSlide = document.querySelector('.slide.active');
-  if (activeSlide) animateHeroSlide(activeSlide);
-
-  // Hook into carousel via custom event from main.js
-  document.addEventListener('heroSlideChange', (e) => {
-    animateHeroSlide(e.detail.slide);
-  });
 
   /* ── Scroll reveal ── */
   const revealEls = document.querySelectorAll('.reveal');
@@ -45,6 +25,33 @@
     });
   } else {
     revealEls.forEach((el) => el.classList.add('revealed'));
+  }
+
+  /* ── Energy flow stations: sequential spotlight ── */
+  const flowStage = document.querySelector('.flow-stage');
+  if (flowStage && !prefersReduced) {
+    const stations = Array.from(flowStage.querySelectorAll('.flow-station'));
+    let activeIndex = 0;
+
+    const flowObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          flowObserver.unobserve(entry.target);
+          stations.forEach((s, i) => {
+            s.style.transitionDelay = `${i * 0.12}s`;
+            s.classList.add('flow-station--live');
+          });
+          setInterval(() => {
+            stations.forEach((s) => s.classList.remove('flow-station--active'));
+            stations[activeIndex].classList.add('flow-station--active');
+            activeIndex = (activeIndex + 1) % stations.length;
+          }, 2200);
+        });
+      },
+      { threshold: 0.25 }
+    );
+    flowObserver.observe(flowStage);
   }
 
   /* ── Counter animation ── */
@@ -97,5 +104,20 @@
         card.style.transform = '';
       });
     });
+  }
+
+  /* ── Soft parallax on energy-flow grid ── */
+  const flowBg = document.querySelector('.energy-flow-grid-bg');
+  if (flowBg && !prefersReduced && window.innerWidth > 768) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        const rect = flowBg.parentElement.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const offset = (window.innerHeight / 2 - (rect.top + rect.height / 2)) * 0.04;
+        flowBg.style.transform = `translateY(${offset}px)`;
+      },
+      { passive: true }
+    );
   }
 })();

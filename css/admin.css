@@ -1,565 +1,703 @@
-/* East Eagle Energy — Django Admin Theme */
+/* ==========================================================================
+   EAST EAGLE ENERGY — Admin (fresh design)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
 
 :root {
-  --ee-navy: #1B365D;
-  --ee-navy-deep: #142E4B;
-  --ee-blue: #2E6EB3;
-  --ee-orange: #F39200;
-  --ee-yellow: #FFCB05;
-  --ee-white: #ffffff;
-  --ee-bg: #f4f7fb;
-  --ee-card: #ffffff;
-  --ee-border: #dde6f0;
-  --ee-text: #1B365D;
-  --ee-muted: #5a6a75;
-  --ee-shadow: 0 10px 30px rgba(27, 54, 93, 0.08);
-  --ee-radius: 14px;
+  --navy: #1B365D;
+  --navy-deep: #0f2340;
+  --blue: #2E6EB3;
+  --cyan: #4FC3F7;
+  --orange: #F39200;
+  --gold: #FFCB05;
+
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef3f9;
+  --border: #d8e2ef;
+  --text: #1B365D;
+  --muted: #5f7490;
+  --shadow: 0 8px 30px rgba(20, 46, 75, 0.08);
+  --radius: 14px;
+  --font: 'Inter', system-ui, sans-serif;
+  --display: 'Sora', system-ui, sans-serif;
+
+  --primary: #e8f0fa;
+  --secondary: #f4f7fb;
+  --accent: var(--orange);
+  --body-fg: var(--text);
+  --body-bg: var(--bg);
+  --body-quiet-color: var(--muted);
+  --header-bg: var(--surface);
+  --header-color: var(--text);
+  --header-link-color: var(--text);
+  --link-fg: var(--blue);
+  --link-hover-color: var(--orange);
+  --hairline-color: var(--border);
+  --border-color: var(--border);
+  --darkened-bg: var(--surface-2);
+  --button-fg: #14233a;
+  --button-bg: var(--orange);
+  --button-hover-bg: var(--gold);
 }
 
-/* Base layout */
-body.login,
-body.dashboard #container,
-body.change-list #container,
-body.change-form #container,
-body.delete-confirmation #container {
-  background: var(--ee-bg) !important;
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0c1524;
+  --surface: #152238;
+  --surface-2: #1a2a42;
+  --border: #2a3f5c;
+  --text: #e8f0f8;
+  --muted: #8fa3bc;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  --primary: #1a2a42;
+  --secondary: #0c1524;
+  --body-fg: var(--text);
+  --body-bg: var(--bg);
+  --header-bg: #101c2e;
+  --header-color: var(--text);
+  --header-link-color: var(--text);
+  --link-fg: var(--cyan);
+  --link-hover-color: var(--gold);
 }
 
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+body {
+  font-family: var(--font) !important;
+  background: var(--bg) !important;
+  color: var(--text);
+}
+
+body::before { display: none; }
+
+#container { background: transparent !important; }
+
+h1, h2, h3, .module h2, .module caption {
+  font-family: var(--display);
+  letter-spacing: -0.02em;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
 #header {
-  background: linear-gradient(135deg, var(--ee-navy-deep) 0%, var(--ee-navy) 55%, var(--ee-blue) 100%) !important;
-  color: var(--ee-white) !important;
-  box-shadow: var(--ee-shadow);
-  border-bottom: 3px solid var(--ee-orange);
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
   padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-#header a:link,
-#header a:visited,
-#header a:hover {
-  color: var(--ee-white) !important;
+#header::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy), var(--blue), var(--orange), var(--gold));
 }
 
-#branding {
-  float: none !important;
-}
+#branding { float: none !important; flex: 1; }
 
 #site-name a {
   display: flex !important;
   align-items: center;
-  gap: 0.9rem;
-}
-
-.admin-logo {
-  height: 42px;
-  width: auto;
-  background: var(--ee-white);
-  border-radius: 10px;
-  padding: 0.25rem 0.45rem;
-}
-
-.admin-brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.admin-brand-text strong {
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.admin-brand-text small {
-  font-size: 0.78rem;
-  opacity: 0.85;
-}
-
-#user-tools {
-  font-weight: 500;
-}
-
-#user-tools a {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-
-div.breadcrumbs {
-  background: var(--ee-white) !important;
-  border: 1px solid var(--ee-border);
-  border-radius: 10px;
-  margin: 1rem 1.5rem 0;
-  padding: 0.75rem 1rem !important;
-  color: var(--ee-muted) !important;
-}
-
-div.breadcrumbs a {
-  color: var(--ee-blue) !important;
-}
-
-#content {
-  padding: 1.25rem 1.5rem 2rem;
-}
-
-#content h1 {
-  color: var(--ee-navy);
-  font-weight: 700;
-}
-
-/* Dashboard */
-.admin-dashboard {
-  margin-bottom: 1.5rem;
-}
-
-.admin-hero {
-  background: linear-gradient(135deg, var(--ee-navy) 0%, var(--ee-blue) 70%, #3d84c7 100%);
-  color: var(--ee-white);
-  border-radius: var(--ee-radius);
-  padding: 1.75rem 2rem;
-  box-shadow: var(--ee-shadow);
-  margin-bottom: 1.25rem;
-}
-
-.admin-hero-eyebrow {
-  color: var(--ee-yellow);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.78rem;
-  margin-bottom: 0.35rem;
-}
-
-.admin-hero h1 {
-  color: var(--ee-white) !important;
-  font-size: 1.8rem;
-  margin-bottom: 0.35rem;
-}
-
-.admin-hero p {
-  opacity: 0.92;
-  max-width: 720px;
-}
-
-.admin-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-}
-
-.admin-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.admin-btn-primary {
-  background: var(--ee-orange);
-  color: #111 !important;
-  border-color: var(--ee-orange);
-}
-
-.admin-btn-primary:hover {
-  background: var(--ee-yellow);
-  border-color: var(--ee-yellow);
-}
-
-.admin-btn-outline {
-  background: transparent;
-  color: var(--ee-white) !important;
-  border-color: rgba(255, 255, 255, 0.75);
-}
-
-.admin-btn-outline:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.admin-btn-ghost {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--ee-white) !important;
-}
-
-.admin-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-.admin-stat-card {
-  background: var(--ee-card);
-  border: 1px solid var(--ee-border);
-  border-radius: var(--ee-radius);
-  padding: 1.1rem 1.2rem;
-  display: flex;
-  gap: 0.9rem;
-  align-items: center;
-  box-shadow: var(--ee-shadow);
-}
-
-.admin-stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  color: var(--ee-white);
-  font-size: 1.1rem;
-}
-
-.admin-stat-icon.products { background: var(--ee-blue); }
-.admin-stat-icon.blog { background: var(--ee-orange); }
-.admin-stat-icon.inquiries { background: var(--ee-navy); }
-.admin-stat-icon.ads { background: #3aa876; }
-
-.admin-stat-card h3 {
-  font-size: 1.6rem;
-  color: var(--ee-navy);
-  margin: 0;
-  line-height: 1;
-}
-
-.admin-stat-card p {
-  margin: 0.15rem 0 0;
-  color: var(--ee-text);
-  font-weight: 600;
-}
-
-.admin-stat-card span {
-  color: var(--ee-muted);
-  font-size: 0.82rem;
-}
-
-.admin-quick-links h2,
-.admin-modules-wrap h2 {
-  color: var(--ee-navy);
-  margin-bottom: 0.85rem;
-}
-
-.admin-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 0.85rem;
-  margin-bottom: 1.5rem;
-}
-
-.admin-quick-card {
-  background: var(--ee-card);
-  border: 1px solid var(--ee-border);
-  border-radius: 12px;
-  padding: 1rem;
-  text-align: center;
-  color: var(--ee-navy) !important;
   text-decoration: none !important;
-  box-shadow: var(--ee-shadow);
-  transition: 0.2s ease;
 }
 
-.admin-quick-card i {
-  display: block;
-  font-size: 1.35rem;
-  color: var(--ee-blue);
-  margin-bottom: 0.45rem;
-}
-
-.admin-quick-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--ee-orange);
-}
-
-/* Default admin modules */
-.admin-modules-wrap .app-products.module,
-.admin-modules-wrap .app-blog.module,
-.admin-modules-wrap .app-contact.module,
-.admin-modules-wrap .app-auth.module,
-.module {
-  background: var(--ee-card) !important;
-  border: 1px solid var(--ee-border) !important;
-  border-radius: var(--ee-radius) !important;
-  box-shadow: var(--ee-shadow);
-  overflow: hidden;
-}
-
-.module h2,
-.module caption {
-  background: linear-gradient(90deg, var(--ee-navy), var(--ee-blue)) !important;
-  color: var(--ee-white) !important;
-}
-
-.module table {
-  border-radius: 0 0 var(--ee-radius) var(--ee-radius);
-}
-
-/* Tables & forms */
-#result_list,
-.results,
-.change-list table,
-.change-form input,
-.change-form select,
-.change-form textarea {
-  border-radius: 8px;
-}
-
-#result_list thead th,
-.results thead th {
-  background: var(--ee-navy) !important;
-  color: var(--ee-white) !important;
-}
-
-.button,
-input[type=submit],
-input[type=button],
-.submit-row input,
-a.button {
-  background: var(--ee-orange) !important;
-  color: #111 !important;
-  border: none !important;
-  border-radius: 8px !important;
-  padding: 0.55rem 1rem !important;
-  font-weight: 600 !important;
-}
-
-.button:hover,
-input[type=submit]:hover,
-input[type=button]:hover,
-.submit-row input:hover,
-a.button:hover {
-  background: var(--ee-yellow) !important;
-}
-
-.button.default,
-input[type=submit].default {
-  background: var(--ee-blue) !important;
-  color: var(--ee-white) !important;
-}
-
-fieldset.module aligned {
-  background: var(--ee-card);
-  border: 1px solid var(--ee-border);
-  border-radius: var(--ee-radius);
-  box-shadow: var(--ee-shadow);
-}
-
-/* Login page */
-body.login {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--ee-navy-deep), var(--ee-navy) 45%, var(--ee-blue) 100%) !important;
-}
-
-body.login #header {
-  display: none;
-}
-
-body.login #container {
-  background: transparent !important;
-  width: min(420px, 92vw);
-  margin: 0 auto;
-  padding: 0;
-}
-
-body.login #content {
-  padding: 0;
-}
-
-.admin-login-brand {
-  text-align: center;
-  color: var(--ee-white);
-  margin-bottom: 1.25rem;
-}
-
-.admin-login-logo {
-  height: 72px;
-  margin: 0 auto 0.75rem;
-  background: var(--ee-white);
-  border-radius: 14px;
-  padding: 0.5rem;
-}
-
-.admin-login-brand h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.15rem;
-}
-
-.admin-login-brand p {
-  opacity: 0.85;
-}
-
-.admin-login-panel {
-  background: var(--ee-white);
-  border-radius: var(--ee-radius);
-  padding: 1.5rem;
-  box-shadow: var(--ee-shadow);
-}
-
-.admin-login-field {
-  margin-bottom: 1rem;
-}
-
-.admin-login-field label {
-  display: block;
-  font-weight: 600;
-  color: var(--ee-navy);
-  margin-bottom: 0.35rem;
-}
-
-.admin-login-field input {
-  width: 100%;
-  padding: 0.7rem 0.85rem;
-  border: 1px solid var(--ee-border);
-  border-radius: 10px;
-  font-size: 1rem;
-}
-
-.admin-login-submit {
-  width: 100%;
-  justify-content: center;
-  margin-top: 0.5rem;
-}
-
-.admin-login-error {
-  background: #fff1f0;
-  color: #b42318;
-  border: 1px solid #fecdca;
-  border-radius: 10px;
-  padding: 0.65rem 0.8rem;
-  margin-bottom: 0.85rem;
-}
-
-/* Hide Django's built-in dark mode theme toggle — every possible selector */
-.theme-toggle,
-#toggle-nav-sidebar,
-[data-theme-toggle],
-button.theme-toggle,
-#header .theme-toggle,
-form.theme-toggle,
-div.theme-toggle,
-#nav-sidebar,
-.toggle-nav-sidebar,
-#toggle-nav-sidebar-checkbox,
-label[for="toggle-nav-sidebar"],
-.sticky { display: none !important; }
-
-/* Emoji icons in quick cards */
-.admin-quick-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.4rem;
-  line-height: 1;
-}
-
-/* Emoji icons in stat cards */
-.admin-stat-icon {
-  font-size: 1.8rem;
-  width: 56px;
-  height: 56px;
+.eee-logo-box {
+  width: auto;
+  height: auto;
+  min-width: 52px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(20, 46, 75, 0.1);
   flex-shrink: 0;
 }
 
-/* All models section */
-.admin-models-section {
-  margin-top: 2rem;
+html[data-theme="dark"] .eee-logo-box {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
 }
 
-.admin-models-section h2 {
-  font-size: 1.1rem;
+.eee-company-logo-header {
+  height: 52px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.eee-logo {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.eee-logo-night { display: none; }
+html[data-theme="dark"] .eee-logo-day { display: none; }
+html[data-theme="dark"] .eee-logo-night { display: block; }
+
+.eee-brand strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--ee-navy);
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--text);
+  line-height: 1.2;
 }
 
-.admin-app-group {
-  background: var(--ee-card);
-  border: 1px solid var(--ee-border);
-  border-radius: var(--ee-radius);
-  margin-bottom: 1rem;
+.eee-brand small {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Full company logo (emblem + name + tagline) */
+.eee-company-logo {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.eee-login-brand-logo {
+  margin: 0 auto 1.75rem;
+  max-width: 300px;
+}
+
+.eee-login-brand-logo .eee-company-logo {
+  max-width: 300px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 12px 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+.eee-login-form-logo {
+  margin: 0 auto 1.5rem;
+  max-width: 200px;
+  text-align: center;
+}
+
+.eee-login-form-logo .eee-company-logo {
+  max-width: 200px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+#user-tools { color: var(--muted); margin: 0; }
+
+.eee-theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--orange);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.eee-theme-btn:hover { border-color: var(--orange); background: var(--surface-2); }
+
+.eee-theme-btn .eee-icon-night { display: none; }
+html[data-theme="dark"] .eee-theme-btn .eee-icon-day { display: none; }
+html[data-theme="dark"] .eee-theme-btn .eee-icon-night { display: inline; }
+
+div.breadcrumbs {
+  background: var(--surface) !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 1rem 1.5rem 0;
+  padding: 0.65rem 1rem !important;
+  color: var(--muted) !important;
+}
+
+#content { padding: 1.5rem; max-width: 1280px; }
+
+/* ── Login page ─────────────────────────────────────────────────────────── */
+body.login {
+  min-height: 100vh;
+  background: var(--surface) !important;
+}
+
+body.login #header,
+body.login #footer { display: none !important; }
+
+body.login #container,
+body.login #content,
+body.login #content-main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100vh;
+}
+
+.eee-login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.eee-login-brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(46, 110, 179, 0.35), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 90%, rgba(243, 146, 0, 0.2), transparent 55%),
+    linear-gradient(160deg, var(--navy-deep) 0%, var(--navy) 50%, #1e4070 100%);
+  color: #fff;
   overflow: hidden;
 }
 
-.admin-app-label {
-  background: var(--ee-navy);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.6rem 1.2rem;
-  margin: 0;
+.eee-login-brand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, #000 20%, transparent 80%);
 }
 
-.admin-model-list {
-  padding: 0.4rem 0;
+.eee-login-brand-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 380px;
+  text-align: center;
 }
 
-.admin-model-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 1.2rem;
-  border-bottom: 1px solid var(--ee-border);
+.eee-login-brand h1 {
+  display: none;
 }
 
-.admin-model-row:last-child {
-  border-bottom: none;
-}
-
-.admin-model-name {
+.eee-login-tagline {
   font-size: 0.95rem;
-  color: var(--ee-text);
-  font-weight: 500;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin: 0 0 1.5rem;
 }
 
-.admin-model-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.admin-model-btn {
+.eee-login-motto {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 203, 5, 0.15);
+  border: 1px solid rgba(255, 203, 5, 0.3);
+  color: var(--gold);
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--ee-blue);
-  border: 1px solid var(--ee-blue);
-  border-radius: 6px;
-  padding: 0.2rem 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.eee-login-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem;
+  background: var(--surface);
+}
+
+html[data-theme="dark"] .eee-login-panel { background: var(--bg); }
+
+.eee-login-panel-top {
+  width: min(400px, 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.eee-login-panel-top a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue);
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
 }
 
-.admin-model-btn:hover {
-  background: var(--ee-blue);
-  color: #fff;
+.eee-login-panel-top a:hover { color: var(--orange); }
+
+.eee-login-form-wrap {
+  width: min(400px, 100%);
 }
 
-/* Responsive */
-@media (max-width: 767px) {
-  #header {
-    padding: 0.75rem 1rem;
-  }
+.eee-login-form-wrap h2 {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  margin: 0 0 0.35rem;
+  color: var(--text);
+}
 
-  .admin-logo {
-    height: 34px;
-  }
+.eee-login-form-wrap > p {
+  color: var(--muted);
+  margin: 0 0 1.75rem;
+  font-size: 0.92rem;
+}
 
-  .admin-hero {
-    padding: 1.25rem;
-  }
+.eee-field { margin-bottom: 1.15rem; }
 
-  .admin-hero h1 {
-    font-size: 1.45rem;
-  }
+.eee-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
 
-  #content {
-    padding: 1rem;
-  }
+.eee-input-wrap { position: relative; }
+
+.eee-input-wrap i.eee-input-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.eee-input-wrap input {
+  width: 100%;
+  padding: 0.85rem 0.9rem 0.85rem 2.5rem !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  font-size: 0.95rem !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+html[data-theme="dark"] .eee-input-wrap input {
+  background: var(--surface) !important;
+}
+
+.eee-input-wrap input:focus {
+  border-color: var(--orange) !important;
+  box-shadow: 0 0 0 3px rgba(243, 146, 0, 0.15) !important;
+  outline: none;
+}
+
+.eee-input-wrap input#id_password { padding-right: 2.5rem !important; }
+
+.eee-pw-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.eee-pw-toggle:hover { color: var(--orange); }
+
+.eee-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.eee-btn-primary {
+  width: 100%;
+  background: linear-gradient(120deg, var(--orange), #ffb020);
+  color: #14233a;
+  box-shadow: 0 8px 20px rgba(243, 146, 0, 0.3);
+}
+
+.eee-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(243, 146, 0, 0.38);
+}
+
+.eee-btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.eee-btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+.eee-alert {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 0.88rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+html[data-theme="dark"] .eee-alert {
+  background: rgba(180, 35, 24, 0.15);
+  border-color: rgba(255, 138, 128, 0.3);
+  color: #ffb4ab;
+}
+
+/* ── Dashboard ──────────────────────────────────────────────────────────── */
+.eee-dash { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.eee-dash-welcome {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.eee-dash-welcome-text h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.35rem;
+  color: var(--text);
+}
+
+.eee-dash-welcome-text p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.eee-dash-welcome-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.eee-dash-welcome-logo {
+  width: auto;
+  min-width: 120px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+}
+
+.eee-dash-welcome-logo .eee-company-logo {
+  max-width: 140px;
+  width: 140px;
+}
+
+.eee-dash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.eee-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.eee-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.eee-stat:hover {
+  transform: translateY(-2px);
+  border-color: rgba(243, 146, 0, 0.4);
+}
+
+.eee-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.eee-stat h3 {
+  font-size: 1.6rem;
+  margin: 0;
+  line-height: 1;
+  color: var(--text);
+}
+
+.eee-stat p {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.eee-stat span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.eee-section-title {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.85rem;
+}
+
+.eee-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.eee-link-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.15rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none !important;
+  color: var(--text) !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.eee-link-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  color: var(--blue) !important;
+}
+
+.eee-link-card i {
+  font-size: 1.25rem;
+  color: var(--orange);
+}
+
+.eee-modules-wrap { margin-top: 0.5rem; }
+
+.eee-modules-wrap .module {
+  border-radius: var(--radius) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* ── Django admin overrides ───────────────────────────────────────────────── */
+.module {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+
+.module h2, .module caption {
+  background: linear-gradient(90deg, var(--navy), var(--blue)) !important;
+  color: #fff !important;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: linear-gradient(120deg, var(--orange), #ffb020) !important;
+  color: #14233a !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.button.default, input[type=submit].default {
+  background: linear-gradient(120deg, var(--blue), #3d84c7) !important;
+  color: #fff !important;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=url],
+input[type=number], textarea, select, .vTextField {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--text) !important;
+}
+
+#result_list thead th {
+  background: var(--navy) !important;
+  color: #fff !important;
+}
+
+.submit-row {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius);
+}
+
+.theme-toggle, #toggle-nav-sidebar, #nav-sidebar, .toggle-nav-sidebar,
+#toggle-nav-sidebar-checkbox, label[for="toggle-nav-sidebar"] {
+  display: none !important;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .eee-login { grid-template-columns: 1fr; }
+  .eee-login-brand { padding: 2.5rem 1.5rem; min-height: auto; }
+  .eee-login-brand-logo .eee-company-logo { max-width: 240px; }
+  .eee-login-form-logo { display: block; max-width: 220px; }
+  .eee-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .eee-stats { grid-template-columns: 1fr; }
+  .eee-dash-welcome { padding: 1.25rem; }
+  .eee-login-panel { padding: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition-duration: 0.01ms !important; }
 }

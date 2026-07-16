@@ -260,7 +260,7 @@ img { max-width: 100%; display: block; }
 .hero-bg-layers {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -411,16 +411,9 @@ img { max-width: 100%; display: block; }
   margin-bottom: 1.75rem;
 }
 
-/* ESS Diagram Visual */
+/* ESS Diagram Visual — disabled */
 .hero-ess-visual {
-  position: absolute;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 420px;
-  height: 320px;
-  pointer-events: none;
+  display: none !important;
 }
 
 .ess-diagram {

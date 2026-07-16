@@ -8,104 +8,265 @@
   </div>
   {% endif %}
 
-  <!-- Hero carousel -->
-  <section id="home" class="hero">
-    <!-- Animated energy background -->
+  <!-- Hero: futuristic background slides + floating content -->
+  <section id="home" class="hero hero--future">
+    <div class="hero-aurora" aria-hidden="true">
+      <span class="hero-aurora-blob hero-aurora-blob--1"></span>
+      <span class="hero-aurora-blob hero-aurora-blob--2"></span>
+      <span class="hero-aurora-blob hero-aurora-blob--3"></span>
+    </div>
+
     <div class="hero-bg-layers" aria-hidden="true">
       <div class="hero-grid-pattern"></div>
-      <div class="hero-glow hero-glow--1"></div>
-      <div class="hero-glow hero-glow--2"></div>
+      <div class="hero-scanline"></div>
       <div class="hero-particles">
         <span></span><span></span><span></span><span></span><span></span>
         <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span>
       </div>
+      <div class="hero-float-orb hero-float-orb--1" aria-hidden="true"></div>
+      <div class="hero-float-orb hero-float-orb--2" aria-hidden="true"></div>
+      <div class="hero-float-orb hero-float-orb--3" aria-hidden="true"></div>
     </div>
 
-    <div class="carousel">
+    <!-- Background image / gradient slides (managed in admin) -->
+    <div class="hero-bg-carousel" aria-hidden="true">
+      <div class="hero-slide-flash" id="heroSlideFlash" aria-hidden="true"></div>
       {% for slide in hero_slides %}
-      <div class="slide {% if forloop.first %}active{% endif %}" style="--bg: {{ slide.gradient }};">
-        {% if slide.image %}
-        <div class="slide-bg-image" style="background-image: url('{{ slide.image.url }}');"></div>
+      <div class="slide-bg-item {% if forloop.first %}active{% endif %}"
+           style="--bg: {{ slide.gradient }};"
+           data-eyebrow="{{ slide.eyebrow }}"
+           data-title="{{ slide.title }}"
+           data-subtitle="{{ slide.subtitle }}"
+           data-primary-text="{{ slide.primary_btn_text }}"
+           data-primary-url="{{ slide.primary_btn_url }}"
+           data-secondary-text="{{ slide.secondary_btn_text }}"
+           data-secondary-url="{{ slide.secondary_btn_url }}">
+        {% if slide.display_image_url %}
+        <div class="slide-bg-image" style="background-image: url('{{ slide.display_image_url }}');"></div>
         {% endif %}
-        <div class="slide-overlay"></div>
-        <div class="slide-content container hero-layout">
-          <div class="hero-text hero-glass">
-            {% if slide.eyebrow %}<p class="eyebrow hero-animate">{{ slide.eyebrow }}</p>{% endif %}
-            <h1 class="hero-animate">{{ slide.title }}</h1>
-            {% if slide.subtitle %}<p class="hero-animate">{{ slide.subtitle }}</p>{% endif %}
-            <div class="hero-buttons hero-animate">
-              {% if slide.primary_btn_text %}
-              <a href="{{ slide.primary_btn_url }}" class="btn btn-primary">{{ slide.primary_btn_text }}</a>
-              {% endif %}
-              {% if slide.secondary_btn_text %}
-              <a href="{{ slide.secondary_btn_url }}" class="btn btn-outline">{{ slide.secondary_btn_text }}</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
       </div>
       {% empty %}
-      <div class="slide active" style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);">
-        <div class="slide-overlay"></div>
-        <div class="slide-content container hero-layout">
-          <div class="hero-text hero-glass">
-            <p class="eyebrow hero-animate">Est. 2022 · Global Energy Solutions</p>
-            <h1 class="hero-animate">Energy That Never Grows Weary</h1>
-            <p class="hero-animate">Dependable solar power, inverters, and battery storage for homes and businesses worldwide.</p>
-            <div class="hero-buttons hero-animate">
-              <a href="/products/" class="btn btn-primary">View Products</a>
-              <a href="/contact/" class="btn btn-outline">Contact Us</a>
-            </div>
-          </div>
-        </div>
+      <div class="slide-bg-item active"
+           style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);"
+           data-eyebrow="Est. 2022 · Global Energy Solutions"
+           data-title="Energy That Never Grows Weary"
+           data-subtitle="Dependable solar power, inverters, and battery storage for homes and businesses worldwide."
+           data-primary-text="View Products"
+           data-primary-url="/products/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-solar.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #142E4B 0%, #1B365D 50%, #FFCB05 100%);"
+           data-eyebrow="Solar Energy Systems"
+           data-title="Power You Can Rely On"
+           data-subtitle="Comprehensive solar solutions designed for consistent, resilient energy — even when the grid fails."
+           data-primary-text="Our Services"
+           data-primary-url="/#services"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-farm.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 50%, #F39200 100%);"
+           data-eyebrow="Energy Storage Systems"
+           data-title="Stable Energy Storage"
+           data-subtitle="LiFePO4 batteries and ESS solutions built to store, manage, and deliver power through every condition."
+           data-primary-text="Explore ESS"
+           data-primary-url="/products/ess/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-battery.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #0d1f35 0%, #1B365D 60%, #2E6EB3 100%);"
+           data-eyebrow="Grid & Commercial"
+           data-title="Clean Power at Scale"
+           data-subtitle="Integrated solar, storage, and grid solutions for commercial and industrial projects worldwide."
+           data-primary-text="Get a Quote"
+           data-primary-url="/contact/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-grid.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #1B365D 0%, #2E6EB3 45%, #FFCB05 100%);"
+           data-eyebrow="Residential Solutions"
+           data-title="Solar For Every Home"
+           data-subtitle="Rooftop solar systems that cut bills, boost independence, and keep your family powered day and night."
+           data-primary-text="View Products"
+           data-primary-url="/products/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-rooftop.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #142E4B 0%, #2E6EB3 55%, #F39200 100%);"
+           data-eyebrow="Smart Inverters"
+           data-title="Convert Power Intelligently"
+           data-subtitle="Hybrid and string inverters from trusted global partners — built for efficiency and long-term performance."
+           data-primary-text="Browse Inverters"
+           data-primary-url="/products/inverters/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-inverter.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #0d1f35 0%, #F39200 50%, #FFCB05 100%);"
+           data-eyebrow="Sustainable Future"
+           data-title="Harness The Sun"
+           data-subtitle="From sunrise to sunset — capture clean energy and store it for when you need it most."
+           data-primary-text="Learn More"
+           data-primary-url="/about/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-sunset.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #142E4B 0%, #1B365D 55%, #2E6EB3 100%);"
+           data-eyebrow="Expert Installation"
+           data-title="Built Right, Built To Last"
+           data-subtitle="Professional design, installation, and commissioning — from rooftop arrays to full ESS deployments across Africa and beyond."
+           data-primary-text="Our Services"
+           data-primary-url="/#services"
+           data-secondary-text="Get a Quote"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-install.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #0d1f35 0%, #2E6EB3 50%, #FFCB05 100%);"
+           data-eyebrow="EV & Future Mobility"
+           data-title="Charge With Clean Energy"
+           data-subtitle="Pair solar and battery storage with EV charging — power your vehicles from the sun and cut fuel costs for good."
+           data-primary-text="Explore Solutions"
+           data-primary-url="/products/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-evcharge.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #1B365D 0%, #142E4B 50%, #F39200 100%);"
+           data-eyebrow="Commercial & Industrial"
+           data-title="Enterprise-Grade Solar"
+           data-subtitle="Cut operating costs and meet sustainability goals with tailored C&amp;I systems — engineered for performance at scale."
+           data-primary-text="Get a Quote"
+           data-primary-url="/contact/"
+           data-secondary-text="About Us"
+           data-secondary-url="/about/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-commercial.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #142E4B 0%, #2E6EB3 60%, #FFCB05 100%);"
+           data-eyebrow="Premium Components"
+           data-title="World-Class Solar Panels"
+           data-subtitle="Tier-1 modules from leading manufacturers — high efficiency, proven reliability, and warranties you can trust."
+           data-primary-text="View Panels"
+           data-primary-url="/products/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-panels.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
+      </div>
+      <div class="slide-bg-item"
+           style="--bg: linear-gradient(135deg, #0d1f35 0%, #1B365D 45%, #F39200 100%);"
+           data-eyebrow="Off-Grid Solutions"
+           data-title="Power Where The Grid Cannot Reach"
+           data-subtitle="Standalone solar and battery systems for remote homes, farms, and communities — reliable energy, anywhere."
+           data-primary-text="Explore ESS"
+           data-primary-url="/products/ess/"
+           data-secondary-text="Contact Us"
+           data-secondary-url="/contact/">
+        <div class="slide-bg-image" style="background-image: url('/images/hero/slide-offgrid.jpg');"></div>
+        <div class="slide-bg-shine" aria-hidden="true"></div>
+        <div class="slide-bg-overlay"></div>
       </div>
       {% endfor %}
     </div>
 
-    <!-- Animated ESS visual (persists across slides) -->
-    <div class="hero-ess-visual" aria-hidden="true">
-      <div class="ess-diagram">
-        <div class="ess-node ess-node--solar">
-          <div class="ess-node-icon"><i class="fa fa-solar-panel"></i></div>
-          <span>Solar</span>
-          <div class="ess-pulse"></div>
+    <!-- Fixed floating content (no heavy box) -->
+    <div class="hero-foreground container hero-layout">
+      <div class="hero-future-content" id="heroContentPanel">
+        <div class="hero-future-accent" aria-hidden="true">
+          <span class="hero-accent-line"></span>
+          <span class="hero-accent-dot"></span>
         </div>
-        <div class="ess-connector ess-connector--1">
-          <div class="ess-flow-line"></div>
-          <div class="ess-flow-dot"></div>
-        </div>
-        <div class="ess-node ess-node--inverter">
-          <div class="ess-node-icon"><i class="fa fa-bolt"></i></div>
-          <span>Inverter</span>
-        </div>
-        <div class="ess-connector ess-connector--2">
-          <div class="ess-flow-line"></div>
-          <div class="ess-flow-dot ess-flow-dot--delay"></div>
-        </div>
-        <div class="ess-node ess-node--battery">
-          <div class="ess-battery">
-            <div class="ess-battery-cap"></div>
-            <div class="ess-battery-body">
-              <div class="ess-battery-fill"></div>
-              <div class="ess-battery-segments">
-                <span></span><span></span><span></span><span></span>
-              </div>
+        <div class="hero-future-inner">
+          <p class="hero-brand">East Eagle Energy</p>
+          {% with slide=hero_slides|first %}
+          {% if slide %}
+            {% if slide.eyebrow %}<p class="eyebrow hero-panel-eyebrow">{{ slide.eyebrow }}</p>{% else %}<p class="eyebrow hero-panel-eyebrow" hidden></p>{% endif %}
+            <h1 class="hero-panel-title">{{ slide.title }}</h1>
+            {% if slide.subtitle %}<p class="hero-panel-subtitle">{{ slide.subtitle }}</p>{% else %}<p class="hero-panel-subtitle" hidden></p>{% endif %}
+            <div class="hero-buttons hero-panel-buttons">
+              {% if slide.primary_btn_text %}
+              <a href="{{ slide.primary_btn_url }}" class="btn btn-primary hero-panel-primary">{{ slide.primary_btn_text }}</a>
+              {% endif %}
+              {% if slide.secondary_btn_text %}
+              <button type="button" class="btn btn-outline hero-panel-secondary js-open-contact-slide">{{ slide.secondary_btn_text }}</button>
+              {% endif %}
             </div>
-          </div>
-          <span>ESS Storage</span>
-          <div class="ess-charge-label">98%</div>
-        </div>
-        <div class="ess-connector ess-connector--3">
-          <div class="ess-flow-line"></div>
-          <div class="ess-flow-dot ess-flow-dot--delay2"></div>
-        </div>
-        <div class="ess-node ess-node--load">
-          <div class="ess-node-icon"><i class="fa fa-building"></i></div>
-          <span>Power Load</span>
+          {% else %}
+            <p class="eyebrow hero-panel-eyebrow">Est. 2022 · Global Energy Solutions</p>
+            <h1 class="hero-panel-title">Energy That Never Grows Weary</h1>
+            <p class="hero-panel-subtitle">Dependable solar power, inverters, and battery storage for homes and businesses worldwide.</p>
+            <div class="hero-buttons hero-panel-buttons">
+              <a href="/products/" class="btn btn-primary hero-panel-primary">View Products</a>
+              <button type="button" class="btn btn-outline hero-panel-secondary js-open-contact-slide">Contact Us</button>
+            </div>
+          {% endif %}
+          {% endwith %}
         </div>
       </div>
-      <div class="ess-orbit ess-orbit--1"></div>
-      <div class="ess-orbit ess-orbit--2"></div>
+
+      <div class="hero-future-visual" aria-hidden="true">
+        <div class="hero-orbit">
+          <span class="hero-orbit-ring hero-orbit-ring--1"></span>
+          <span class="hero-orbit-ring hero-orbit-ring--2"></span>
+          <span class="hero-orbit-core"><i class="fa fa-bolt"></i></span>
+        </div>
+        <div class="hero-flow-lines">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-energy-rail" aria-hidden="true">
+      <span class="hero-energy-rail-spark"></span>
+    </div>
+
+    <div class="hero-slide-progress" id="heroSlideProgress" aria-hidden="true">
+      <span class="hero-slide-progress-fill"></span>
+    </div>
+
+    <div class="hero-slide-count" id="heroSlideCount" aria-hidden="true">
+      <span class="hero-slide-current">01</span>
+      <span class="hero-slide-sep">/</span>
+      <span class="hero-slide-total">01</span>
     </div>
 
     <button class="carousel-btn prev" aria-label="Previous slide"><i class="fa fa-chevron-left"></i></button>
@@ -178,6 +339,105 @@
           <p>Hybrid and string inverters built for long-term, resilient performance.</p>
         </article>
       </div>
+    </div>
+  </section>
+
+  <!-- How energy flows: solar → inverter → battery → grid -->
+  <section id="energy-flow" class="energy-flow">
+    <div class="energy-flow-grid-bg" aria-hidden="true"></div>
+    <div class="container">
+      <div class="section-intro reveal">
+        <p class="eyebrow">How It Works</p>
+        <h2>From Sunlight to Switch</h2>
+        <p class="section-intro-text">Watch how our integrated systems capture, convert, store, and deliver clean energy — day and night.</p>
+      </div>
+
+      <div class="flow-stage">
+        <article class="flow-station reveal">
+          <span class="flow-step-num">01</span>
+          <div class="flow-visual">
+            <div class="fx-sun" aria-hidden="true">
+              <div class="fx-sun-rays">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="fx-sun-core"></div>
+            </div>
+            <div>
+              <div class="fx-panel" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="fx-panel-stand" aria-hidden="true"></div>
+            </div>
+          </div>
+          <h3>Solar Capture</h3>
+          <p>High-efficiency panels harvest sunlight and generate DC power.</p>
+          <div class="flow-link" aria-hidden="true"></div>
+        </article>
+
+        <article class="flow-station reveal">
+          <span class="flow-step-num">02</span>
+          <div class="flow-visual">
+            <div class="fx-inverter" aria-hidden="true">
+              <div class="fx-inverter-led"></div>
+              <svg class="fx-wave" viewBox="0 0 74 30">
+                <path class="wave-dc" d="M0 8 H26" />
+                <path class="wave-ac" d="M26 15 Q32 2 38 15 T50 15 T62 15 T74 15" />
+              </svg>
+              <div class="fx-inverter-labels"><span>DC</span><span>AC</span></div>
+            </div>
+          </div>
+          <h3>Smart Inversion</h3>
+          <p>Hybrid inverters convert DC into clean, stable AC power.</p>
+          <div class="flow-link" aria-hidden="true"></div>
+        </article>
+
+        <article class="flow-station reveal">
+          <span class="flow-step-num">03</span>
+          <div class="flow-visual">
+            <div class="fx-battery" aria-hidden="true">
+              <div class="fx-battery-cap"></div>
+              <div class="fx-battery-body">
+                <div class="fx-battery-fill"></div>
+                <div class="fx-battery-bubbles"><span></span><span></span><span></span></div>
+                <i class="fa fa-bolt fx-battery-bolt"></i>
+              </div>
+              <div class="fx-battery-pct">ESS</div>
+            </div>
+          </div>
+          <h3>Battery Storage</h3>
+          <p>LiFePO4 storage banks energy for nights and outages.</p>
+          <div class="flow-link" aria-hidden="true"></div>
+        </article>
+
+        <article class="flow-station reveal">
+          <span class="flow-step-num">04</span>
+          <div class="flow-visual">
+            <div class="fx-grid" aria-hidden="true">
+              <svg class="fx-pylon" viewBox="0 0 54 88">
+                <path d="M20 88 L25 30 M34 88 L29 30" />
+                <line x1="16" y1="70" x2="38" y2="70" />
+                <line x1="18" y1="52" x2="36" y2="52" />
+                <line x1="8" y1="30" x2="46" y2="30" />
+                <line x1="14" y1="18" x2="40" y2="18" />
+                <path d="M25 30 L27 8 L29 30" />
+                <path class="pylon-spark" d="M8 30 Q27 44 46 30" />
+                <path class="pylon-spark" d="M14 18 Q27 30 40 18" style="animation-delay:-1.1s" />
+              </svg>
+              <div class="fx-home">
+                <div class="fx-home-roof"></div>
+                <div class="fx-home-body"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+          </div>
+          <h3>Grid & Home Delivery</h3>
+          <p>Power flows to your home, business, or back to the grid.</p>
+        </article>
+      </div>
+
+      <p class="flow-caption reveal">One connected system — <strong>Energy That Never Grows Weary.</strong></p>
     </div>
   </section>
 
@@ -365,4 +625,4 @@
   </section>
 
 {% include 'includes/footer.html' %}
-<script src="/js/home-animations.js"></script>
+<script src="/js/home-animations.js?v=20260716g"></script>

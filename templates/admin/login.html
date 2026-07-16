@@ -1,47 +1,105 @@
-{% extends "admin/login.html" %}
+{% extends "admin/base_site.html" %}
 {% load i18n static %}
 
 {% block extrastyle %}
 {{ block.super }}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="/css/admin.css">
+{{ form.media }}
 {% endblock %}
 
-{% block branding %}
-<div class="admin-login-brand">
-  <img src="/images/logo.png" alt="East Eagle Energy" class="admin-login-logo">
-  <h1>East Eagle Energy</h1>
-  <p>Admin Dashboard</p>
-</div>
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+(function () {
+  var t = localStorage.getItem('eee-theme');
+  if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<script src="/js/admin-theme.js" defer></script>
+<script src="/js/admin-login.js?v=20260716s" defer></script>
 {% endblock %}
+
+{% block branding %}{% endblock %}
 
 {% block content %}
-<div class="admin-login-panel">
-  {% if form.errors and not form.non_field_errors %}
-    <p class="admin-login-error">
-      <i class="fa fa-circle-exclamation"></i>
-      {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
-    </p>
-  {% endif %}
-  {% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-      <p class="admin-login-error"><i class="fa fa-circle-exclamation"></i> {{ error }}</p>
-    {% endfor %}
-  {% endif %}
-  <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
-    <div class="admin-login-field">
-      <label for="id_username"><i class="fa fa-user"></i> {% trans 'Username' %}</label>
-      {{ form.username }}
+<div class="eee-login">
+  <aside class="eee-login-brand">
+    <div class="eee-login-brand-inner">
+      <div class="eee-login-brand-logo">
+        <img src="/images/company-logo.png" alt="East Eagle Energy" class="eee-company-logo">
+      </div>
+      <p class="eee-login-tagline">Manage products, content, hero slides, and customer inquiries — all in one place.</p>
+      <span class="eee-login-motto">Energy That Never Grows Weary</span>
     </div>
-    <div class="admin-login-field">
-      <label for="id_password"><i class="fa fa-lock"></i> {% trans 'Password' %}</label>
-      {{ form.password }}
-      <input type="hidden" name="next" value="{{ next }}">
+  </aside>
+
+  <main class="eee-login-panel">
+    <div class="eee-login-panel-top">
+      <a href="/" target="_blank" rel="noopener"><i class="fa fa-arrow-up-right-from-square"></i> View website</a>
+      <button type="button" class="eee-theme-btn" id="adminThemeToggle" aria-label="Toggle theme">
+        <i class="fa fa-sun eee-icon-day"></i>
+        <i class="fa fa-moon eee-icon-night"></i>
+      </button>
     </div>
-    <button type="submit" class="admin-btn admin-btn-primary admin-login-submit">
-      <i class="fa fa-right-to-bracket"></i> {% trans 'Log in' %}
-    </button>
-  </form>
+
+    <div class="eee-login-form-wrap">
+      <div class="eee-login-form-logo">
+        <img src="/images/company-logo.png" alt="East Eagle Energy" class="eee-company-logo">
+      </div>
+      <h2>Sign in</h2>
+      <p>Enter your credentials to access the admin dashboard.</p>
+
+      {% if user.is_authenticated %}
+      <div class="eee-alert">
+        <i class="fa fa-circle-exclamation"></i>
+        <span>{% blocktranslate trimmed %}You are authenticated as {{ username }}, but are not authorized to access this page.{% endblocktranslate %}</span>
+      </div>
+      {% endif %}
+
+      {% if form.errors and not form.non_field_errors %}
+      <div class="eee-alert">
+        <i class="fa fa-circle-exclamation"></i>
+        <span>{% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}</span>
+      </div>
+      {% endif %}
+
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="eee-alert"><i class="fa fa-circle-exclamation"></i><span>{{ error }}</span></div>
+        {% endfor %}
+      {% endif %}
+
+      <form action="{{ app_path }}" method="post" id="login-form">
+        {% csrf_token %}
+        <div class="eee-field">
+          <label for="id_username">{% trans 'Username' %}</label>
+          <div class="eee-input-wrap">
+            <i class="fa fa-user eee-input-icon"></i>
+            {{ form.username }}
+          </div>
+        </div>
+        <div class="eee-field">
+          <label for="id_password">{% trans 'Password' %}</label>
+          <div class="eee-input-wrap">
+            <i class="fa fa-lock eee-input-icon"></i>
+            {{ form.password }}
+            <button type="button" class="eee-pw-toggle" id="adminPwToggle" aria-label="Show password" tabindex="-1">
+              <i class="fa fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="eee-btn eee-btn-primary">{% trans 'Sign in' %}</button>
+      </form>
+    </div>
+  </main>
 </div>
 {% endblock %}
 

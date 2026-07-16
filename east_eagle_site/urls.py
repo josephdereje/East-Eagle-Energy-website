@@ -9,7 +9,7 @@ from django.views.static import serve
 
 from contact.forms import ContactInquiryForm
 from products.models import Product
-from blog.models import HomepageAd, BlogPost, HeroSlide
+from blog.models import AboutMilestone, AboutPage, AboutValue, HomepageAd, BlogPost, HeroSlide
 from east_eagle_site.sitemaps import sitemaps
 from east_eagle_site.seo import about_schema_json, home_schema_json
 
@@ -64,10 +64,25 @@ def home(request):
 
 
 def about(request):
+    about_page = AboutPage.load()
+    about_values = AboutValue.objects.filter(is_active=True)
+    about_milestones = AboutMilestone.objects.filter(is_active=True)
+    showcase_images = [
+        '/images/hero/slide-install.jpg',
+        '/images/hero/slide-commercial.jpg',
+        '/images/hero/slide-farm.jpg',
+        '/images/hero/slide-battery.jpg',
+        '/images/hero/slide-solar.jpg',
+    ]
+
     return render(
         request,
         'about.html',
         {
+            'about_page': about_page,
+            'about_values': about_values,
+            'about_milestones': about_milestones,
+            'showcase_images': showcase_images,
             'seo_title': 'About Us | East Eagle Energy',
             'seo_description': (
                 'Learn about East Eagle Energy — our mission, core aims, and growth '
@@ -93,14 +108,10 @@ urlpatterns = [
 
 # Templates load /css/, /js/, /images/ (not /static/). Serve these in
 # production too so updates from git pull apply without relying only on
-# a separate public_html copy. Media stays DEBUG-only when DEBUG is True.
+# a separate public_html copy.
 urlpatterns += [
     re_path(r'^css/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'css'}),
     re_path(r'^js/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'js'}),
     re_path(r'^images/(?P<path>.*)$', serve, {'document_root': settings.BASE_DIR / 'images'}),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    ]

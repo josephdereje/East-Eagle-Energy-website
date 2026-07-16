@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import BlogPost, HeroSlide, HomepageAd
+from .models import AboutMilestone, AboutPage, AboutValue, BlogPost, HeroSlide, HomepageAd
 
 
 @admin.register(BlogPost)
@@ -46,6 +46,37 @@ class HeroSlideAdmin(admin.ModelAdmin):
             'fields': ('display_order', 'is_active')
         }),
     )
+
+
+@admin.register(AboutPage)
+class AboutPageAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Hero', {'fields': ('hero_eyebrow', 'hero_title', 'hero_subtitle')}),
+        ('Core Aims Intro', {'fields': ('aims_intro',)}),
+        ('Mission', {
+            'fields': ('mission_eyebrow', 'mission_title', 'mission_text', 'mission_quote'),
+        }),
+    )
+
+    def has_add_permission(self, request):
+        return not AboutPage.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(AboutValue)
+class AboutValueAdmin(admin.ModelAdmin):
+    list_display = ('title', 'icon', 'is_active', 'display_order')
+    list_editable = ('is_active', 'display_order')
+    search_fields = ('title', 'description')
+
+
+@admin.register(AboutMilestone)
+class AboutMilestoneAdmin(admin.ModelAdmin):
+    list_display = ('year', 'title', 'is_active', 'display_order')
+    list_editable = ('is_active', 'display_order')
+    search_fields = ('title', 'description', 'year')
 
 
 @admin.register(HomepageAd)

@@ -1,55 +1,57 @@
 {% extends "admin/index.html" %}
 {% load i18n static admin_dashboard %}
 
-{% block content_title %}<h1>Dashboard</h1>{% endblock %}
-
+{% block content_title %}{% endblock %}
 {% block sidebar %}{% endblock %}
 
 {% block content %}
-
 {% admin_dashboard_stats as stats %}
-<div class="admin-dashboard">
 
-  <section class="admin-hero">
-    <div class="admin-hero-content">
-      <p class="admin-hero-eyebrow">Energy That Never Grows Weary</p>
-      <h1>Welcome to your dashboard</h1>
-      <p>Manage products, blog posts, inquiries, and homepage content.</p>
-      <div class="admin-hero-actions">
-        <a href="{% url 'admin:products_product_add' %}" class="admin-btn admin-btn-primary">＋ Add Product</a>
-        <a href="{% url 'admin:blog_blogpost_add' %}" class="admin-btn admin-btn-outline">✎ New Blog Post</a>
-        <a href="/" target="_blank" rel="noopener" class="admin-btn admin-btn-ghost">↗ View Website</a>
+<div class="eee-dash">
+  <section class="eee-dash-welcome">
+    <div class="eee-dash-welcome-brand">
+      <div class="eee-dash-welcome-logo">
+        <img src="/images/company-logo.png" alt="East Eagle Energy" class="eee-company-logo">
       </div>
+      <div class="eee-dash-welcome-text">
+        <h1>Welcome back</h1>
+        <p>East Eagle Energy admin — manage your site content and products.</p>
+      </div>
+    </div>
+    <div class="eee-dash-actions">
+      <a href="{% url 'admin:products_product_add' %}" class="eee-btn eee-btn-primary" style="width:auto;"><i class="fa fa-plus"></i> Add Product</a>
+      <a href="{% url 'admin:blog_blogpost_add' %}" class="eee-btn eee-btn-ghost"><i class="fa fa-pen"></i> New Post</a>
+      <a href="/" target="_blank" rel="noopener" class="eee-btn eee-btn-ghost"><i class="fa fa-external-link"></i> Website</a>
     </div>
   </section>
 
-  <section class="admin-stats-grid">
-    <article class="admin-stat-card">
-      <div class="admin-stat-icon">📦</div>
+  <section class="eee-stats">
+    <article class="eee-stat">
+      <div class="eee-stat-icon"><i class="fa fa-box"></i></div>
       <div>
         <h3>{{ stats.products }}</h3>
         <p>Active products</p>
         <span>{{ stats.products_total }} total</span>
       </div>
     </article>
-    <article class="admin-stat-card">
-      <div class="admin-stat-icon">📰</div>
+    <article class="eee-stat">
+      <div class="eee-stat-icon"><i class="fa fa-newspaper"></i></div>
       <div>
         <h3>{{ stats.blog_posts }}</h3>
         <p>Published posts</p>
         <span>{{ stats.blog_drafts }} drafts</span>
       </div>
     </article>
-    <article class="admin-stat-card">
-      <div class="admin-stat-icon">✉️</div>
+    <article class="eee-stat">
+      <div class="eee-stat-icon"><i class="fa fa-envelope"></i></div>
       <div>
         <h3>{{ stats.inquiries }}</h3>
-        <p>Contact inquiries</p>
-        <span>Quote requests</span>
+        <p>Inquiries</p>
+        <span>Contact form</span>
       </div>
     </article>
-    <article class="admin-stat-card">
-      <div class="admin-stat-icon">🖼️</div>
+    <article class="eee-stat">
+      <div class="eee-stat-icon"><i class="fa fa-image"></i></div>
       <div>
         <h3>{{ stats.homepage_ads }}</h3>
         <p>Homepage ads</p>
@@ -58,31 +60,22 @@
     </article>
   </section>
 
-  <section class="admin-quick-links">
-    <h2>Quick links</h2>
-    <div class="admin-quick-grid">
-      <a href="{% url 'admin:products_product_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">⚡</span><span>Products</span>
-      </a>
-      <a href="{% url 'admin:blog_blogpost_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">📝</span><span>Blog</span>
-      </a>
-      <a href="{% url 'admin:contact_contactinquiry_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">📥</span><span>Inquiries</span>
-      </a>
-      <a href="{% url 'admin:blog_homepagead_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">🖼️</span><span>Homepage Ads</span>
-      </a>
-      <a href="{% url 'admin:auth_user_changelist' %}" class="admin-quick-card">
-        <span class="admin-quick-icon">👤</span><span>Users</span>
-      </a>
+  <section>
+    <h2 class="eee-section-title">Quick access</h2>
+    <div class="eee-links">
+      <a href="{% url 'admin:products_product_changelist' %}" class="eee-link-card"><i class="fa fa-bolt"></i> Products</a>
+      <a href="{% url 'admin:blog_blogpost_changelist' %}" class="eee-link-card"><i class="fa fa-pen-to-square"></i> Blog</a>
+      <a href="{% url 'admin:blog_heroslide_changelist' %}" class="eee-link-card"><i class="fa fa-images"></i> Hero Slides</a>
+      <a href="{% url 'admin:blog_aboutpage_changelist' %}" class="eee-link-card"><i class="fa fa-circle-info"></i> About Page</a>
+      <a href="{% url 'admin:contact_contactinquiry_changelist' %}" class="eee-link-card"><i class="fa fa-inbox"></i> Inquiries</a>
+      <a href="{% url 'admin:blog_homepagead_changelist' %}" class="eee-link-card"><i class="fa fa-panorama"></i> Ads</a>
+      <a href="{% url 'admin:auth_user_changelist' %}" class="eee-link-card"><i class="fa fa-users"></i> Users</a>
     </div>
   </section>
 
+  <section class="eee-modules-wrap">
+    <h2 class="eee-section-title">All modules</h2>
+    {{ block.super }}
+  </section>
 </div>
-
-<div style="margin-top:2rem">
-  {{ block.super }}
-</div>
-
 {% endblock %}

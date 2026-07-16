@@ -1,0 +1,46 @@
+<div class="contact-slide" id="contactSlide" aria-hidden="true">
+  <div class="contact-slide-backdrop" id="contactSlideBackdrop"></div>
+  <aside class="contact-slide-panel" role="dialog" aria-labelledby="contactSlideTitle" aria-modal="true">
+    <button type="button" class="contact-slide-close" id="contactSlideClose" aria-label="Close contact form">
+      <i class="fa fa-xmark"></i>
+    </button>
+
+    <div class="contact-slide-header">
+      <p class="contact-slide-eyebrow">East Eagle Energy</p>
+      <h2 id="contactSlideTitle">Get in Touch</h2>
+      <p>Request a consultation — we respond within 24 hours.</p>
+    </div>
+
+    <form class="contact-slide-form" method="post" action="{% url 'contact:submit' %}">
+      {% csrf_token %}
+      <input type="hidden" name="company" value="Website inquiry">
+      <input type="hidden" name="address" value="Quick contact panel">
+
+      <div class="contact-slide-field">
+        <label for="slide-contact-name">Name</label>
+        <input type="text" id="slide-contact-name" name="name" required placeholder="Your full name">
+      </div>
+      <div class="contact-slide-field">
+        <label for="slide-contact-phone">Phone</label>
+        <input type="tel" id="slide-contact-phone" name="phone" required placeholder="+251 93 321 9802">
+      </div>
+      <div class="contact-slide-field">
+        <label for="slide-contact-email">Email</label>
+        <input type="email" id="slide-contact-email" name="email" required placeholder="your.email@example.com">
+      </div>
+      <div class="contact-slide-field">
+        <label for="slide-contact-message">Message</label>
+        <textarea id="slide-contact-message" name="message" rows="4" required placeholder="Tell us about your project or power needs…"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary contact-slide-submit">
+        <i class="fa fa-paper-plane"></i> Send Message
+      </button>
+    </form>
+
+    <div class="contact-slide-footer">
+      <a href="tel:+251933219802"><i class="fa fa-phone"></i> +251 93 321 9802</a>
+      <a href="/contact/"><i class="fa fa-arrow-right"></i> Full contact page</a>
+    </div>
+  </aside>
+</div>

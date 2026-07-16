@@ -1,158 +1,202 @@
 {% include 'includes/header.html' %}
 
-  <section class="page-hero about-hero">
-    <div class="container">
-      <p class="eyebrow">About East Eagle Energy</p>
-      <h1>Energy That Never Grows Weary</h1>
-      <p>Global solar, storage, and power solutions — built for reliability since 2022.</p>
+  <!-- Cinematic hero with rotating backgrounds -->
+  <section class="about-page-hero">
+    <div class="about-hero-bg" aria-hidden="true">
+      {% for img in showcase_images %}
+      <div class="about-hero-bg-slide {% if forloop.first %}active{% endif %}" style="background-image: url('{{ img }}');"></div>
+      {% endfor %}
+      <div class="about-hero-bg-overlay"></div>
+      <div class="about-hero-bg-shine"></div>
+    </div>
+    <div class="about-hero-aurora" aria-hidden="true">
+      <span></span><span></span>
+    </div>
+    <div class="container about-hero-inner">
+      <div class="about-hero-accent reveal" aria-hidden="true">
+        <span class="about-accent-line"></span>
+        <span class="about-accent-dot"></span>
+      </div>
+      <p class="eyebrow reveal">{{ about_page.hero_eyebrow }}</p>
+      <h1 class="reveal">{{ about_page.hero_title }}</h1>
+      <p class="about-hero-lead reveal">{{ about_page.hero_subtitle }}</p>
+      <div class="about-hero-stats reveal">
+        <div class="about-hero-stat">
+          <span class="about-hero-stat-num" data-count="2022">0</span>
+          <span class="about-hero-stat-label">Founded</span>
+        </div>
+        <div class="about-hero-stat">
+          <span class="about-hero-stat-num" data-count="5">0</span><span class="about-hero-stat-suffix">+</span>
+          <span class="about-hero-stat-label">Global Regions</span>
+        </div>
+        <div class="about-hero-stat">
+          <span class="about-hero-stat-num" data-count="6">0</span><span class="about-hero-stat-suffix">+</span>
+          <span class="about-hero-stat-label">Product Lines</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-hero-scroll-hint" aria-hidden="true">
+      <span></span>
     </div>
   </section>
 
-  <!-- Core Aims -->
-  <section class="section about-aims">
-    <div class="container about-aims-grid">
-      <div class="about-aims-content reveal">
+  <!-- Core values -->
+  <section class="section about-values-section">
+    <div class="container">
+      <div class="about-section-head reveal">
         <p class="eyebrow">Our Core Aims</p>
         <h2>What Drives Us Forward</h2>
-        <p>East Eagle Energy was founded with a clear purpose: to make dependable, clean energy accessible to homes, businesses, and industries worldwide.</p>
-        <ul class="about-aims-list">
-          <li>
-            <span class="aim-icon"><i class="fa fa-globe"></i></span>
-            <div>
-              <strong>Global Energy Access</strong>
-              <p>Deliver solar inverters, LiFePO4 batteries, and ESS solutions across residential, commercial, and industrial markets.</p>
-            </div>
-          </li>
-          <li>
-            <span class="aim-icon"><i class="fa fa-shield-halved"></i></span>
-            <div>
-              <strong>Reliability First</strong>
-              <p>Source and supply equipment from trusted global partners — Deye, Growatt, Pylontech, Jinko, and more.</p>
-            </div>
-          </li>
-          <li>
-            <span class="aim-icon"><i class="fa fa-leaf"></i></span>
-            <div>
-              <strong>Sustainable Future</strong>
-              <p>Accelerate the transition to renewable energy through smart storage, monitoring, and integrated power systems.</p>
-            </div>
-          </li>
-          <li>
-            <span class="aim-icon"><i class="fa fa-handshake"></i></span>
-            <div>
-              <strong>Partnership & Support</strong>
-              <p>Provide end-to-end consultation, installation support, and after-sales service for every project.</p>
-            </div>
-          </li>
-        </ul>
+        <p>{{ about_page.aims_intro }}</p>
       </div>
-      <div class="about-factory-placeholder reveal">
-        <div class="factory-image-slot">
-          <i class="fa fa-industry"></i>
-          <p>Factory & Operations</p>
-          <span>Photo placeholder — replace with facility images</span>
+      <div class="about-values-grid">
+        {% for value in about_values %}
+        <article class="about-value-card reveal" data-tilt>
+          <div class="about-value-icon"><i class="fa {{ value.icon }}"></i></div>
+          <div class="about-value-glow" aria-hidden="true"></div>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.description }}</p>
+        </article>
+        {% empty %}
+        <article class="about-value-card reveal">
+          <div class="about-value-icon"><i class="fa fa-globe"></i></div>
+          <h3>Global Energy Access</h3>
+          <p>Delivering solar and storage solutions worldwide.</p>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual showcase + energy chain -->
+  <section class="section about-showcase-section">
+    <div class="container about-showcase-grid">
+      <div class="about-showcase-visual reveal">
+        <div class="about-showcase-frame">
+          {% for img in showcase_images %}
+          <div class="about-showcase-slide {% if forloop.first %}active{% endif %}" style="background-image: url('{{ img }}');"></div>
+          {% endfor %}
+          <div class="about-showcase-overlay"></div>
+          <div class="about-showcase-badge">
+            <i class="fa fa-industry"></i>
+            <span>Operations &amp; Projects</span>
+          </div>
         </div>
+        <div class="about-showcase-dots" id="aboutShowcaseDots" aria-hidden="true"></div>
+      </div>
+      <div class="about-showcase-content reveal">
+        <p class="eyebrow">What We Deliver</p>
+        <h2>Integrated Energy Systems</h2>
+        <p>From consultation and system design to installation and long-term support — East Eagle Energy delivers complete solar, storage, and power conversion solutions.</p>
+        <ul class="about-capability-list">
+          <li><i class="fa fa-solar-panel"></i> Solar generation &amp; rooftop systems</li>
+          <li><i class="fa fa-battery-full"></i> LiFePO4 batteries &amp; ESS storage</li>
+          <li><i class="fa fa-bolt"></i> Hybrid &amp; string inverters</li>
+          <li><i class="fa fa-charging-station"></i> EV charging infrastructure</li>
+          <li><i class="fa fa-chart-line"></i> Smart monitoring &amp; energy management</li>
+        </ul>
+        <a href="/products/" class="btn btn-primary">Explore Products</a>
       </div>
     </div>
   </section>
 
   <!-- Mission -->
-  <section class="section about-mission">
+  <section class="section about-mission-section">
     <div class="container">
-      <div class="mission-card reveal">
-        <div class="mission-icon"><i class="fa fa-bolt"></i></div>
-        <p class="eyebrow">Our Mission</p>
-        <h2>Resilient Energy for Every Project</h2>
-        <p class="mission-text">
-          To supply energy solutions — inverters, battery storage, solar panels, and EV charging systems —
-          that remain resilient and dependable over time. We believe power should never grow weary,
-          whether for a family home, a commercial building, or an industrial facility.
-        </p>
-        <blockquote class="mission-quote">
-          "Energy That Never Grows Weary."
-        </blockquote>
+      <div class="about-mission-card reveal">
+        <div class="about-mission-orbit" aria-hidden="true">
+          <span class="about-mission-core"><i class="fa fa-bolt"></i></span>
+        </div>
+        <p class="eyebrow">{{ about_page.mission_eyebrow }}</p>
+        <h2>{{ about_page.mission_title }}</h2>
+        <p class="about-mission-text">{{ about_page.mission_text }}</p>
+        <blockquote class="about-mission-quote">"{{ about_page.mission_quote }}"</blockquote>
       </div>
     </div>
   </section>
 
-  <!-- Growth Timeline -->
-  <section class="section about-growth">
+  <!-- Growth stats -->
+  <section class="section about-growth-section">
     <div class="container">
-      <div class="section-header section-header--center reveal">
+      <div class="about-section-head about-section-head--center reveal">
         <p class="eyebrow">Our Growth</p>
         <h2>Building Momentum Since 2022</h2>
       </div>
-
-      <div class="growth-stats reveal">
-        <div class="growth-stat">
-          <span class="growth-number" data-count="2022">0</span>
-          <span class="growth-label">Founded</span>
+      <div class="about-growth-stats reveal">
+        <div class="about-growth-stat">
+          <span class="about-growth-num" data-count="2022">0</span>
+          <span class="about-growth-label">Founded</span>
         </div>
-        <div class="growth-stat">
-          <span class="growth-number" data-count="5">0</span><span class="growth-suffix">+</span>
-          <span class="growth-label">Global Regions</span>
+        <div class="about-growth-stat">
+          <span class="about-growth-num" data-count="5">0</span><span class="about-growth-suffix">+</span>
+          <span class="about-growth-label">Global Regions</span>
         </div>
-        <div class="growth-stat">
-          <span class="growth-number" data-count="6">0</span><span class="growth-suffix">+</span>
-          <span class="growth-label">Product Lines</span>
+        <div class="about-growth-stat">
+          <span class="about-growth-num" data-count="6">0</span><span class="about-growth-suffix">+</span>
+          <span class="about-growth-label">Product Lines</span>
         </div>
-        <div class="growth-stat">
-          <span class="growth-number" data-count="20">0</span><span class="growth-suffix">+</span>
-          <span class="growth-label">Products Listed</span>
+        <div class="about-growth-stat">
+          <span class="about-growth-num" data-count="20">0</span><span class="about-growth-suffix">+</span>
+          <span class="about-growth-label">Products Listed</span>
         </div>
-        <div class="growth-stat">
-          <span class="growth-number stat-number--text">24/7</span>
-          <span class="growth-label">Support Available</span>
-        </div>
-      </div>
-
-      <div class="growth-timeline reveal">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2022</span>
-            <h3>Company Founded</h3>
-            <p>East Eagle Energy established in Addis Ababa, Ethiopia — focusing on solar inverters and battery storage.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2023</span>
-            <h3>Commercial & Industrial Expansion</h3>
-            <p>Expanded into C & I BESS solutions, partnering with leading global manufacturers.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2024</span>
-            <h3>Global Reach</h3>
-            <p>Extended operations across Africa, China, Dubai, Israel, and North America.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <span class="timeline-year">2025+</span>
-            <h3>Full Energy Ecosystem</h3>
-            <p>Launching EV chargers, solar panels, smart energy management, and cloud monitoring solutions.</p>
-          </div>
+        <div class="about-growth-stat">
+          <span class="about-growth-num about-growth-num--text">24/7</span>
+          <span class="about-growth-label">Support Available</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section about-cta">
+  <!-- Timeline -->
+  <section class="section about-timeline-section">
+    <div class="container">
+      <div class="about-timeline reveal" id="aboutTimeline">
+        <div class="about-timeline-rail" aria-hidden="true">
+          <span class="about-timeline-rail-fill" id="aboutTimelineFill"></span>
+        </div>
+        {% for milestone in about_milestones %}
+        <div class="about-timeline-item reveal">
+          <div class="about-timeline-dot"><span>{{ milestone.year }}</span></div>
+          <div class="about-timeline-card">
+            <span class="about-timeline-year">{{ milestone.year }}</span>
+            <h3>{{ milestone.title }}</h3>
+            <p>{{ milestone.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Global presence -->
+  <section class="section about-regions-section">
+    <div class="container">
+      <div class="about-section-head about-section-head--center reveal">
+        <p class="eyebrow">Global Presence</p>
+        <h2>Powering Projects Worldwide</h2>
+      </div>
+      <div class="about-regions-grid reveal">
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> Ethiopia</span>
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> Africa</span>
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> China</span>
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> Dubai</span>
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> Israel</span>
+        <span class="about-region-pill"><i class="fa fa-location-dot"></i> North America</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section about-cta-section">
     <div class="container about-cta-inner reveal">
+      <div class="about-cta-glow" aria-hidden="true"></div>
       <h2>Ready to Power Your Project?</h2>
       <p>Speak with our team about residential, commercial, or industrial energy solutions.</p>
       <div class="about-cta-buttons">
-        <a href="/contact/" class="btn btn-primary">Get in Touch</a>
+        <button type="button" class="btn btn-primary js-open-contact-slide">Get in Touch</button>
         <a href="/products/" class="btn btn-outline-dark">Browse Products</a>
       </div>
     </div>
   </section>
 
 {% include 'includes/footer.html' %}
-<script src="/js/home-animations.js"></script>
+<script src="/js/about-animations.js?v=20260716k"></script>
