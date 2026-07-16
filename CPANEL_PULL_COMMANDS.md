@@ -1,106 +1,108 @@
-# cPanel Deployment Commands - Quick Reference
+# cPanel Deployment — East Eagle Energy
 
-## ⚠️ CORRECT PROJECT PATH (read this first)
-
-Your live site runs from **`public_html/east_eagle`** — NOT `/home/easteagl/easteagle`.
+## Correct paths
 
 | Item | Path |
 |------|------|
-| **Django app (git pull here)** | `/home/easteagl/public_html/east_eagle/` |
-| **Virtualenv** | `source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate` |
-| **Apache static (CSS/JS/images)** | `/home/easteagl/public_html/css/`, `js/`, `images/` |
-| **Restart** | `touch ~/public_html/east_eagle/passenger_wsgi.py` |
+| Django app | `/home/easteagl/public_html/east_eagle/` |
+| Virtualenv | `source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate` |
+| Public static | `/home/easteagl/public_html/css/`, `js/`, `images/` |
 
-If you pull in the wrong folder, the website will look unchanged.
+**Do NOT use** `/home/easteagl/easteagle` — that is the wrong folder.
 
 ---
 
-## Full deploy (copy & paste)
+## Option A — One command (recommended)
 
 ```bash
-# 1) CORRECT folder + venv
+cd /home/easteagl/public_html/east_eagle
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
+git fetch origin main && git reset --hard origin/main
+bash scripts/deploy_cpanel.sh
+```
+
+---
+
+## Option B — Manual steps
+
+```bash
 cd /home/easteagl/public_html/east_eagle
 source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
 
-# 2) Force sync from GitHub
 git fetch origin main
 git reset --hard origin/main
 git log -1 --oneline
-# Must show: 08c05cf Redesign public site and admin...
 
-# 3) Verify new files exist
+# Must exist — if not, git sync failed
 ls -la blog/management/commands/seed_about.py
 ls -la css/premium.css
-ls -la images/hero/ | head
+ls -la images/hero/slide-solar.jpg
 
-# 4) Database + static
 python manage.py migrate
 python manage.py collectstatic --no-input
 python manage.py seed_hero_slides
 python manage.py seed_about
 
-# 5) Copy CSS/JS/images to public_html (Apache serves /css /js /images)
-mkdir -p /home/easteagl/public_html/css \
-         /home/easteagl/public_html/js \
-         /home/easteagl/public_html/images/hero
-
+mkdir -p /home/easteagl/public_html/css /home/easteagl/public_html/js /home/easteagl/public_html/images/hero
 cp -f css/*.css /home/easteagl/public_html/css/
 cp -f js/*.js   /home/easteagl/public_html/js/
-cp -f images/*  /home/easteagl/public_html/images/ 2>/dev/null || true
-cp -rf images/hero/* /home/easteagl/public_html/images/hero/
+cp -rf images/hero/ /home/easteagl/public_html/images/
+cp -f images/company-logo.png images/logo*.png /home/easteagl/public_html/images/ 2>/dev/null || true
 
-# 6) Restart Passenger
-touch /home/easteagl/public_html/east_eagle/passenger_wsgi.py
+touch passenger_wsgi.py
 ```
 
 ---
 
-## Clear LiteSpeed cache (important)
+## If `seed_about` or `images/hero` still missing
 
-cPanel → **LiteSpeed Web Cache Manager** → **Purge All**
+Git did not sync. Run diagnostics:
 
-Or: **Setup Python App** → **Restart**
+```bash
+cd /home/easteagl/public_html/east_eagle
+pwd
+git remote -v
+git log -1 --oneline
+ls -la blog/management/commands/
+```
 
-Then hard refresh: **Ctrl+Shift+R** / **Cmd+Shift+R**
+Expected commit: `b41f515` or newer.
+
+### Re-clone (fixes broken git)
+
+```bash
+cd /home/easteagl/public_html
+mv east_eagle east_eagle_backup_$(date +%Y%m%d)
+git clone https://github.com/josephdereje/East-Eagle-Energy-website.git east_eagle
+cd east_eagle
+source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
+
+# Restore data from backup
+cp ../east_eagle_backup_*/.env . 2>/dev/null || true
+cp ../east_eagle_backup_*/db.sqlite3 . 2>/dev/null || true
+
+pip install -r requirements_production.txt
+bash scripts/deploy_cpanel.sh
+```
+
+Then in cPanel → **Setup Python App** → confirm app root is `public_html/east_eagle` → **Restart**.
 
 ---
 
-## How to know deploy worked
+## After deploy
 
-Homepage HTML must include **`premium.css`** (not only styles.css):
+1. **LiteSpeed Web Cache Manager** → Purge All
+2. Hard refresh: **Cmd+Shift+R**
+3. Verify:
 
 ```bash
 curl -s https://www.easteagleenergy.com/ | grep premium.css
 ```
 
-If that prints nothing, you are still on old templates (wrong folder or cache).
+---
 
-Check these URLs return **200**:
+## Live checks
 
 - https://www.easteagleenergy.com/css/premium.css
-- https://www.easteagleenergy.com/css/admin.css
-- https://www.easteagleenergy.com/images/company-logo.png
 - https://www.easteagleenergy.com/images/hero/slide-solar.jpg
-
----
-
-## Files that must land in `public_html/css/`
-
-| File | Purpose |
-|------|---------|
-| `styles.css` | Main layout |
-| `dark-mode.css` | Night mode |
-| `premium.css` | Hero animations, About page, premium UI |
-| `admin.css` | Admin login + dashboard |
-
----
-
-## First-time admin login
-
-```bash
-cd /home/easteagl/public_html/east_eagle
-source /home/easteagl/virtualenv/public_html/east_eagle/3.9/bin/activate
-python manage.py createsuperuser
-```
-
-Admin: https://www.easteagleenergy.com/admin/
+- https://www.easteagleenergy.com/admin/
