@@ -27,17 +27,26 @@
 
         <ul class="contact-detail-list">
           <li>
-            <span class="contact-icon">📍</span>
+            <span class="contact-icon">🏢</span>
             <div>
-              <strong>Office</strong>
-              <p>Century Executive Tower, 12-Room Number F12/06<br>Addis Ababa, Ethiopia</p>
+              <strong>Main Office — China</strong>
+              <p>Room 1133, Garden Building, No. 368 Huanshi East Road<br>Yuexiu District, Guangzhou City</p>
+              <p><a href="tel:+8613710727747">+86 137 1072 7747</a></p>
             </div>
           </li>
           <li>
-            <span class="contact-icon">📞</span>
+            <span class="contact-icon">📍</span>
             <div>
-              <strong>Phone</strong>
+              <strong>Branch Office — Ethiopia</strong>
+              <p>Century Executive Tower, 12-Room Number F12/06<br>Addis Ababa, Ethiopia</p>
               <p><a href="tel:+251933219802">+251 93 321 9802</a></p>
+            </div>
+          </li>
+          <li>
+            <span class="contact-icon">🇹🇿</span>
+            <div>
+              <strong>Tanzania — Opening Soon</strong>
+              <p>A branch office is opening soon in Tanzania.</p>
             </div>
           </li>
           <li>
@@ -59,9 +68,9 @@
         <!-- Google Map embed — office location -->
         <div class="contact-map">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.518!2d38.7614!3d9.0107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDAnMzguNSJOIDM4wrA0NSczNy42IkU!5e0!3m2!1sen!2set!4v1"
+            src="https://maps.google.com/maps?q=368%20Huanshi%20East%20Road%2C%20Yuexiu%2C%20Guangzhou&hl=en&z=16&output=embed"
             width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade" title="East Eagle Energy office location">
+            referrerpolicy="no-referrer-when-downgrade" title="East Eagle Energy main office in Guangzhou">
           </iframe>
         </div>
 
@@ -146,14 +155,14 @@
       <!-- Region cards below map -->
       <div class="world-regions-grid">
         <div class="world-region-card">
-          <span class="region-flag">🌍</span>
-          <strong>Africa</strong>
-          <p>Ethiopia · East Africa</p>
-        </div>
-        <div class="world-region-card">
           <span class="region-flag">🌏</span>
           <strong>China</strong>
-          <p>Manufacturing · Sourcing</p>
+          <p>Main office · Guangzhou</p>
+        </div>
+        <div class="world-region-card">
+          <span class="region-flag">🌍</span>
+          <strong>East Africa</strong>
+          <p>Ethiopia branch · Tanzania opening soon</p>
         </div>
         <div class="world-region-card">
           <span class="region-flag">🕌</span>
@@ -202,8 +211,9 @@
     });
 
     const locations = [
-      { lat: 9.03,  lng: 38.74, label: '📍 East Eagle Energy HQ',  sub: 'Addis Ababa, Ethiopia',  color: '#F39200' },
-      { lat: 35.86, lng: 104.2, label: '🏭 China',                  sub: 'Manufacturing & Sourcing', color: '#2E6EB3' },
+      { lat: 23.135, lng: 113.289, label: 'Main Office — China', sub: 'Guangzhou, Yuexiu District', color: '#F39200' },
+      { lat: 9.03,  lng: 38.74, label: 'Branch Office — Ethiopia', sub: 'Addis Ababa', color: '#2E6EB3' },
+      { lat: -6.37, lng: 34.89, label: 'Tanzania', sub: 'Opening soon', color: '#8aa0b8' },
       { lat: 25.20, lng: 55.27, label: '🕌 Dubai, UAE',             sub: 'Distribution Hub',        color: '#2E6EB3' },
       { lat: 31.05, lng: 34.85, label: '✡️ Israel',                 sub: 'Technology & R&D',        color: '#2E6EB3' },
       { lat: 38.89, lng: -77.0, label: '🌎 North America',          sub: 'Partnerships & Export',   color: '#2E6EB3' },

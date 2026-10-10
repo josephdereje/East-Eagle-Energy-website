@@ -45,7 +45,7 @@ DEFAULT_MILESTONES = [
     {
         'year': '2024',
         'title': 'Global Reach',
-        'description': 'Extended operations across Africa, China, Dubai, Israel, and North America.',
+        'description': 'Main office in Guangzhou, China, with a branch office in Addis Ababa, Ethiopia, and projects across Africa, Dubai, Israel, and North America.',
         'display_order': 2,
     },
     {
@@ -53,6 +53,12 @@ DEFAULT_MILESTONES = [
         'title': 'Full Energy Ecosystem',
         'description': 'Launching EV chargers, solar panels, smart energy management, and cloud monitoring solutions.',
         'display_order': 3,
+    },
+    {
+        'year': 'Soon',
+        'title': 'Tanzania Office',
+        'description': 'A branch office is opening soon in Tanzania.',
+        'display_order': 4,
     },
 ]
 

@@ -19,7 +19,7 @@ def contact_page(request):
         'seo_title': 'Contact Us | East Eagle Energy',
         'seo_description': (
             'Contact East Eagle Energy for solar inverters, battery storage, and energy '
-            'system quotes. Based in Addis Ababa, Ethiopia.'
+            'system quotes. Main office in Guangzhou, China, with a branch in Ethiopia.'
         ),
         'page_schema_json': contact_schema_json(),
     })
@@ -39,7 +39,7 @@ def submit_inquiry(request):
                 'seo_title': 'Contact Us | East Eagle Energy',
                 'seo_description': (
                     'Contact East Eagle Energy for solar inverters, battery storage, and energy '
-                    'system quotes. Based in Addis Ababa, Ethiopia.'
+                    'system quotes. Main office in Guangzhou, China, with a branch in Ethiopia.'
                 ),
                 'page_schema_json': contact_schema_json(),
             })

@@ -132,6 +132,13 @@ img { max-width: 100%; display: block; }
   flex-wrap: wrap;
 }
 
+.top-bar-phones {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .top-bar a { color: var(--navy); }
 .top-bar a:hover { color: var(--orange); }
 .tagline { color: var(--orange); font-weight: 600; letter-spacing: 0.04em; }

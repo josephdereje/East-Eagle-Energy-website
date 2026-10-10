@@ -2597,6 +2597,67 @@ body.contact-slide-open {
   margin: 0;
 }
 
+.about-offices-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.about-office-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid rgba(27, 54, 93, 0.08);
+  border-radius: 18px;
+  padding: 1.5rem 1.4rem 1.4rem;
+  box-shadow: 0 10px 28px rgba(20, 46, 75, 0.06);
+}
+
+.about-office-badge {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F39200;
+  background: rgba(243, 146, 0, 0.12);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+
+.about-office-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--navy, #1B365D);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.about-office-card h3 i { color: #F39200; }
+
+.about-office-card p {
+  color: var(--gray-600, #5a6a7e);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.about-office-card a {
+  color: var(--navy, #1B365D);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.about-office-card a:hover { color: #F39200; }
+
+.about-office-card--soon {
+  border-style: dashed;
+}
+
 .about-regions-grid {
   display: flex;
   flex-wrap: wrap;
@@ -2687,6 +2748,7 @@ body.contact-slide-open {
 
 @media (max-width: 991px) {
   .about-values-grid { grid-template-columns: 1fr; }
+  .about-offices-grid { grid-template-columns: 1fr; }
   .about-showcase-grid { grid-template-columns: 1fr; }
   .about-growth-stats { grid-template-columns: repeat(2, 1fr); }
 }
@@ -2699,9 +2761,15 @@ body.contact-slide-open {
 }
 
 [data-theme="dark"] .about-value-card,
+[data-theme="dark"] .about-office-card,
 [data-theme="dark"] .about-timeline-card {
   background: rgba(12, 24, 42, 0.85);
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .about-office-card h3,
+[data-theme="dark"] .about-office-card a {
+  color: #e8edf5;
 }
 
 [data-theme="dark"] .about-value-card h3,

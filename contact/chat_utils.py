@@ -13,7 +13,7 @@ def bot_reply_for_message(text):
         return (
             "Pricing depends on your system size and products. Our technical team can "
             "prepare a custom quote — I've notified them and they usually reply within "
-            "one business day. You can also call +251 93 321 9802."
+            "one business day. Call China +86 137 1072 7747 or Ethiopia +251 93 321 9802."
         )
 
     if any(word in q for word in ('inverter', 'deye', 'growatt', 'hybrid')):
@@ -46,18 +46,20 @@ def bot_reply_for_message(text):
 
     if any(word in q for word in ('contact', 'phone', 'call', 'email', 'hours')):
         return (
-            "Reach us at +251 93 321 9802 or info@easteagleenergy.com. "
-            "Office: Century Executive Tower, Addis Ababa. Our team monitors this "
-            "chat during business hours."
+            "Main office: Room 1133, Garden Building, No. 368 Huanshi East Road, "
+            "Yuexiu District, Guangzhou, China — +86 137 1072 7747. "
+            "Ethiopia branch: Century Executive Tower, Addis Ababa — +251 93 321 9802. "
+            "A Tanzania office is opening soon. Email info@easteagleenergy.com."
         )
 
     if any(word in q for word in ('hello', 'hi', 'hey', 'help')):
         return (
             "Hello! Ask me about products, system sizing, quotes, or installation. "
-            "For urgent matters, call +251 93 321 9802."
+            "For urgent matters, call China +86 137 1072 7747 or Ethiopia +251 93 321 9802."
         )
 
     return (
         "Thanks for your message! I've sent it to our technical team — they'll "
-        "reply to your email soon. For faster help, call +251 93 321 9802."
+        "reply to your email soon. For faster help, call China +86 137 1072 7747 "
+        "or Ethiopia +251 93 321 9802."
     )

@@ -34,11 +34,35 @@ def organization_node():
         'foundingDate': '2022',
         'address': {
             '@type': 'PostalAddress',
-            'streetAddress': 'Century Executive Tower, 12-Room Number F12/06',
-            'addressLocality': 'Addis Ababa',
-            'addressCountry': 'ET',
+            'streetAddress': 'Room 1133, Garden Building, No. 368 Huanshi East Road',
+            'addressLocality': 'Yuexiu District, Guangzhou',
+            'addressCountry': 'CN',
         },
-        'telephone': '+251933219802',
+        'telephone': '+8613710727747',
+        'location': [
+            {
+                '@type': 'Place',
+                'name': 'East Eagle Energy Main Office',
+                'telephone': '+8613710727747',
+                'address': {
+                    '@type': 'PostalAddress',
+                    'streetAddress': 'Room 1133, Garden Building, No. 368 Huanshi East Road',
+                    'addressLocality': 'Yuexiu District, Guangzhou',
+                    'addressCountry': 'CN',
+                },
+            },
+            {
+                '@type': 'Place',
+                'name': 'East Eagle Energy Ethiopia Branch',
+                'telephone': '+251933219802',
+                'address': {
+                    '@type': 'PostalAddress',
+                    'streetAddress': 'Century Executive Tower, 12-Room Number F12/06',
+                    'addressLocality': 'Addis Ababa',
+                    'addressCountry': 'ET',
+                },
+            },
+        ],
         'sameAs': [
             'https://www.facebook.com/easteagleenergy',
             'https://www.linkedin.com/company/easteagleenergy',
