@@ -1,12 +1,19 @@
+from pathlib import Path
+
+from django.core.files import File
 from django.core.management.base import BaseCommand
 
 from products.models import (
     EssSubType,
     Product,
     ProductCategory,
+    ProductImage,
     ProductType,
     VoltageType,
 )
+
+SEED_ASSET_DIR = Path(__file__).resolve().parents[2] / 'seed_assets'
+MEDIA_KEYS = ('image_file', 'gallery_files')
 
 
 SAMPLE_PRODUCTS = [
@@ -259,24 +266,50 @@ SAMPLE_PRODUCTS = [
     },
     # EV CHARGERS
     {
-        'name': 'Deye EV Charger 7kW AC Wallbox',
-        'slug': 'deye-ev-charger-7kw-wallbox',
+        'name': 'East Eagle 7kW Wall-Mount GB/T EV Charger',
+        'slug': 'east-eagle-7kw-wall-mount-gbt-ev-charger',
         'product_type': ProductType.EV_CHARGER,
         'category': ProductCategory.RESIDENTIAL,
-        'short_description': '7 kW / AC Home EV Charging Station',
-        'description': 'Deye 7kW AC wall-mounted EV charger with Type 2 connector. Smart scheduling, RFID access, and app control.',
-        'price': 85000.00,
-        'is_featured': True,
+        'short_description': '7 kW / Wall-mount AC charger with GBT (GB/T) connector',
+        'description': (
+            'East Eagle 7 kW wall-mounted AC EV charger with a hardwired GBT (GB/T) connector '
+            'for home and small-site charging.\n\n'
+            'Rated output is 7.0 kW at 230 VAC ±15%, with current adjustable from 6 A to 32 A. '
+            'Supply is single-phase 1P+N+PE, 230 VAC ±15%, 32 A.\n\n'
+            'The wall-mount unit has an LED power display, RGB status ring, and RFID reader. '
+            'Charging can start by RFID card, plug-and-play, or the optional app and Wi-Fi. '
+            'The tethered cable is 5 m, with custom lengths available. Housing is PC + ABS V0 '
+            'and the cable jacket is TPU.\n\n'
+            'Cooling is natural. The operating range is −25°C to +50°C, 5%–95% humidity, '
+            'and altitudes up to 2,000 m.\n\n'
+            'Protection includes Type B leakage detection (AC 30 mA + DC 6 mA), IP55, IK10, '
+            'over-current, over- and under-voltage, RCD, ground fault, surge, and over-temperature. '
+            'Power measurement accuracy is ±1.0% from 1% to full scale. Warranty is 2 years. '
+            'Certifications include CE and FCC, with RFID and mobile remote operation.'
+        ),
+        'is_featured': False,
+        'image_file': 'ev-chargers/wall-mount-7kw-gbt.jpg',
     },
     {
-        'name': 'Deye DC Fast EV Charger 60kW',
-        'slug': 'deye-dc-fast-ev-charger-60kw',
+        'name': 'East Eagle DC Mini EV Charger 20–40kW',
+        'slug': 'east-eagle-dc-mini-ev-charger-20-40kw',
         'product_type': ProductType.EV_CHARGER,
         'category': ProductCategory.C_AND_I_BESS,
-        'short_description': '60 kW / DC Fast Charging Station',
-        'description': 'Deye 60kW DC fast charger for commercial and fleet applications. CCS2 connector, integrated payment system.',
-        'price': 850000.00,
-        'is_featured': True,
+        'short_description': '20 / 30 / 40 kW / Compact DC fast charger',
+        'description': (
+            'East Eagle DC Mini is a compact wall-mounted DC fast charger for commercial '
+            'and fleet sites. It is offered in 20 kW, 30 kW, and 40 kW ratings.\n\n'
+            'The cabinet includes an LCD screen, status indicator lamp, RFID reader, '
+            'emergency stop button, and a side-mounted charging connector with a tethered cable.\n\n'
+            'Connectivity covers Wi-Fi, 4G, Modbus, and OCPP 1.6 JSON. '
+            'The enclosure is rated IP55 and carries CE marking.'
+        ),
+        'is_featured': False,
+        'image_file': 'ev-chargers/dc-mini-main.jpg',
+        'gallery_files': [
+            {'file': 'ev-chargers/dc-mini-range.png', 'label': '20–40 kW range'},
+            {'file': 'ev-chargers/dc-mini-features.png', 'label': 'Features'},
+        ],
     },
     # SMART ENERGY MANAGEMENT
     {
@@ -304,18 +337,47 @@ SAMPLE_PRODUCTS = [
 ]
 
 
+def _attach_media(product, item):
+    image_file = item.get('image_file')
+    if image_file:
+        path = SEED_ASSET_DIR / image_file
+        if path.exists():
+            with path.open('rb') as handle:
+                product.image.save(path.name, File(handle), save=True)
+
+    gallery = item.get('gallery_files') or []
+    if not gallery:
+        return
+
+    product.gallery_images.all().delete()
+    for order, entry in enumerate(gallery, start=1):
+        path = SEED_ASSET_DIR / entry['file']
+        if not path.exists():
+            continue
+        gallery_image = ProductImage(
+            product=product,
+            label=entry.get('label', ''),
+            display_order=order,
+            is_active=True,
+        )
+        with path.open('rb') as handle:
+            gallery_image.image.save(path.name, File(handle), save=False)
+        gallery_image.save()
+
+
 class Command(BaseCommand):
-    help = 'Seed sample products for ESS and Inverter categories'
+    help = 'Seed sample products for ESS, inverters, solar panels, and EV chargers'
 
     def handle(self, *args, **options):
         created = 0
         updated = 0
         for item in SAMPLE_PRODUCTS:
-            defaults = {k: v for k, v in item.items() if k != 'slug'}
-            _, was_created = Product.objects.update_or_create(
+            defaults = {k: v for k, v in item.items() if k != 'slug' and k not in MEDIA_KEYS}
+            product, was_created = Product.objects.update_or_create(
                 slug=item['slug'],
                 defaults=defaults,
             )
+            _attach_media(product, item)
             if was_created:
                 created += 1
             else:
