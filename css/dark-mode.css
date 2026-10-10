@@ -379,6 +379,26 @@
   color: #1a2432;
 }
 
+[data-theme="dark"] .app-download {
+  background:
+    radial-gradient(ellipse 50% 80% at 100% 20%, rgba(243, 146, 0, 0.14), transparent),
+    #121a26;
+}
+
+[data-theme="dark"] .app-download-copy > p,
+[data-theme="dark"] .footer-app p {
+  color: var(--dm-muted);
+}
+
+[data-theme="dark"] .app-download-points li,
+[data-theme="dark"] .footer-app strong {
+  color: var(--dm-text);
+}
+
+[data-theme="dark"] .footer-app {
+  border-top-color: var(--dm-border);
+}
+
 /* Footer */
 [data-theme="dark"] .footer {
   background: var(--footer-bg);
